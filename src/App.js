@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import SignInPage from './SignInPage';
+import MainPage from './MainPage';
+import ErrorPage from './ErrorPage';
+import PrivateRoute from "./PrivateRoute";
+import ProfilePage from "./ProfilePage";
+import TemplatePage from "./TemplatePage";
 
-function App() {
+const App = () => {
+  const isAuthenticated = localStorage.getItem("lock") === 'key';
+  console.log(isAuthenticated ? 'User authenticated' : 'User NOT authenticated');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={ <Navigate to="/main" /> } />
+        <Route path="/main" element={<PrivateRoute> <MainPage/> </PrivateRoute>}/>
+        <Route path="/profile" element={<PrivateRoute> <ProfilePage/> </PrivateRoute>}/>
+        <Route path="/template" element={<PrivateRoute> <TemplatePage/> </PrivateRoute>}/>
+        <Route path="/sign-in" element={<SignInPage/> }/>
+        <Route path="/error" element={<ErrorPage/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
