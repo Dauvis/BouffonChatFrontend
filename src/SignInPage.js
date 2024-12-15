@@ -1,27 +1,32 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const SignInPage = () => {
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = () => {
-    console.log("Authenticating user...");
+  const onSuccess = (response) => {
+    console.log(response);
+    localStorage.setItem("lock", 'key');
+    navigate('/main');
 
-    const isAuthenticated = true;
+    // Send token or handle login success
+  };
 
-    if (isAuthenticated) {
-      localStorage.setItem("lock", 'key');
-      console.log("User authenticated, navigating to main page...");
-      navigate('/main');
-    } else {
-      console.log("User authentication failed");
-    }
+  const onError = () => {
+    console.error('Login Failed');
+    navigate('/error', { state: { errorStatus: 401 } });
   };
 
   return (
     <div>
       <h2>Sign-In Page</h2>
-      <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+      <GoogleOAuthProvider clientId="34128132067-0eqsetdv86b2efmmec131p7b8uvf0g8u.apps.googleusercontent.com">
+        <GoogleLogin
+         onSuccess={onSuccess}
+         onError={onError}
+       />
+     </GoogleOAuthProvider>      
     </div>
   );
 };
