@@ -7,9 +7,6 @@ import ProfilePage from "./ProfilePage";
 import TemplatePage from "./TemplatePage";
 
 const App = () => {
-  const isAuthenticated = localStorage.getItem("lock") === 'key';
-  console.log(isAuthenticated ? 'User authenticated' : 'User NOT authenticated');
-
   return (
     <BrowserRouter>
       <Routes>

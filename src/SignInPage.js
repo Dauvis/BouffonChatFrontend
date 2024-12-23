@@ -1,14 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import loginService from "./services/loginService.js";
 
 const SignInPage = () => {
   const navigate = useNavigate();
 
-  const onSuccess = (response) => {
-    console.log(response);
-    localStorage.setItem("lock", 'key');
-    navigate('/main');
+  const onSuccess = async (response) => {
+    const idToken = response.credential;
+    const authData = await loginService.logIntoAPI(idToken);
+
+    if (authData) {
+      sessionStorage.setItem("key", authData.token);
+      sessionStorage.setItem("profile", JSON.stringify(authData.profile));
+      navigate('/main');
+    } else {
+      sessionStorage.removeItem('key');
+      sessionStorage.removeItem('profile');
+  }
 
     // Send token or handle login success
   };
