@@ -5,6 +5,7 @@ import ErrorPage from './ErrorPage';
 import PrivateRoute from "./PrivateRoute";
 import ProfilePage from "./ProfilePage";
 import TemplatePage from "./TemplatePage";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   return (
