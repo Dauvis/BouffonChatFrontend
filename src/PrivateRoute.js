@@ -1,31 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useLocation, Navigate } from 'react-router'
+import React from "react";
 import apiUtil from "./util/apiUtil.js";
+import { useLocation, Navigate } from 'react-router'
 
 const PrivateRoute = ({ children }) => {
-  const navigate = useNavigate();
+  const isAuthenticated = apiUtil.isAuthenticated();
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      const authenticated = apiUtil.isAuthenticated();
-      const refreshed = authenticated || await apiUtil.refreshAccess();
-      if (refreshed) {
-        setIsAuthenticated(true);
-      } else {
-        navigate('/sign-in');
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuthentication();
-  }, [navigate]);
-
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
 
   return isAuthenticated ? (
     <>{children}</>
