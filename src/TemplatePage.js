@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import NavHeader from "./components/NavHeader";
 
-const TemplatePage = () => {
+export default function TemplatePage() {
   const navigate = useNavigate();
 
   const goToMainPage = () => {
@@ -8,12 +10,22 @@ const TemplatePage = () => {
   };
 
   return (
-    <div>
-      <h1>Templates</h1>
-      <p>This is the template management page.</p>
-      <button onClick={goToMainPage}>Close template management</button>
-    </div>
+    <>
+      <NavHeader />
+      <main>
+        <Container>
+          <Row>
+            <Col>
+            <h1>Welcome to the Templates page</h1>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+            <Button variant="primary" onClick={goToMainPage}>Go to Main</Button>
+            </Col>
+          </Row>
+        </Container>
+      </main>
+    </>
   );
 };
-
-export default TemplatePage;

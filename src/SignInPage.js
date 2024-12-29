@@ -45,12 +45,6 @@ const SignInPage = () => {
         </Card.Body>
       </Card>
     </Container>
-    // <div>
-    //   <h2>Sign-In Page</h2>
-    //   <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-    //     <GoogleLogin onSuccess={onSuccess} onError={onError} />
-    //   </GoogleOAuthProvider>
-    // </div>
   );
 };
 

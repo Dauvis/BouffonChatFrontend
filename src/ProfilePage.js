@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, Button} from "react-bootstrap";
+import NavHeader from "./components/NavHeader";
 
-const ProfilePage = () => {
+export default function ProfilePage() {
     const navigate = useNavigate();
 
     const goToMainPage = () => {
@@ -8,12 +10,22 @@ const ProfilePage = () => {
     };
   
     return (
-        <div>
-            <h1>Profile</h1>
-            <p>This is the profile page.</p>
-            <button onClick={goToMainPage}>Close profile</button>
-        </div>
+        <>
+            <NavHeader/>
+            <main>
+                <Container>
+                    <Row>
+                        <Col>
+                        <h1>Welcome to the Profile page</h1>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                        <Button variant="primary" onClick={goToMainPage}>Go to Main</Button>
+                        </Col>
+                    </Row>
+                </Container>
+            </main>
+        </>
     );
 };
-
-export default ProfilePage;

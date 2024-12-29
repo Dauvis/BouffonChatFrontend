@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
-const ErrorPage = () => {
+export default function ErrorPage() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -11,12 +12,16 @@ const ErrorPage = () => {
     };
   
     return (
-        <div>
-            <h1>Error {errorStatus || 'Unknown'}</h1>
-            <p>Something went wrong. Please try again later.</p>
-            <button onClick={goToMainPage}>Return to app</button>
-        </div>
+        <>        
+            <Container>
+                <Row>
+                    <Col>
+                        <h1>Error {errorStatus || 'Unknown'}</h1>
+                        <p>Something went wrong. Please try again later.</p>            
+                        <Button variant="secondary" onClick={goToMainPage}>Return to app</Button>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 };
-
-export default ErrorPage;
