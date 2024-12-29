@@ -1,10 +1,9 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import loginService from "./services/loginService.js";
 import { Container, Card } from "react-bootstrap";
 
-const SignInPage = () => {
+export default function SignInPage() {
   const navigate = useNavigate();
 
   const onSuccess = async (response) => {
@@ -12,10 +11,10 @@ const SignInPage = () => {
     const authData = await loginService.logIntoAPI(idToken);
 
     if (authData) {
-      sessionStorage.setItem("profile", JSON.stringify(authData.profile));
+      localStorage.setItem("profile", JSON.stringify(authData.profile));
       navigate("/main");
     } else {
-      sessionStorage.removeItem("profile");
+      localStorage.removeItem("profile");
     }
   };
 
@@ -47,5 +46,3 @@ const SignInPage = () => {
     </Container>
   );
 };
-
-export default SignInPage;

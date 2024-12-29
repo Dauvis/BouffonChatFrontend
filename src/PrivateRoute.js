@@ -1,8 +1,7 @@
-import React from "react";
 import apiUtil from "./util/apiUtil.js";
 import { useLocation, Navigate } from 'react-router'
 
-const PrivateRoute = ({ children }) => {
+export default function PrivateRoute({ children }) {
   const isAuthenticated = apiUtil.isAuthenticated();
   const location = useLocation();
 
@@ -16,5 +15,3 @@ const PrivateRoute = ({ children }) => {
     />
   )
 };
-
-export default PrivateRoute;

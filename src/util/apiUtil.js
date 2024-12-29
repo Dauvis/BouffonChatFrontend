@@ -1,5 +1,5 @@
 const isAuthenticated = () => {
-  const profile = sessionStorage.getItem("profile");
+  const profile = localStorage.getItem("profile");
   return profile !== null;
 };
 

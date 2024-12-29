@@ -12,7 +12,7 @@ export default function MainPage() {
 
     const logOutOfApp = async () => {
         await loginService.logOutOfAPI();
-        sessionStorage.removeItem('profile');
+        localStorage.removeItem('profile');
         navigate('/sign-in');
     }
 
