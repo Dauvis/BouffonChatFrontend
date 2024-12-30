@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import loginService from "./services/loginService.js";
+import loginService from "../../services/loginService.js";
 import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 import { List } from "react-bootstrap-icons";
-import NavHeader from "./components/NavHeader";
-import MainOffcanvas from "./components/MainOffcanvas/MainOffcanvas";
+import NavHeader from "../../components/NavHeader";
+import MainOffcanvas from "../../components/MainOffcanvas/MainOffcanvas";
 
 export default function MainPage() {
     const navigate = useNavigate();

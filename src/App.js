@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import SignInPage from './SignInPage';
-import MainPage from './MainPage';
-import ErrorPage from './ErrorPage';
+import SignInPage from './pages/SignInPage';
+import MainPage from './pages/MainPage';
+import ErrorPage from './pages/ErrorPage';
 import PrivateRoute from "./PrivateRoute";
-import ProfilePage from "./ProfilePage";
-import TemplatePage from "./TemplatePage";
+import ProfilePage from "./pages/ProfilePage";
+import TemplatePage from "./pages/TemplatePage";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
