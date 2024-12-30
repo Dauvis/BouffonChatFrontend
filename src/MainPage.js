@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import loginService from "./services/loginService.js";
 import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
+import { List } from "react-bootstrap-icons";
 import NavHeader from "./components/NavHeader";
 
 export default function MainPage() {
@@ -20,9 +21,11 @@ export default function MainPage() {
         navigate('/error', { state: { errorStatus } });
     };
 
+    const navIcon = ( <List />);
+    
     return (
         <>
-            <NavHeader />
+            <NavHeader icon={navIcon} callBack={() => alert("TODO: Show menu")}/>
             <main>
                 <Container>
                     <Row>

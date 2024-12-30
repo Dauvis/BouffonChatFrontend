@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { XLg } from "react-bootstrap-icons";
 import NavHeader from "./components/NavHeader";
 
 export default function TemplatePage() {
@@ -9,9 +10,11 @@ export default function TemplatePage() {
     navigate("/main");
   };
 
+  const navIcon = ( <XLg /> );
+
   return (
     <>
-      <NavHeader />
+      <NavHeader icon={navIcon} callBack={() => goToMainPage()} />
       <main>
         <Container>
           <Row>

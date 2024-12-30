@@ -1,15 +1,20 @@
-import { Container, Navbar } from "react-bootstrap";
+import { Container, Navbar, Button } from "react-bootstrap";
 import './NavHeader.css'
 
-export default function NavHeader() {
+export default function NavHeader({icon, callBack}) {
+    const navBarButton = (
+        <Button variant="outline-secondary" onClick={callBack}>{icon}</Button>
+    );
+
     return (
-        <header className="fixed-top">
-            <Navbar className="bg-body-tertiary">
+        <header>
+            <Navbar className="bg-body-tertiary" fixed="top">
                 <Container>
                     <Navbar.Brand href="/main" className="nav-header-brand">
-                    <img alt="Bouffon Chat Logo" src="/images/bouffon_chat_icon.png" className="nav-header-logo d-inline-block align-top"/>
-                    <span>Bouffon Chat</span>
+                        <img alt="Bouffon Chat Logo" src="/images/bouffon_chat_icon.png" className="nav-header-logo d-inline-block align-top" />
+                        <span>Bouffon Chat</span>
                     </Navbar.Brand>
+                    {navBarButton}
                 </Container>
             </Navbar>
         </header>
