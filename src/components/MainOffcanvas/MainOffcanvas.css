@@ -1,0 +1,20 @@
+.main-offcanvas-scroll-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.chat-entry-archived {
+    color: darkgray;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.chat-entry-active {
+    font-style: normal;
+    font-weight: bold;
+}
+
+.chat-entry-temp {
+    font-style: normal;
+    font-weight: normal;
+}

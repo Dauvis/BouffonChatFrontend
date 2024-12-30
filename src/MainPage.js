@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import loginService from "./services/loginService.js";
 import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 import { List } from "react-bootstrap-icons";
 import NavHeader from "./components/NavHeader";
+import MainOffcanvas from "./components/MainOffcanvas/MainOffcanvas";
 
 export default function MainPage() {
     const navigate = useNavigate();
+    const [showOffcanvas, setShowOffcanvas] = useState(false);
 
     const goToPage = (page) => {
         navigate(page);
@@ -22,10 +25,11 @@ export default function MainPage() {
     };
 
     const navIcon = ( <List />);
-    
+
     return (
         <>
-            <NavHeader icon={navIcon} callBack={() => alert("TODO: Show menu")}/>
+            <NavHeader icon={navIcon} callBack={() => setShowOffcanvas(true)}/>
+            <MainOffcanvas offcanvasState={showOffcanvas} closeCallBack={() => setShowOffcanvas(false)} />
             <main>
                 <Container>
                     <Row>
