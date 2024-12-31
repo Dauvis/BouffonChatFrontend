@@ -13,10 +13,6 @@ export default function MainPage() {
     const navigate = useNavigate();
     const [showOffcanvas, setShowOffcanvas] = useState(false);
 
-    const goToPage = (page) => {
-        navigate(page);
-    }
-
     const logOutOfApp = async () => {
         await loginService.logOutOfAPI();
         localStorage.removeItem('profile');
@@ -37,16 +33,9 @@ export default function MainPage() {
                 <Container>
                     <Row>
                         <Col>
-                            <h1>Welcome to the Main page</h1>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
                             <ButtonGroup>
-                                <Button variant="primary" onClick={() => goToPage('/profile')}>Open profile</Button>
-                                <Button variant="primary" onClick={() => goToPage('/template')}>Open templates</Button>
                                 <Button variant="warning" onClick={logOutOfApp}>Log out</Button>
-                                <Button variant="danger" onClick={() => handleError(500)}>Server error</Button>
+                                <Button variant="danger" onClick={() => handleError(500)}>Error page</Button>
                             </ButtonGroup>
                         </Col>
                     </Row>
