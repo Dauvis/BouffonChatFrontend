@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { XLg } from "react-bootstrap-icons";
 import NavHeader from "../../components/NavHeader";
 
@@ -20,11 +20,6 @@ export default function TemplatePage() {
           <Row>
             <Col>
             <h1>Welcome to the Templates page</h1>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-            <Button variant="primary" onClick={goToMainPage}>Go to Main</Button>
             </Col>
           </Row>
         </Container>
