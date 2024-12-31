@@ -1,24 +1,30 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { EmojiFrownFill } from "react-bootstrap-icons";
 
-export default function ErrorPage() {
+export default function ErrorPage({status, message}) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const errorStatus = location.state?.errorStatus;
+    const errorStatus = status || location.state?.errorStatus || "Unknown";
+    const errorText = message || location.state?.errorText || "There was an error but we cannot tell what kind of error it was."
 
     const goToMainPage = () => {
-      navigate("/main");
+        navigate("/main");
     };
-  
+
     return (
-        <>        
-            <Container>
+        <>
+            <Container className="vh-100 d-flex justify-content-center align-items-center">
                 <Row>
                     <Col>
-                        <h1>Error {errorStatus || 'Unknown'}</h1>
-                        <p>Something went wrong. Please try again later.</p>            
-                        <Button variant="secondary" onClick={goToMainPage}>Return to app</Button>
+                        <Card className="bg-body-tertiary">
+                            <Card.Body>
+                                <Card.Title>Error: {errorStatus} <EmojiFrownFill color="darkgreen" /></Card.Title>
+                                <Card.Text>{errorText}</Card.Text>
+                                <Button variant="secondary" onClick={goToMainPage}>Return to app</Button>
+                            </Card.Body>
+                        </Card>
                     </Col>
                 </Row>
             </Container>

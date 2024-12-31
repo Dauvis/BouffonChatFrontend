@@ -18,6 +18,7 @@ const App = () => {
         <Route path="/template" element={<PrivateRoute> <TemplatePage/> </PrivateRoute>}/>
         <Route path="/sign-in" element={<SignInPage/> }/>
         <Route path="/error" element={<ErrorPage/>}/>
+        <Route path="*" element={<ErrorPage status="404" message="The page that you are looking for does not exist."/>}/>
       </Routes>
     </BrowserRouter>
   );
