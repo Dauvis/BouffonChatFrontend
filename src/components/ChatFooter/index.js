@@ -1,0 +1,1 @@
+export {defatult} from "./ChatFooter.js"

@@ -5,6 +5,7 @@ import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 import { List } from "react-bootstrap-icons";
 import NavHeader from "../../components/NavHeader";
 import MainOffcanvas from "../../components/MainOffcanvas/MainOffcanvas";
+import ChatFooter from "../../components/ChatFooter/ChatFooter";
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -49,6 +50,7 @@ export default function MainPage() {
                     </Row>
                 </Container>
             </main>
+            <ChatFooter />
         </>
     );
 };
