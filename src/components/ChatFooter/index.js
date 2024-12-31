@@ -1,1 +1,1 @@
-export {defatult} from "./ChatFooter.js"
+export {default} from "./ChatFooter.js"

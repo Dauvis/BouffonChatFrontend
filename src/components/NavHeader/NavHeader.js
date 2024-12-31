@@ -4,7 +4,7 @@ import './NavHeader.css'
 
 export default function NavHeader({icon, callBack}) {
     const navBarButton = (
-        <Button variant="outline-secondary" onClick={callBack}>{icon}</Button>
+        <Button variant="outline-secondary" className="nav-header-button" onClick={callBack}>{icon}</Button>
     );
 
     return (

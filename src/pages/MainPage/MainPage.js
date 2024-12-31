@@ -4,8 +4,10 @@ import loginService from "../../services/loginService.js";
 import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 import { List } from "react-bootstrap-icons";
 import NavHeader from "../../components/NavHeader";
-import MainOffcanvas from "../../components/MainOffcanvas/MainOffcanvas";
-import ChatFooter from "../../components/ChatFooter/ChatFooter";
+import MainOffcanvas from "../../components/MainOffcanvas";
+import ChatFooter from "../../components/ChatFooter";
+import ChatContent from "../../components/ChatContent";
+import ChatTitle from "../../components/ChatTitle";
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -49,6 +51,8 @@ export default function MainPage() {
                         </Col>
                     </Row>
                 </Container>
+                <ChatTitle title="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris" />
+                <ChatContent />
             </main>
             <ChatFooter />
         </>

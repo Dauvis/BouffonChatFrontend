@@ -1,0 +1,23 @@
+.chat-content-message-common {
+    margin-top: 0.5rem;
+}
+
+.chat-content-message-common .card-title {
+    padding-left: 0.5rem;
+    margin-bottom: 0rem;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.175);
+}
+
+.chat-content-message-common .card-body {
+    padding: 0.5rem;
+}
+
+.chat-content-message-user.card {
+    background-color: lightblue;
+    margin-right: 2rem;
+}
+
+.chat-content-message-assistant.card {
+    background-color: lightgreen;
+    margin-left: 2rem;
+}
