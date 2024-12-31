@@ -2,9 +2,12 @@ import { Offcanvas, Nav, Button, Dropdown, Form, ListGroup } from "react-bootstr
 import { PersonSquare, MoonFill, ChatLeftDots, JournalPlus, Image, 
     BoxSeam, ChatFill, ChatLeftText } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import miscUtil from "../../util/miscUtil.js"
 import "./MainOffcanvas.css";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
+    const profile = miscUtil.getProfile();
+
     return (
         <Offcanvas show={offcanvasState} onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
@@ -13,7 +16,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
             <Offcanvas.Body>
                 <Nav className="flex-column">
                     <Nav.Item>
-                        <Link to="/profile" className="chat-menu-link"><PersonSquare /> John Doe</Link>
+                        <Link to="/profile" className="chat-menu-link"><PersonSquare /> {profile.name}</Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Button variant="link"><MoonFill /> Switch to dark mode</Button>

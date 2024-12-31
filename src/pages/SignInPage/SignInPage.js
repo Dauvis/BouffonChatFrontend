@@ -21,7 +21,7 @@ export default function SignInPage() {
 
   const onError = () => {
     console.error("Login Failed");
-    navigate("/error", { state: { errorStatus: 401 } });
+    navigate("/error", { state: { errorStatus: 401, errorText: "Authentication with Google failed. Please, try again." } });
   };
 
   return (

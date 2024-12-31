@@ -1,17 +1,17 @@
-const isAuthenticated = () => {
+function isAuthenticated() {
   const profile = localStorage.getItem("profile");
   return profile !== null;
 };
 
-const apiResponse = (success, status, body) => {
+function apiResponse(success, status, body) {
   return { success, status, body };
 };
 
-const getEndpointUri = (endpoint) => {
+function getEndpointUri(endpoint) {
     return `${process.env.REACT_APP_API_URL}/api${endpoint}`;
 }
 
-const apiPost = async (endpoint, body) => {
+async function apiPost(endpoint, body) {
   const endpointUri = getEndpointUri(endpoint);
 
   try {
@@ -36,7 +36,7 @@ const apiPost = async (endpoint, body) => {
   }
 };
 
-const apiDelete = async (endpoint, isProtected = true) => {
+async function apiDelete(endpoint, isProtected = true) {
     const endpointUri = getEndpointUri(endpoint);
 
   try {
