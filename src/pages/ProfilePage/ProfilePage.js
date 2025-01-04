@@ -13,11 +13,11 @@ export default function ProfilePage() {
 
     return (
         <>
-            <NavHeader icon={(<XLg />)} callBack={() => goToMainPage()}/>
+            <NavHeader icon={(<XLg />)} callBack={goToMainPage}/>
             <main>
                 <Container>
                     <h3>Profile</h3>
-                    <ProfileForm />
+                    <ProfileForm saveCallback={goToMainPage} cancelCallback={goToMainPage} />
                 </Container>
             </main>
         </>

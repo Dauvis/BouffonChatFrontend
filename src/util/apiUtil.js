@@ -78,6 +78,31 @@ async function apiGet(endpoint, isProtected = true) {
   }
 }
 
-const apiUtil = { isAuthenticated, apiPost, apiDelete, apiGet };
+async function apiPut(endpoint, body) {
+  const endpointUri = getEndpointUri(endpoint);
+
+  try {
+    const response = await fetch(endpointUri, {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data = response.status === 204 ? {} : await response.json();
+      return apiResponse(true, response.status, data);
+    } else {
+      return apiResponse(false, response.status, {});
+    }
+  } catch (error) {
+    console.error(`Error putting to ${endpointUri}: ${error.message}`);
+    return apiResponse(false, 500, {});
+  }
+};
+
+const apiUtil = { isAuthenticated, apiPost, apiDelete, apiGet, apiPut };
 
 export default apiUtil;
