@@ -8,7 +8,7 @@ function apiResponse(success, status, body) {
 };
 
 function getEndpointUri(endpoint) {
-    return `${process.env.REACT_APP_API_URL}/api${endpoint}`;
+  return `${process.env.REACT_APP_API_URL}/api${endpoint}`;
 }
 
 async function apiPost(endpoint, body) {
@@ -37,7 +37,7 @@ async function apiPost(endpoint, body) {
 };
 
 async function apiDelete(endpoint, isProtected = true) {
-    const endpointUri = getEndpointUri(endpoint);
+  const endpointUri = getEndpointUri(endpoint);
 
   try {
     const response = await fetch(endpointUri, {
@@ -55,6 +55,29 @@ async function apiDelete(endpoint, isProtected = true) {
   }
 };
 
-const apiUtil = { isAuthenticated, apiPost, apiDelete }; 
+async function apiGet(endpoint, isProtected = true) {
+  const endpointUri = getEndpointUri(endpoint);
+
+  try {
+    const response = await fetch(endpointUri, {
+      method: "GET",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return apiResponse(true, response.status, data);
+    } else {
+      return apiResponse(false, response.status, {});
+    }
+  } catch (error) {
+    console.error(`Error fetching resource ${endpointUri}: ${error.message}`);
+  }
+}
+
+const apiUtil = { isAuthenticated, apiPost, apiDelete, apiGet };
 
 export default apiUtil;
