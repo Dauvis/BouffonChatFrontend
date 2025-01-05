@@ -1,3 +1,7 @@
 .profile-form-button {
     margin-right: 0.25rem;
 }
+
+input:invalid {
+    border: 2px dashed red;
+}

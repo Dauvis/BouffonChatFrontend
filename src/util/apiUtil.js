@@ -28,7 +28,8 @@ async function apiPost(endpoint, body) {
       const data = await response.json();
       return apiResponse(true, response.status, data);
     } else {
-      return apiResponse(false, response.status, {});
+      const errorData = await response.json();
+      return apiResponse(false, response.status, errorData);
     }
   } catch (error) {
     console.error(`Error posting to ${endpointUri}: ${error.message}`);
@@ -71,7 +72,8 @@ async function apiGet(endpoint, isProtected = true) {
       const data = await response.json();
       return apiResponse(true, response.status, data);
     } else {
-      return apiResponse(false, response.status, {});
+      const errorData = await response.json();
+      return apiResponse(false, response.status, errorData);
     }
   } catch (error) {
     console.error(`Error fetching resource ${endpointUri}: ${error.message}`);
@@ -95,7 +97,8 @@ async function apiPut(endpoint, body) {
       const data = response.status === 204 ? {} : await response.json();
       return apiResponse(true, response.status, data);
     } else {
-      return apiResponse(false, response.status, {});
+      const errorData = await response.json();
+      return apiResponse(false, response.status, errorData);
     }
   } catch (error) {
     console.error(`Error putting to ${endpointUri}: ${error.message}`);

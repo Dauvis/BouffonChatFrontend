@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 import { BoxArrowRight } from "react-bootstrap-icons";
 import { OptionsContext } from "../../components/OptionsContext/OptionsContext.js";
 import loginService  from "../../services/loginService.js";
@@ -20,12 +20,17 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
     ));
 
     const [profile, setProfile] = useState(null);
+    const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
         const fetchProfile = async () => {
             const response = await apiUtil.apiGet("/v1/profile");
-            setProfile(response.body.profile);
-            // TODO: check for errors
+
+            if (response.success) {
+                setProfile(response.body.profile);
+            } else {
+                console.log(`Error fetching profile: ${response.body.message}`);
+            }            
         }
 
         fetchProfile();
@@ -47,26 +52,30 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
     }
 
     const saveProfile = async () => {
-        // TODO: Add validation
         const response = await apiUtil.apiPut("/v1/profile", profile);
-        // TODO: check for errors from API
-        saveCallback();
+        
+        if (!response.success) {
+            setErrorMsg(response.body.message);
+        } else {
+            saveCallback();
+        }
     }
 
     return (
         profile ?
-        <Form>
+        <Form action={saveProfile}>
+            { errorMsg ? <Alert variant="danger">{errorMsg}</Alert> : null}
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-3" controlId="name">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="eg. John Doe" required defaultValue={profile.name} onChange={fieldChanged}/>
+                        <Form.Control type="text" placeholder="eg. John Doe" required defaultValue={profile.name} onBlur={fieldChanged}/>
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
                     <Form.Group className="mb-3" controlId="email">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="eg. jdoe@example.com" required defaultValue={profile.email} onChange={fieldChanged}/>
+                        <Form.Control type="email" placeholder="eg. jdoe@example.com" required defaultValue={profile.email} onBlur={fieldChanged}/>
                     </Form.Group>
                 </Col>
             </Row>
@@ -74,7 +83,7 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
                 <Col sm={6}>
                     <Form.Group className="mb-3" controlId="defaultTone">
                         <Form.Label>Tone</Form.Label>
-                        <Form.Select defaultValue={profile.defaultTone} onChange={fieldChanged}>
+                        <Form.Select defaultValue={profile.defaultTone} onBlur={fieldChanged}>
                             <option value="">Select tone...</option>
                             {toneOptions}
                         </Form.Select>
@@ -83,7 +92,7 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
                 <Col sm={6}>
                     <Form.Group className="mb-3" controlId="defaultModel">
                         <Form.Label>Model</Form.Label>
-                        <Form.Select defaultValue={profile.defaultModel} onChange={fieldChanged}>
+                        <Form.Select defaultValue={profile.defaultModel} onBlur={fieldChanged}>
                             <option value="">Select model...</option>
                             {modelOptions}
                         </Form.Select>
@@ -94,13 +103,13 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
                 <Col>
                     <Form.Group className="mb-3" controlId="defaultInstructions">
                         <Form.Label>Instructions</Form.Label>
-                        <Form.Control as="textarea" placeholder="Instructions for the assistant..." rows={7} defaultValue={profile.defaultInstructions} onChange={fieldChanged}/>
+                        <Form.Control as="textarea" placeholder="Instructions for the assistant..." rows={7} defaultValue={profile.defaultInstructions} onBlur={fieldChanged}/>
                     </Form.Group>
                 </Col>
             </Row>
             <Row>
                 <Col sm={8}>
-                    <Button variant="primary" className="profile-form-button" onClick={saveProfile}>Save</Button> 
+                    <Button variant="primary" type="submit" className="profile-form-button">Save</Button> 
                     <Button variant="secondary" className="profile-form-button" onClick={cancelCallback}>Cancel</Button>
                 </Col>
                 <Col sm={4} className="text-end">
