@@ -6,6 +6,7 @@ import { OptionsContext } from "../../components/OptionsContext/OptionsContext.j
 import loginService  from "../../services/loginService.js";
 import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
+import LoadingWait from "../LoadingWait/LoadingWait.js";
 
 export default function ProfileForm({saveCallback, cancelCallback}) {
     const navigate = useNavigate();
@@ -117,6 +118,6 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
                 </Col>
             </Row>
         </Form>
-        : <span>Please wait...</span>
+        : <LoadingWait text="Please wait. Loading profile" />
     );
 }
