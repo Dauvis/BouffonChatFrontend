@@ -37,7 +37,7 @@ async function apiPost(endpoint, body) {
   }
 };
 
-async function apiDelete(endpoint, isProtected = true) {
+async function apiDelete(endpoint) {
   const endpointUri = getEndpointUri(endpoint);
 
   try {
@@ -56,7 +56,7 @@ async function apiDelete(endpoint, isProtected = true) {
   }
 };
 
-async function apiGet(endpoint, isProtected = true) {
+async function apiGet(endpoint) {
   const endpointUri = getEndpointUri(endpoint);
 
   try {

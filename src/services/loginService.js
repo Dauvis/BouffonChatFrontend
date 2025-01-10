@@ -1,7 +1,7 @@
 import apiUtil from "../util/apiUtil.js"
 
-const logIntoAPI = async (idToken) => {
-  const {success, body} = await apiUtil.apiPost("/v1/login", {token: idToken}, false);
+const logIntoAPI = async (idToken, navigate) => {
+  const {success, body} = await apiUtil.apiPost("/v1/login", {token: idToken}, navigate);
 
   if (success) {
     return body;
@@ -11,8 +11,8 @@ const logIntoAPI = async (idToken) => {
   }
 };
 
-const logOutOfAPI = async () => {
-    const { success } = apiUtil.apiDelete("/v1/login");
+const logOutOfAPI = async (navigate) => {
+    const { success } = apiUtil.apiDelete("/v1/login", navigate);
     
     return success;
 }

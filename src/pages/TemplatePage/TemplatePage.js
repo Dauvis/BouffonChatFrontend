@@ -26,12 +26,16 @@ export default function TemplatePage() {
             setCurrentTemplate(allTemplates ? allTemplates[0] : null);
             setCategoryList([...new Set(allTemplates.map(entry => entry.category))]);
         } else {
-            console.log(`Error fetching templates: ${response.body.message}`);
+          if (response.status === 401) {
+            navigate("/sign-in");
+          }
+
+          console.log(`Error fetching templates: ${response.body.message}`);
         }            
     }
 
     fetchTemplates();
-}, []);
+}, [navigate]);
 
   function goToMainPage() {
     navigate("/main");

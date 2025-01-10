@@ -5,7 +5,7 @@ import ErrorPage from './pages/ErrorPage';
 import PrivateRoute from "./PrivateRoute";
 import ProfilePage from "./pages/ProfilePage";
 import TemplatePage from "./pages/TemplatePage";
-import { OptionsProvider } from "./components/OptionsContext/OptionsContext.js";
+import { OptionsProvider } from "./contexts/OptionsContext.js";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';

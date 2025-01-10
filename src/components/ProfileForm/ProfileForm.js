@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 import { BoxArrowRight } from "react-bootstrap-icons";
-import { OptionsContext } from "../../components/OptionsContext/OptionsContext.js";
+import { OptionsContext } from "../../contexts/OptionsContext.js";
 import loginService  from "../../services/loginService.js";
 import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
@@ -30,12 +30,15 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
             if (response.success) {
                 setProfile(response.body.profile);
             } else {
+                if (response.status === 401) {
+                    navigate("/sign-in");
+                }
                 console.log(`Error fetching profile: ${response.body.message}`);
             }            
         }
 
         fetchProfile();
-    }, []);
+    }, [navigate]);
 
     const logOutOfApp = async () => {
         await loginService.logOutOfAPI();
@@ -56,6 +59,10 @@ export default function ProfileForm({saveCallback, cancelCallback}) {
         const response = await apiUtil.apiPut("/v1/profile", profile);
         
         if (!response.success) {
+            if (response.status === 401) {
+                navigate("/sign-in");
+            }
+
             setErrorMsg(response.body.message);
         } else {
             saveCallback();
