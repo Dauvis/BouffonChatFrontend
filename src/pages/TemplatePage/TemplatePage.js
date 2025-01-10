@@ -8,45 +8,48 @@ import TemplateListByCategory from "../../components/TemplateListByCategory";
 import "./TemplatePage.css"
 import TemplateList from "../../components/TemplateList/TemplateList";
 import apiUtil from "../../util/apiUtil.js";
+import ErrorRedirect from "../../components/ErrorRedirect";
 
 export default function TemplatePage() {
   const navigate = useNavigate();
   const [showCategoryView, setShowCategoryView] = useState(true);
   const [templateList, setTemplateList] = useState([]);
-  const [currentTemplate, setCurrentTemplate] = useState(null);
+  const [currentTemplate, setCurrentTemplate] = useState({ name: '', description: '', category: '', tone:'', instructions:'', notes:''});
   const [categoryList, setCategoryList] = useState(null);
+  const [errorResponse, setErrorResponse] = useState(null);
 
   useEffect(() => {
     const fetchTemplates = async () => {
-        const response = await apiUtil.apiGet("/v1/template");
+      const response = await apiUtil.apiGet("/v1/template");
 
-        if (response.success) {
-            const allTemplates = response.body.templates;
-            setTemplateList(allTemplates);
-            setCurrentTemplate(allTemplates ? allTemplates[0] : null);
-            setCategoryList([...new Set(allTemplates.map(entry => entry.category))]);
-        } else {
-          if (response.status === 401) {
-            navigate("/sign-in");
-          }
-
-          console.log(`Error fetching templates: ${response.body.message}`);
-        }            
+      if (response.success) {
+        const allTemplates = response.body.templates;
+        setTemplateList(allTemplates);
+        setCurrentTemplate(allTemplates ? allTemplates[0] : null);
+        setCategoryList([...new Set(allTemplates.map(entry => entry.category))]);
+      } else {
+        setErrorResponse(response.body);
+        console.log(`Error fetching templates: ${response.body.message}`);
+      }
     }
 
     fetchTemplates();
-}, [navigate]);
+  }, []);
 
   function goToMainPage() {
     navigate("/main");
   };
 
-function handleItemClicked(templateId) {
-  const template = templateList.find(entry => entry._id === templateId);
-  setCurrentTemplate(template);
-}
+  function handleItemClicked(templateId) {
+    const template = templateList.find(entry => entry._id === templateId);
+    setCurrentTemplate(template);
+  }
 
   const navIcon = (<XLg />);
+
+  if (errorResponse) {
+    return (<ErrorRedirect errorResponse={errorResponse} />);
+  }
 
   return (
     <>
@@ -75,8 +78,8 @@ function handleItemClicked(templateId) {
                   </Col>
                 </Row>
                 <Row>
-                  {showCategoryView 
-                    ? <TemplateListByCategory templates={templateList} currentTemplate={currentTemplate} categories={categoryList} itemCallback={handleItemClicked} /> 
+                  {showCategoryView
+                    ? <TemplateListByCategory templates={templateList} currentTemplate={currentTemplate} categories={categoryList} itemCallback={handleItemClicked} />
                     : <TemplateList templates={templateList} currentTemplate={currentTemplate} itemCallback={handleItemClicked} />}
                 </Row>
               </Container>

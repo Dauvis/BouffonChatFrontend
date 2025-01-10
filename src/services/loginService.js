@@ -6,7 +6,6 @@ const logIntoAPI = async (idToken, navigate) => {
   if (success) {
     return body;
   } else {
-    // TODO handle failure to authenticate (401, 403, and other)
     return null;
   }
 };
