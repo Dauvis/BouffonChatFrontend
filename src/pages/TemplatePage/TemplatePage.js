@@ -9,14 +9,21 @@ import "./TemplatePage.css"
 import TemplateList from "../../components/TemplateList/TemplateList";
 import apiUtil from "../../util/apiUtil.js";
 import ErrorRedirect from "../../components/ErrorRedirect";
+import TemplateModal from "../../components/TemplateModal";
+import YesNoModal from "../../components/YesNoModal";
+import miscUtil from "../../util/miscUtil.js";
 
 export default function TemplatePage() {
   const navigate = useNavigate();
+  const blankTemplate = { _id: '', name: '', description: '', category: '', tone:'', instructions:'', notes:''};
+
   const [showCategoryView, setShowCategoryView] = useState(true);
   const [templateList, setTemplateList] = useState([]);
-  const [currentTemplate, setCurrentTemplate] = useState({ name: '', description: '', category: '', tone:'', instructions:'', notes:''});
-  const [categoryList, setCategoryList] = useState(null);
-  const [errorResponse, setErrorResponse] = useState(null);
+  const [currentTemplate, setCurrentTemplate] = useState(blankTemplate);
+  const [categoryList, setCategoryList] = useState([]);
+  const [errorResponse, setErrorResponse] = useState('');
+  const [modalData, setModalData] = useState({show: false});
+  const [yesNoModalData, setYesNoModalData] = useState({show: false, message: ''});
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -45,6 +52,80 @@ export default function TemplatePage() {
     setCurrentTemplate(template);
   }
 
+  function handleNewClicked() {
+    const profile = miscUtil.getProfile();
+    const initData = {
+      ...blankTemplate,
+      tone: profile.defaultTone,
+      instructions: profile.defaultInstructions
+    };
+
+    setModalData({show: true, data: initData});
+  }
+
+  function handleEditClicked() {
+    setModalData({show: true, data: currentTemplate});
+  }
+
+  function modalClosedCallback(data) {
+    if (data) {
+      if (templateList.some(t => t._id === data._id)) {
+        setTemplateList((prev) => (
+          prev.map(t => (t._id === data._id ? data : t))
+        ));
+      } else {
+        setTemplateList((prev) => [...prev, data]);
+      }
+
+      if (!categoryList.includes(data.category)) {
+        setCategoryList((prev) => ([...prev, data.category]).sort());
+      }
+
+      setCurrentTemplate(data);
+    }
+    
+    setModalData({show: false, data: blankTemplate});
+  }
+
+  function handleDeleteClicked() {
+    setYesNoModalData({show: true, message: "Are you sure you want to delete the selected template?"});
+  }
+
+  async function yesNoCallback(result) {
+    if (result.result) {
+      const curTemplateId = currentTemplate._id;
+      const curCategory = currentTemplate.category;
+      const curIndex = templateList.findIndex(t => t._id === curTemplateId);
+      const response = await apiUtil.apiDelete(`/v1/template/${curTemplateId}`);
+
+      if (response.success) {
+        const updatedTempList = templateList.filter(t => t._id !== curTemplateId);
+        const updatedCatList = [...new Set(updatedTempList.map(entry => entry.category))];
+
+        let newCurrent;
+
+        if (showCategoryView) {
+          newCurrent = updatedTempList.find(t => t.category === curCategory);
+        } else {
+          newCurrent = updatedTempList.length <= curIndex ? updatedTempList[curIndex] : 
+            updatedTempList.length && curIndex !== 0 ? updatedTempList[curIndex-1] : null;
+        }
+        
+        if (!newCurrent) {
+          newCurrent = updatedTempList.length ? updatedTempList[0] : blankTemplate;
+        }
+
+        setTemplateList(updatedTempList);
+        setCategoryList(updatedCatList);
+        setCurrentTemplate(newCurrent);
+      } else {
+        setErrorResponse(response);
+      }
+    }
+
+    setYesNoModalData({show: false, message:''});
+  }
+
   const navIcon = (<XLg />);
 
   if (errorResponse) {
@@ -55,6 +136,9 @@ export default function TemplatePage() {
     <>
       <NavHeader icon={navIcon} callBack={goToMainPage} />
       <main>
+        <TemplateModal show={modalData.show} defaultData={modalData.data} categories={categoryList} 
+          closeCallback={modalClosedCallback} />
+        <YesNoModal show={yesNoModalData.show} message={yesNoModalData.message} closeCallback={yesNoCallback} />
         <Container>
           <Row>
             <Col xs={12} md={4}>
@@ -63,10 +147,10 @@ export default function TemplatePage() {
                   <Col>
                     <ButtonToolbar className="template-page-toolbar">
                       <ButtonGroup className="me-2" aria-label="Templates">
-                        <Button variant="secondary" aria-label="New template"><PlusLg /></Button>
-                        <Button variant="secondary" aria-label="Edit template"><PencilFill /></Button>
-                        <Button variant="secondary" aria-label="Delete template"><XLg /></Button>
-                        <Button variant="secondary" aria-label="Create conversation"><ChatTextFill /></Button>
+                        <Button variant="secondary" aria-label="New template" onClick={handleNewClicked}><PlusLg /></Button>
+                        <Button variant="secondary" aria-label="Edit template" onClick={handleEditClicked}><PencilFill /></Button>
+                        <Button variant="secondary" aria-label="Delete template" onClick={handleDeleteClicked}><XLg /></Button>
+                        <Button variant="secondary" aria-label="Create conversation" onClick={() => alert('Coming soon')}><ChatTextFill /></Button>
                       </ButtonGroup>
                       <ButtonGroup className="me-2" aria-label="View">
                         <Button variant="secondary" id="showByCategory" aria-label="Show by category"

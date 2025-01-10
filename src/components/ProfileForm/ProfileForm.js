@@ -8,6 +8,7 @@ import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
 import LoadingWait from "../LoadingWait/LoadingWait.js";
 import ErrorRedirect from "../ErrorRedirect";
+import miscUtil from "../../util/miscUtil.js";
 
 export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
 
     const logOutOfApp = async () => {
         await loginService.logOutOfAPI();
-        localStorage.removeItem('profile');
+        miscUtil.clearProfile();
         navigate('/sign-in');
     }
 
@@ -60,10 +61,10 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
 
         if (!response.success) {
             if (response.status === 401) {
-                navigate("/sign-in");
+                setErrorResponse(response);
+            } else {
+                setErrorMsg(response.body.message);
             }
-
-            setErrorMsg(response.body.message);
         } else {
             saveCallback();
         }

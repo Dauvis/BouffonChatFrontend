@@ -1,9 +1,16 @@
 import { Accordion, Alert, ListGroup } from "react-bootstrap"
+import { useState, useEffect } from "react";
 import "./TemplateListByCategory.css"
 import LoadingWait from "../LoadingWait/LoadingWait";
 import TemplateListItem from "../TemplateListItem";
 
 export default function TemplateListByCategory({ templates, currentTemplate, categories, itemCallback }) {
+    const [curActiveKey, setCurActiveKey] = useState('');
+
+    useEffect(() => {
+        setCurActiveKey(currentTemplate.category)
+    }, [currentTemplate])
+
     if (!categories) {
         return (<LoadingWait />);
     }
@@ -37,9 +44,13 @@ export default function TemplateListByCategory({ templates, currentTemplate, cat
         );
     });
 
+    function handleOnSelect(eventKey) {
+        setCurActiveKey(eventKey);
+    }
+
     return (
         items.length ?   
-        <Accordion defaultActiveKey={currentTemplate.category}>
+        <Accordion activeKey={curActiveKey} onSelect={handleOnSelect}>
             {items}
         </Accordion>
         :
