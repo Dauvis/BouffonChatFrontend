@@ -9,7 +9,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
     const profile = miscUtil.getProfile();
 
     return (
-        <Offcanvas show={offcanvasState} onHide={closeCallBack}>
+        <Offcanvas show={offcanvasState} placement="end" onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title>Menu</Offcanvas.Title>
             </Offcanvas.Header>

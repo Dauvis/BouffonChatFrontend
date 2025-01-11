@@ -35,7 +35,7 @@ export default function TemplatePage() {
         setCurrentTemplate(allTemplates ? allTemplates[0] : null);
         setCategoryList([...new Set(allTemplates.map(entry => entry.category))]);
       } else {
-        setErrorResponse(response.body);
+        setErrorResponse(response);
         console.log(`Error fetching templates: ${response.body.message}`);
       }
     }
