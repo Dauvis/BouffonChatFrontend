@@ -19,7 +19,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Link to="/profile" className="chat-menu-link"><PersonSquare /> {profile.name}</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Button variant="link"><MoonFill /> Switch to dark mode</Button>
+                        <Button variant="link" onClick={() => alert("Coming soon")}><MoonFill /> Switch to dark mode</Button>
                     </Nav.Item>                    
                 </Nav>
                 <hr className="my-3" />
@@ -28,11 +28,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Dropdown>
                             <Dropdown.Toggle variant="link"><ChatLeftDots /> New...</Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item href="#">Conversation</Dropdown.Item>
-                                <Dropdown.Item href="#">Temporary chat</Dropdown.Item>
-                                <Dropdown.Item href="#">Template #1</Dropdown.Item>
-                                <Dropdown.Item href="#">Template #2</Dropdown.Item>
-                                <Dropdown.Item href="#">Template #3</Dropdown.Item>
+                                <Dropdown.Item action onClick={() => alert("Coming soon")}>Conversation</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav.Item>
@@ -40,7 +36,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Link to="/template" className="chat-menu-link"><JournalPlus /> Manage templates</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Button variant="link"><Image /> Image tool</Button>
+                        <Button variant="link" onClick={() => alert("Coming soon")}><Image /> Image tool</Button>
                     </Nav.Item>
                     <hr className="my-3" />
                     <ChatList />
