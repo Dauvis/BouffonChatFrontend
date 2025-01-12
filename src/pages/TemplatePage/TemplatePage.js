@@ -15,11 +15,10 @@ import miscUtil from "../../util/miscUtil.js";
 
 export default function TemplatePage() {
   const navigate = useNavigate();
-  const blankTemplate = { _id: '', name: '', description: '', category: '', tone:'', instructions:'', notes:''};
 
   const [showCategoryView, setShowCategoryView] = useState(true);
   const [templateList, setTemplateList] = useState([]);
-  const [currentTemplate, setCurrentTemplate] = useState(blankTemplate);
+  const [currentTemplate, setCurrentTemplate] = useState(miscUtil.emptyTemplate);
   const [categoryList, setCategoryList] = useState([]);
   const [errorResponse, setErrorResponse] = useState('');
   const [modalData, setModalData] = useState({show: false});
@@ -55,8 +54,9 @@ export default function TemplatePage() {
   function handleNewClicked() {
     const profile = miscUtil.getProfile();
     const initData = {
-      ...blankTemplate,
+      ...miscUtil.emptyTemplate,
       tone: profile.defaultTone,
+      model: profile.defaultModel,
       instructions: profile.defaultInstructions
     };
 
@@ -84,7 +84,7 @@ export default function TemplatePage() {
       setCurrentTemplate(data);
     }
     
-    setModalData({show: false, data: blankTemplate});
+    setModalData({show: false, data: miscUtil.emptyTemplate});
   }
 
   function handleDeleteClicked() {
@@ -112,7 +112,7 @@ export default function TemplatePage() {
         }
         
         if (!newCurrent) {
-          newCurrent = updatedTempList.length ? updatedTempList[0] : blankTemplate;
+          newCurrent = updatedTempList.length ? updatedTempList[0] : miscUtil.emptyTemplate;
         }
 
         setTemplateList(updatedTempList);

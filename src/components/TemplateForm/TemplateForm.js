@@ -23,6 +23,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
             description: formData.get("description"),
             category: formData.get("category"),
             tone: formData.get("tone"),
+            model: formData.get("model"),
             instructions: formData.get("instructions"),
             notes: formData.get("notes")
         };
@@ -61,6 +62,10 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
 
     const toneOptions = (options?.tones || []).map(entry => (
         <option key={entry} value={entry}>{entry}</option>
+    ));
+
+    const modelOptions = (options?.models || []).map(entry => (
+        <option key={entry.value} value={entry.value}>{entry.label}</option>
     ));
 
     return (
@@ -102,6 +107,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
                     <Form.Group>
                         <Form.Label>Tone</Form.Label>
                         <Form.Select name="tone" id="tone" defaultValue={defaultData.tone}>
+                            <option value=""></option>
                             {toneOptions}
                         </Form.Select>
                     </Form.Group>
@@ -110,8 +116,21 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
                 <Row>
                     <Col>
                     <Form.Group>
+                        <Form.Label>Model</Form.Label>
+                        <Form.Select name="model" id="model" defaultValue={defaultData.model}>
+                            <option value=""></option>
+                            {modelOptions}
+                        </Form.Select>
+                    </Form.Group>
+                    </Col>
+                    <Col>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                    <Form.Group>
                         <Form.Label>Instructions</Form.Label>
-                        <Form.Control as="textarea" name="instructions" id="instructions" rows={8} defaultValue={defaultData.instructions} />
+                        <Form.Control as="textarea" name="instructions" id="instructions" rows={7} defaultValue={defaultData.instructions} />
                     </Form.Group>
                     </Col>
                 </Row>
@@ -119,7 +138,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
                     <Col>
                     <Form.Group>
                         <Form.Label>Notes</Form.Label>
-                        <Form.Control as="textarea" name="notes" id="notes" rows={8} defaultValue={defaultData.notes} />
+                        <Form.Control as="textarea" name="notes" id="notes" rows={7} defaultValue={defaultData.notes} />
                     </Form.Group>
                     </Col>
                 </Row>

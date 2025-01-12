@@ -16,6 +16,7 @@ const emptyTemplate = {
     description: '',
     category: '',
     tone: '',
+    model: '',
     instructions: '',
     notes: ''
 };
