@@ -6,7 +6,7 @@ import PrivateRoute from "./PrivateRoute";
 import ProfilePage from "./pages/ProfilePage";
 import TemplatePage from "./pages/TemplatePage";
 import { OptionsProvider } from "./contexts/OptionsContext.js";
-
+import { ChatDataProvider } from "./contexts/ChatDataContext.js";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -18,19 +18,25 @@ const App = () => {
         <Route path="/main" element={
           <PrivateRoute>
             <OptionsProvider>
-              <MainPage />
+              <ChatDataProvider>
+                <MainPage />
+              </ChatDataProvider>
             </OptionsProvider>
           </PrivateRoute>} />
         <Route path="/profile" element={
           <PrivateRoute>
             <OptionsProvider>
-              <ProfilePage />
+              <ChatDataProvider>
+                <ProfilePage />
+              </ChatDataProvider>
             </OptionsProvider>
           </PrivateRoute>} />
         <Route path="/template" element={
           <PrivateRoute>
             <OptionsProvider>
-              <TemplatePage />
+              <ChatDataProvider>
+                <TemplatePage />
+              </ChatDataProvider>
             </OptionsProvider>
           </PrivateRoute>} />
         <Route path="/sign-in" element={<SignInPage />} />

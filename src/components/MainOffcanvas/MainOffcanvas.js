@@ -1,6 +1,6 @@
-import { Offcanvas, Nav, Button, Dropdown, Form, ListGroup } from "react-bootstrap";
-import { PersonSquare, MoonFill, ChatLeftDots, JournalPlus, Image, 
-    BoxSeam, ChatFill, ChatLeftText } from "react-bootstrap-icons";
+import { Offcanvas, Nav, Button, Dropdown } from "react-bootstrap";
+import { PersonSquare, MoonFill, ChatLeftDots, JournalPlus, Image } from "react-bootstrap-icons";
+import ChatList from "../ChatList";
 import { Link } from "react-router-dom";
 import miscUtil from "../../util/miscUtil.js"
 import "./MainOffcanvas.css";
@@ -43,26 +43,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Button variant="link"><Image /> Image tool</Button>
                     </Nav.Item>
                     <hr className="my-3" />
-                    <Form>
-                        <Form.Control type="text" placeholder="Search..." />
-                        <Form.Switch label="Show archived" />
-                    </Form>
-                    <h5>Conversations</h5>
-                    <div className="main-offcanvas-scroll-list">
-                        <ListGroup>
-                            <ListGroup.Item className="chat-entry-archived" active><BoxSeam /> This is an archived conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-active"><ChatFill /> This is an active conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-temp"><ChatLeftText /> This is a temporary conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-archived"><BoxSeam /> This is an archived conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-active"><ChatFill /> This is an active conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-temp"><ChatLeftText /> This is a temporary conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-archived"><BoxSeam /> This is an archived conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-active"><ChatFill /> This is an active conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-temp"><ChatLeftText /> This is a temporary conversation</ListGroup.Item>
-                            <ListGroup.Item className="chat-entry-active"><ChatFill /> This is a very long name for a conversation and 
-                                I am going to keep adding text until I am quite satisfied that this title is long enough</ListGroup.Item>
-                        </ListGroup>
-                    </div>
+                    <ChatList />
                 </Nav>
             </Offcanvas.Body>
         </Offcanvas>
