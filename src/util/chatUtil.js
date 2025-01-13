@@ -55,6 +55,21 @@ function listItemBadge(type) {
     return ( <Badge pill bg={variant}>{icon}</Badge> );
 }
 
-const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge };
+function filterChatList(chatList, keyword, showArchived) {
+    const lowerKeyword = keyword.toLocaleLowerCase();
+    let filteredList = chatList;
+
+    if (!showArchived) {
+        filteredList = filteredList.filter(c => c.type !== "archived");
+    }
+
+    if (keyword) {
+        filteredList = filteredList.filter(c => c.name.toLocaleLowerCase().includes(lowerKeyword));
+    }
+
+    return filteredList;
+}
+
+const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, filterChatList };
 
 export default chatUtil;

@@ -5,9 +5,11 @@ import { ChatDataContext } from "../../contexts/ChatDataContext.js";
 import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
 import ErrorRedirect from "../ErrorRedirect/ErrorRedirect.js";
+import chatUtil from "../../util/chatUtil.js";
 
 export default function ChatList() {
     const { chatListData, activeChat, setActiveChat } = useContext(ChatDataContext);
+    const [ searchData, setSearchData ] = useState({archived: false, keyword: '' });    
     const [ errorResponse, setErrorRespons ] = useState('');
 
     async function clickCallback(clickedChatId) {
@@ -20,7 +22,20 @@ export default function ChatList() {
         }
     }
 
-    const listItems = chatListData.map(c => (
+    function handleSearchChanged(event) {
+        const target = event.currentTarget;
+        const value = target.id === "archived" ? target.checked : target.value;
+        const newSearchData = {
+            ...searchData,
+            [target.id]: value
+        }
+
+        setSearchData(newSearchData);
+    }
+
+    const filteredList = chatUtil.filterChatList(chatListData, searchData.keyword, searchData.archived);
+
+    const listItems = filteredList.map(c => (
         <ChatListItem key={c._id} isActive={c._id === activeChat._id} type={c.type} name={c.name} id={c._id} clickCallback={clickCallback}/>
     ));
 
@@ -32,8 +47,8 @@ export default function ChatList() {
         <>
         <Card>
             <Card.Body>
-                <FormControl type="text" placeholder="Search by name" />
-                <FormCheck type="switch" label="Show archived" />
+                <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} />
+                <FormCheck type="switch" id="archived" label="Show archived" onChange={handleSearchChanged} />
             </Card.Body>
         </Card>
         <Card>
