@@ -76,6 +76,11 @@ function replaceChat(chatList, updated) {
     ));
 }
 
-const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, filterChatList, replaceChat };
+function removeChat(chatList, chatId) {
+    return chatList.filter(c => c._id !== chatId);
+}
+
+const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, 
+    filterChatList, replaceChat, removeChat };
 
 export default chatUtil;

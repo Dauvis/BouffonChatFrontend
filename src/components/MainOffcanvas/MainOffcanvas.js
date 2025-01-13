@@ -29,7 +29,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Dropdown>
                             <Dropdown.Toggle variant="link"><ChatLeftDots /> New...</Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item action onClick={() => alert("Coming soon")}>Conversation</Dropdown.Item>
+                                <Dropdown.Item as="button" onClick={() => alert("Coming soon")}>Conversation</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav.Item>

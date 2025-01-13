@@ -8,12 +8,15 @@ import ChatInfoModal from "../ChatInfoModal";
 import apiUtil from "../../util/apiUtil";
 import ErrorRedirect from "../ErrorRedirect";
 import ChatRenameModal from "../ChatRenameModal";
+import YesNoModal from "../YesNoModal";
+import miscUtil from "../../util/miscUtil";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showRename, setShowRename ] = useState(false);
     const [ errorResponse, setErrorResponse ] = useState('');
+    const [ showDeleteModal, setShowDeleteModal ] = useState(false);
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
 
     function showInfoClosed() {
@@ -56,6 +59,36 @@ export default function ChatFooter() {
         }
     }
 
+    async function handleCloseShowDeleteModal({result}) {
+        if (result) {
+            const curChatId = activeChat._id;
+            const response = await apiUtil.apiDelete(`/v1/chat/${curChatId}`)
+
+            if (response.success) {
+                const updatedList = chatUtil.removeChat(chatListData, curChatId);
+                const newChatId = updatedList.length ? updatedList[0]._id : '';
+
+                if (newChatId) {
+                    const chatResponse = await apiUtil.apiGet(`/v1/chat/${newChatId}`);
+
+                    if (chatResponse.success) {
+                        setActiveChat(chatResponse.body.chats[0]);
+                    } else {
+                        setActiveChat(miscUtil.emptyChat);
+                    }
+                } else {
+                    setActiveChat(miscUtil.emptyChat);
+                }
+
+                setChatListData(updatedList);
+            } else {
+                setErrorResponse(response);
+            }
+        }
+
+        setShowDeleteModal(false);
+    }
+
     const limitPercent = chatUtil.chatLimitPercent(activeChat);
     const limitVariant = chatUtil.chatLimitVariant(limitPercent);
     const disabled = !activeChat._id;
@@ -69,6 +102,7 @@ export default function ChatFooter() {
         <footer>
             <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={showInfoClosed} />
             <ChatRenameModal show={showRename} curName={activeChat.name} closeCallback={handleRenameClosed} />
+            <YesNoModal show={showDeleteModal} message="Are you sure you want to delete this chat?" closeCallback={handleCloseShowDeleteModal} />
             <Container>
             <Card className="bg-body-tertiary">
                 <Card.Body>
@@ -94,7 +128,7 @@ export default function ChatFooter() {
                                 <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowClockwise /> Redo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowRename(true)} ><Pencil /> Rename</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={convertClicked} >{convertIcon} {convertText}</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} ><Trash /> Delete</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowDeleteModal(true)} ><Trash /> Delete</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                         </Col>
