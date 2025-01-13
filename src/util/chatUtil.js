@@ -80,7 +80,22 @@ function removeChat(chatList, chatId) {
     return chatList.filter(c => c._id !== chatId);
 }
 
+function addChat(chatList, newChat) {
+    const list = [ ...chatList, newChat ];
+    return list.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function initNewParameters(profile, template) {
+    return {
+        name: '',
+        tone: template.tone || profile.defaultTone,
+        model: template.model || profile.defaultModel,
+        instructions: template.instructions || profile.defaultInstructions,
+        notes: template.notes
+    }
+}
+
 const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, 
-    filterChatList, replaceChat, removeChat };
+    filterChatList, replaceChat, removeChat, initNewParameters, addChat };
 
 export default chatUtil;

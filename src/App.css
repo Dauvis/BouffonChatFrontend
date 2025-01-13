@@ -4,6 +4,12 @@ main {
 }
 
 input:invalid {
-  border: 2px solid red;
-  background-color: lightpink;
+  border: 2px dotted red;
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+select:invalid {
+  border: 2px dotted red;
+  background-color: rgba(255, 0, 0, 0.2);
+  color: black;
 }

@@ -14,13 +14,8 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();
     const options = useContext(OptionsContext);
 
-    const toneOptions = (options?.tones || []).map(entry => (
-        <option key={entry} value={entry}>{entry}</option>
-    ));
-
-    const modelOptions = (options?.models || []).map(entry => (
-        <option key={entry.value} value={entry.value}>{entry.label}</option>
-    ));
+    const toneOptions = options.toneOptionsList();
+    const modelOptions = options.modelOptionsList();
 
     const [profile, setProfile] = useState(null);
     const [errorMsg, setErrorMsg] = useState("");
@@ -66,6 +61,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
                 setErrorMsg(response.body.message);
             }
         } else {
+            miscUtil.setProfile(profile);
             saveCallback();
         }
     }

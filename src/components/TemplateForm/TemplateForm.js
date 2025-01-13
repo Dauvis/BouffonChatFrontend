@@ -60,13 +60,8 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
         <Dropdown.Item key={entry} as="button" onClick={(e) => handleCategorySelected(entry, e)}>{entry}</Dropdown.Item>
     ))
 
-    const toneOptions = (options?.tones || []).map(entry => (
-        <option key={entry} value={entry}>{entry}</option>
-    ));
-
-    const modelOptions = (options?.models || []).map(entry => (
-        <option key={entry.value} value={entry.value}>{entry.label}</option>
-    ));
+    const toneOptions = options.toneOptionsList();
+    const modelOptions = options.modelOptionsList();
 
     return (
         <Form action={handleFormAction}>

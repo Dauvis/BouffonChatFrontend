@@ -15,8 +15,25 @@ export const OptionsProvider = ({ children }) => {
         getAllOptions();
     }, []);
 
+    function toneOptionsList() {
+        return (options?.tones || []).map(entry => (
+            <option key={entry} value={entry}>{entry}</option>
+        ));
+    }
+
+    function modelOptionsList() {
+        return (options?.models || []).map(entry => (
+            <option key={entry.value} value={entry.value}>{entry.label}</option>
+        ));
+    }
+
+    function modelLabel(model) {
+        const curModel = options?.models ? options.models.find(o => o.value === model) : null;
+        return curModel?.label || '';    
+    }
+
     return (
-        <OptionsContext.Provider value={options}>
+        <OptionsContext.Provider value={{options, toneOptionsList, modelOptionsList, modelLabel }}>
             {children}
         </OptionsContext.Provider>
     );

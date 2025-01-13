@@ -5,8 +5,7 @@ import { OptionsContext } from "../../contexts/OptionsContext";
 export default function TemplateView({current}) {
     const options = useContext(OptionsContext);
 
-    const curModel = options?.models ? options.models.find(o => o.value === current.model) : null;
-    const curModelLabel = curModel?.label || '';
+    const curModelLabel = options.modelLabel(current.model);
 
     return (
         <Container>

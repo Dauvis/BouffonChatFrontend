@@ -5,11 +5,28 @@ import { Link } from "react-router-dom";
 import miscUtil from "../../util/miscUtil.js"
 import "./MainOffcanvas.css";
 import ColorModeButton from "../ColorModeButton";
+import { useState } from "react";
+import ChatCreateModal from "../ChatCreateModal";
+import chatUtil from "../../util/chatUtil.js";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
+    const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
+
     const profile = miscUtil.getProfile();
 
+    function createNewChat(template) {
+        closeCallBack();
+        const parameters = chatUtil.initNewParameters(profile, miscUtil.emptyTemplate);
+        setShowCreate({show: true, parameters});
+    }
+
+    function handleCreateCallback() {
+        setShowCreate({show: false, parameters:'' });
+    }
+
     return (
+        <>
+        <ChatCreateModal show={showCreate.show} parameters={showCreate.parameters} closeCallback={handleCreateCallback} />
         <Offcanvas show={offcanvasState} placement="end" onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title>Menu</Offcanvas.Title>
@@ -29,7 +46,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Dropdown>
                             <Dropdown.Toggle variant="link"><ChatLeftDots /> New...</Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item as="button" onClick={() => alert("Coming soon")}>Conversation</Dropdown.Item>
+                                <Dropdown.Item as="button" onClick={() => createNewChat('')}>Conversation</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav.Item>
@@ -44,5 +61,6 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                 </Nav>
             </Offcanvas.Body>
         </Offcanvas>
+        </>
     );
 }
