@@ -10,6 +10,16 @@ function clearProfile() {
     localStorage.removeItem("profile");
 }
 
+function setTheme(theme) {
+    localStorage.setItem("theme", theme);
+}
+
+function getTheme(theme) {
+    const curTheme = localStorage.getItem("theme");
+
+    return curTheme || "light";
+}
+
 const emptyTemplate = {
     _id: '',
     name: '',
@@ -36,6 +46,6 @@ const emptyChat = {
     exchanges: []
 }
 
-const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat }
+const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat, setTheme, getTheme }
 
 export default miscUtil;

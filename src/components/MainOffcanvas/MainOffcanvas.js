@@ -1,9 +1,10 @@
 import { Offcanvas, Nav, Button, Dropdown } from "react-bootstrap";
-import { PersonSquare, MoonFill, ChatLeftDots, JournalPlus, Image } from "react-bootstrap-icons";
+import { PersonSquare, ChatLeftDots, JournalPlus, Image } from "react-bootstrap-icons";
 import ChatList from "../ChatList";
 import { Link } from "react-router-dom";
 import miscUtil from "../../util/miscUtil.js"
 import "./MainOffcanvas.css";
+import ColorModeButton from "../ColorModeButton";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
     const profile = miscUtil.getProfile();
@@ -19,7 +20,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Link to="/profile" className="chat-menu-link"><PersonSquare /> {profile.name}</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Button variant="link" onClick={() => alert("Coming soon")}><MoonFill /> Switch to dark mode</Button>
+                        <ColorModeButton />
                     </Nav.Item>                    
                 </Nav>
                 <hr className="my-3" />

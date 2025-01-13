@@ -4,10 +4,12 @@
 
 .chat-content-message-common .card-title {
     border-bottom: solid 1px rgba(0, 0, 0, 0.175);
+    color: black;
 }
 
 .chat-content-message-common .card-body {
     padding: 0.5rem;
+    color: black;
 }
 
 .chat-content-message-user.card {

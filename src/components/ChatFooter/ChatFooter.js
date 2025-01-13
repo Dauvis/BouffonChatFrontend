@@ -36,12 +36,12 @@ export default function ChatFooter() {
                                 <List /> Actions...
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item action disabled={disabled} onClick={() => alert("Coming soon")} ><InfoCircle /> Info</Dropdown.Item>
-                                <Dropdown.Item action disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
-                                <Dropdown.Item action disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowClockwise /> Redo</Dropdown.Item>
-                                <Dropdown.Item action disabled={disabled} onClick={() => alert("Coming soon")} ><Pencil /> Rename</Dropdown.Item>
-                                <Dropdown.Item action disabled={disabled} onClick={() => alert("Coming soon")} >{convertIcon} {convertText}</Dropdown.Item>
-                                <Dropdown.Item action disabled={disabled} onClick={() => alert("Coming soon")} ><Trash /> Delete</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} ><InfoCircle /> Info</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowClockwise /> Redo</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} ><Pencil /> Rename</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} >{convertIcon} {convertText}</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} ><Trash /> Delete</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                         </Col>
