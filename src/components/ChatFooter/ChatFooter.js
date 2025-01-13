@@ -1,13 +1,19 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
 import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
 import chatUtil from "../../util/chatUtil";
+import ChatInfoModal from "../ChatInfoModal";
 
 export default function ChatFooter() {
     const { activeChat } = useContext(ChatDataContext);
+    const [ showInfo, setShowInfo ] = useState(false);
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
+
+    function showInfoClosed() {
+        setShowInfo(false);
+    }
 
     const limitPercent = chatUtil.chatLimitPercent(activeChat);
     const limitVariant = chatUtil.chatLimitVariant(limitPercent);
@@ -16,6 +22,7 @@ export default function ChatFooter() {
 
     return (
         <footer>
+            <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={showInfoClosed} />
             <Container>
             <Card className="bg-body-tertiary">
                 <Card.Body>
@@ -36,7 +43,7 @@ export default function ChatFooter() {
                                 <List /> Actions...
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} ><InfoCircle /> Info</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowInfo(true)} ><InfoCircle /> Info</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowClockwise /> Redo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => alert("Coming soon")} ><Pencil /> Rename</Dropdown.Item>
