@@ -1,33 +1,16 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
-import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, ChatDotsFill, Trash, SendFill, ChatFill } from "react-bootstrap-icons";
+import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
 import { useContext } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
-import miscUtil from "../../util/miscUtil";
+import chatUtil from "../../util/chatUtil";
 
 export default function ChatFooter() {
     const { activeChat } = useContext(ChatDataContext);
+    const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
 
-    const convertIcon = (activeChat.type === "active") ? <ChatDotsFill /> : <ChatFill />;
-    let convertText = "Save";
-    
-    if (activeChat.type === "temp") {
-        convertText = "Save as active";
-    } else if (activeChat.type === "active") {
-        convertText = "Save as archived";
-    } else if (activeChat.type === "archived") {
-        convertText = "Restore as active";
-    }
-
-    const limitPercent = miscUtil.chatLimitPercent(activeChat);
-    let limitVariant = "info";
-
-    if (limitPercent >= 90) {
-        limitVariant = "danger";
-    } else if (limitPercent >= 75) {
-        limitVariant = "warning";
-    }
-
+    const limitPercent = chatUtil.chatLimitPercent(activeChat);
+    const limitVariant = chatUtil.chatLimitVariant(limitPercent);
     const disabled = !activeChat._id;
     const archived = activeChat.type === "archived";
 

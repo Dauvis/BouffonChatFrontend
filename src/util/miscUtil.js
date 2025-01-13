@@ -10,18 +10,6 @@ function clearProfile() {
     localStorage.removeItem("profile");
 }
 
-function chatLimitPercent(chat) {
-    if (chat.model === "gpt-4o-mini") {
-        return 100 * (chat.tokens / 25000);
-    }
-
-    if (chat.model === "gpt-40") {
-        return 100 * (chat.tokens / 25000);
-    }
-
-    return 0;
-}
-
 const emptyTemplate = {
     _id: '',
     name: '',
@@ -48,6 +36,6 @@ const emptyChat = {
     exchanges: []
 }
 
-const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat, chatLimitPercent }
+const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat }
 
 export default miscUtil;

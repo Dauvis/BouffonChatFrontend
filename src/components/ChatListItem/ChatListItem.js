@@ -1,21 +1,12 @@
-import { Badge, ListGroup } from "react-bootstrap";
-import { BoxSeam, ChatDotsFill, ChatFill } from "react-bootstrap-icons";
+import {  ListGroup } from "react-bootstrap";
+import chatUtil from "../../util/chatUtil";
 
 export default function ChatListItem({isActive, id, type, name, clickCallback}) {
-    let icon = <ChatDotsFill />;
-    let variant = "primary";
-
-    if (type === "archived") {
-        icon = <BoxSeam />;
-        variant = "secondary";
-    } else if (type === "temp") {
-        icon = <ChatFill />;
-        variant = "warning";
-    }
+    const badge = chatUtil.listItemBadge(type);
 
     return (
         <ListGroup.Item className="small" active={isActive} action onClick={() => clickCallback(id)}>
-            <Badge pill bg={variant}>{icon}</Badge> {name}
+            {badge} {name}
         </ListGroup.Item>
     );
 }
