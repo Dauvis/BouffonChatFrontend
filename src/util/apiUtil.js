@@ -106,6 +106,32 @@ async function apiPut(endpoint, body) {
   }
 };
 
-const apiUtil = { isAuthenticated, apiPost, apiDelete, apiGet, apiPut };
+async function apiPatch(endpoint, body) {
+  const endpointUri = getEndpointUri(endpoint);
+
+  try {
+    const response = await fetch(endpointUri, {
+      method: "PATCH",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data = response.status === 204 ? {} : await response.json();
+      return apiResponse(true, response.status, data);
+    } else {
+      const errorData = await response.json();
+      return apiResponse(false, response.status, errorData);
+    }
+  } catch (error) {
+    console.error(`Error putting to ${endpointUri}: ${error.message}`);
+    return apiResponse(false, 500, {});
+  }
+};
+
+const apiUtil = { isAuthenticated, apiPost, apiDelete, apiGet, apiPut, apiPatch };
 
 export default apiUtil;

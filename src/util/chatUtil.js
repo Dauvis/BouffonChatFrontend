@@ -70,6 +70,12 @@ function filterChatList(chatList, keyword, showArchived) {
     return filteredList;
 }
 
-const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, filterChatList };
+function replaceChat(chatList, updated) {
+    return chatList.map(c => (
+        c._id === updated._id ? updated : c
+    ));
+}
+
+const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, filterChatList, replaceChat };
 
 export default chatUtil;
