@@ -1,6 +1,6 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
 import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
 import chatUtil from "../../util/chatUtil";
@@ -12,11 +12,12 @@ import YesNoModal from "../YesNoModal";
 import miscUtil from "../../util/miscUtil";
 
 export default function ChatFooter() {
-    const { activeChat, setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
+    const { activeChat, setActiveChat, chatListData, setChatListData, updateActiveChat, setUpdateActiveChat } = useContext(ChatDataContext);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showRename, setShowRename ] = useState(false);
     const [ errorResponse, setErrorResponse ] = useState('');
     const [ showDeleteModal, setShowDeleteModal ] = useState(false);
+    const [ messageText, setMessageText ] = useState('');
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
 
     function showInfoClosed() {
@@ -72,6 +73,7 @@ export default function ChatFooter() {
                     const chatResponse = await apiUtil.apiGet(`/v1/chat/${newChatId}`);
 
                     if (chatResponse.success) {
+                        sessionStorage("curChatId", newChatId)
                         setActiveChat(chatResponse.body.chats[0]);
                     } else {
                         setActiveChat(miscUtil.emptyChat);
@@ -87,6 +89,69 @@ export default function ChatFooter() {
         }
 
         setShowDeleteModal(false);
+    }
+
+    function handleMessageChanged(event) {
+        const target = event.currentTarget
+        setMessageText(target.value);
+    }
+
+    useEffect(() => {
+        async function processMessage() {
+            const { chat, userMessage } = updateActiveChat
+
+            const initialExchanges = chat.exchanges
+            const initialUpdated = {
+                ...chat,
+                exchanges: [
+                    ...initialExchanges,
+                    { 
+                        userMessage,
+                        assistantMessage: '',
+                        _id: "000000000000000000000000"
+                    }
+                ]
+            }
+
+            setMessageText("")
+            setActiveChat(initialUpdated);
+            const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage })
+    
+            if (response.success) {
+                const curChatId = sessionStorage.getItem("curChatId")
+
+                if (curChatId === chat._id) {
+                    const exchangeData = response.body;
+                    const curExchanges = chat.exchanges
+                    const updated = {
+                        ...chat,
+                        tokens: exchangeData.tokens,
+                        lastActivity: Date.now(),
+                        exchanges: [
+                            ...curExchanges,
+                            { 
+                                userMessage, 
+                                assistantMessage: exchangeData.assistantMessage, 
+                                _id: exchangeData.exchangeId
+                            }
+                        ]
+                    }
+    
+                    setActiveChat(updated);
+                }
+            } else {
+                alert("There was an issue accessing the assistant. Please wait a few minutes and try again")
+                setMessageText(userMessage)
+            }    
+        }
+
+        if (updateActiveChat) {
+            processMessage()
+        }
+    }, [updateActiveChat, setActiveChat] )
+
+    async function handleSendClicked() {
+        setUpdateActiveChat({ chat: activeChat, userMessage: messageText })
     }
 
     const limitPercent = chatUtil.chatLimitPercent(activeChat);
@@ -108,7 +173,7 @@ export default function ChatFooter() {
                 <Card.Body>
                     <Row>
                         <Col>
-                        <FormControl as="textarea" disabled={disabled || archived} placeholder="Enter message..."/>
+                        <FormControl as="textarea" disabled={disabled || archived} placeholder="Enter message..." value={messageText} onChange={handleMessageChanged}/>
                         </Col>
                     </Row>
                     <Row>
@@ -133,7 +198,7 @@ export default function ChatFooter() {
                         </Dropdown>
                         </Col>
                         <Col xs={4} className="text-end">
-                        <Button variant="primary" disabled={disabled || archived} onClick={() => alert("Coming soon")}><SendFill /> Send</Button>
+                        <Button variant="primary" disabled={disabled || archived} onClick={handleSendClicked}><SendFill /> Send</Button>
                         </Col>
                     </Row>
                 </Card.Body>                

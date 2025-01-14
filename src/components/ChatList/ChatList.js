@@ -34,6 +34,7 @@ export default function ChatList() {
     }
 
     const filteredList = chatUtil.filterChatList(chatListData, searchData.keyword, searchData.archived);
+    sessionStorage.setItem("curChatId", activeChat._id);
 
     const listItems = filteredList.map(c => (
         <ChatListItem key={c._id} isActive={c._id === activeChat._id} type={c.type} name={c.name} id={c._id} clickCallback={clickCallback}/>

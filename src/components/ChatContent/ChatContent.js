@@ -3,6 +3,7 @@ import { useContext } from "react";
 import MessageBlock from "../MessageBlock";
 import ChatTitle from "../ChatTitle";
 import { ChatDataContext } from "../../contexts/ChatDataContext.js";
+import LoadingWait from "../LoadingWait/LoadingWait.js";
 
 export default function ChatContent() {
     const { activeChat } = useContext(ChatDataContext);
@@ -13,7 +14,11 @@ export default function ChatContent() {
         content = activeChat.exchanges.map(exchg => (
             <div key={exchg._id}>
                 <MessageBlock isUser={true} message={exchg.userMessage} />
-                <MessageBlock isUser={false} message={exchg.assistantMessage} />
+                { 
+                    exchg.assistantMessage 
+                    ? <MessageBlock isUser={false} message={exchg.assistantMessage} />
+                    : <LoadingWait cancelUpdate={true} />
+                }
             </div>            
         ));
     }

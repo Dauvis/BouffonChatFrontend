@@ -30,6 +30,7 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
         if (response.success) {
             const newChat = response.body.chat
             const newList = chatUtil.addChat(chatListData, { _id: newChat._id, name: newChat.name, type: newChat.type });
+            sessionStorage.setItem("curChatId", newChat._id)
             setChatListData(newList);
             setActiveChat(newChat);
             closeCallback();
