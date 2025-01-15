@@ -1,6 +1,6 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
 import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
 import chatUtil from "../../util/chatUtil";
@@ -19,6 +19,7 @@ export default function ChatFooter() {
     const [ showDeleteModal, setShowDeleteModal ] = useState(false);
     const [ messageText, setMessageText ] = useState('');
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
+    const sendButtonRef = useRef(null);
 
     function showInfoClosed() {
         setShowInfo(false);
@@ -126,6 +127,7 @@ export default function ChatFooter() {
                 const curChatId = miscUtil.getTrackedChatId()
 
                 if (curChatId === chat._id) {
+                    sendButtonRef.current.scrollIntoView({behavior: "smooth"});
                     const exchangeData = response.body;
                     const curExchanges = chat.exchanges
                     const updated = {
@@ -203,7 +205,7 @@ export default function ChatFooter() {
                         </Dropdown>
                         </Col>
                         <Col xs={4} className="text-end">
-                        <Button variant="primary" disabled={disabled || archived} onClick={handleSendClicked}><SendFill /> Send</Button>
+                        <Button ref={sendButtonRef} variant="primary" disabled={disabled || archived} onClick={handleSendClicked}><SendFill /> Send</Button>
                         </Col>
                     </Row>
                 </Card.Body>                

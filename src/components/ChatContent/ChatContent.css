@@ -1,0 +1,22 @@
+.chat-content-scroll-up {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    z-index: 99;
+    padding: 0.5rem;
+    opacity: 75%;
+}
+
+.chat-content-scroll-down {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 99;
+    padding: 0.5rem;
+    opacity: 75%;
+}
+
+.chat-content-scroll-icon {
+    width: 2rem;
+    height: 2rem;
+}
