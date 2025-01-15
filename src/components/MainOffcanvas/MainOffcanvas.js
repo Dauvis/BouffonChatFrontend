@@ -8,21 +8,39 @@ import ColorModeButton from "../ColorModeButton";
 import { useState } from "react";
 import ChatCreateModal from "../ChatCreateModal";
 import chatUtil from "../../util/chatUtil.js";
+import apiUtil from "../../util/apiUtil.js";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
     const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
 
     const profile = miscUtil.getProfile();
 
-    function createNewChat(template) {
+    async function createNewChat(templateId) {
+        let template = miscUtil.emptyTemplate;
+
+        if (templateId) {
+            const response = await apiUtil.apiGet(`/v1/template/${templateId}`);
+
+            if (response.success) {
+                template = response.body.templates[0];
+            } else {
+                return;
+            }
+        }
+
         closeCallBack();
-        const parameters = chatUtil.initNewParameters(profile, miscUtil.emptyTemplate);
+        const parameters = chatUtil.initNewParameters(profile, template);
         setShowCreate({show: true, parameters});
     }
 
     function handleCreateCallback() {
         setShowCreate({show: false, parameters:'' });
     }
+
+    const templateMru = miscUtil.getTemplateMRU() || [];
+    const mruOptions = templateMru.map(entry => (
+        <Dropdown.Item key={entry.id} as="button" onClick={() => createNewChat(entry.id)}>{entry.name}</Dropdown.Item>
+    ));
 
     return (
         <>
@@ -47,6 +65,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                             <Dropdown.Toggle variant="link"><ChatLeftDots /> New...</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as="button" onClick={() => createNewChat('')}>Conversation</Dropdown.Item>
+                                {mruOptions}
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav.Item>

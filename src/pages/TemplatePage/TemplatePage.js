@@ -133,6 +133,7 @@ export default function TemplatePage() {
 
   function createNewChat() {
       const parameters = chatUtil.initNewParameters(profile, currentTemplate);
+      miscUtil.addTemplateMRU(currentTemplate);
       setShowCreate({show: true, parameters});
   }
 
