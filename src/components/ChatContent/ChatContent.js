@@ -17,7 +17,7 @@ export default function ChatContent() {
                 { 
                     exchg.assistantMessage 
                     ? <MessageBlock isUser={false} message={exchg.assistantMessage} />
-                    : <LoadingWait cancelUpdate={true} />
+                    : <LoadingWait />
                 }
             </div>            
         ));

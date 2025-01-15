@@ -12,6 +12,8 @@ import ErrorRedirect from "../../components/ErrorRedirect";
 import TemplateModal from "../../components/TemplateModal";
 import YesNoModal from "../../components/YesNoModal";
 import miscUtil from "../../util/miscUtil.js";
+import chatUtil from "../../util/chatUtil.js";
+import ChatCreateModal from "../../components/ChatCreateModal";
 
 export default function TemplatePage() {
   const navigate = useNavigate();
@@ -23,6 +25,9 @@ export default function TemplatePage() {
   const [errorResponse, setErrorResponse] = useState('');
   const [modalData, setModalData] = useState({show: false});
   const [yesNoModalData, setYesNoModalData] = useState({show: false, message: ''});
+  const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
+
+  const profile = miscUtil.getProfile();
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -126,6 +131,16 @@ export default function TemplatePage() {
     setYesNoModalData({show: false, message:''});
   }
 
+  function createNewChat() {
+      const parameters = chatUtil.initNewParameters(profile, currentTemplate);
+      setShowCreate({show: true, parameters});
+  }
+
+  function handleCreateCallback() {
+      setShowCreate({show: false, parameters:'' });
+      goToMainPage();
+  }
+
   const navIcon = (<XLg />);
 
   if (errorResponse) {
@@ -139,6 +154,7 @@ export default function TemplatePage() {
         <TemplateModal show={modalData.show} defaultData={modalData.data} categories={categoryList} 
           closeCallback={modalClosedCallback} />
         <YesNoModal show={yesNoModalData.show} message={yesNoModalData.message} closeCallback={yesNoCallback} />
+        <ChatCreateModal show={showCreate.show} parameters={showCreate.parameters} closeCallback={handleCreateCallback} />
         <Container>
           <Row>
             <Col xs={12} md={4}>
@@ -150,7 +166,7 @@ export default function TemplatePage() {
                         <Button variant="secondary" aria-label="New template" onClick={handleNewClicked}><PlusLg /></Button>
                         <Button variant="secondary" aria-label="Edit template" onClick={handleEditClicked}><PencilFill /></Button>
                         <Button variant="secondary" aria-label="Delete template" onClick={handleDeleteClicked}><XLg /></Button>
-                        <Button variant="secondary" aria-label="Create conversation" onClick={() => alert('Coming soon')}><ChatTextFill /></Button>
+                        <Button variant="secondary" aria-label="Create conversation" onClick={createNewChat}><ChatTextFill /></Button>
                       </ButtonGroup>
                       <ButtonGroup className="me-2" aria-label="View">
                         <Button variant="secondary" id="showByCategory" aria-label="Show by category"
