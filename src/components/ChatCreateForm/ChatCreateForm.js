@@ -6,6 +6,7 @@ import "./ChatCreateForm.css"
 import apiUtil from "../../util/apiUtil";
 import ErrorRedirect from "../ErrorRedirect";
 import chatUtil from "../../util/chatUtil";
+import miscUtil from "../../util/miscUtil";
 
 export default function ChatCreateForm({ parameters, closeCallback }) {
     const options = useContext(OptionsContext);
@@ -30,9 +31,9 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
         if (response.success) {
             const newChat = response.body.chat
             const newList = chatUtil.addChat(chatListData, { _id: newChat._id, name: newChat.name, type: newChat.type });
-            sessionStorage.setItem("curChatId", newChat._id)
             setChatListData(newList);
             setActiveChat(newChat);
+            miscUtil.setTrackedChatId(newChat._id)
             closeCallback();
         } else {
             setErrorResponse(response);

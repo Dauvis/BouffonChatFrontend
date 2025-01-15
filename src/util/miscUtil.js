@@ -10,6 +10,15 @@ function clearProfile() {
     localStorage.removeItem("profile");
 }
 
+function setTrackedChatId(chatId) {
+    sessionStorage.setItem("trackedChatId", chatId);
+}
+
+function getTrackedChatId()
+{
+    return sessionStorage.getItem("trackedChatId");
+}
+
 function setTheme(theme) {
     localStorage.setItem("theme", theme);
 }
@@ -46,6 +55,7 @@ const emptyChat = {
     exchanges: []
 }
 
-const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat, setTheme, getTheme }
+const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat, 
+    setTheme, getTheme, setTrackedChatId, getTrackedChatId }
 
 export default miscUtil;

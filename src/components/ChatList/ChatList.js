@@ -6,6 +6,7 @@ import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
 import ErrorRedirect from "../ErrorRedirect/ErrorRedirect.js";
 import chatUtil from "../../util/chatUtil.js";
+import miscUtil from "../../util/miscUtil.js";
 
 export default function ChatList() {
     const { chatListData, activeChat, setActiveChat } = useContext(ChatDataContext);
@@ -16,7 +17,9 @@ export default function ChatList() {
         const chatResponse = await apiUtil.apiGet(`/v1/chat/${clickedChatId}`);
 
         if (chatResponse.success) {
-            setActiveChat(chatResponse.body.chats[0]);
+            const selected = chatResponse.body.chats[0]
+            setActiveChat(selected);
+            miscUtil.setTrackedChatId(selected._id)
         } else {
             setErrorRespons(chatResponse);
         }
@@ -34,7 +37,6 @@ export default function ChatList() {
     }
 
     const filteredList = chatUtil.filterChatList(chatListData, searchData.keyword, searchData.archived);
-    sessionStorage.setItem("curChatId", activeChat._id);
 
     const listItems = filteredList.map(c => (
         <ChatListItem key={c._id} isActive={c._id === activeChat._id} type={c.type} name={c.name} id={c._id} clickCallback={clickCallback}/>

@@ -28,6 +28,7 @@ export const ChatDataProvider = ({ children }) => {
 
                 setChatListData(chatList);
                 setActiveChat(firstChat);
+                miscUtil.setTrackedChatId(firstChat._id)
             }
         }
 

@@ -3,6 +3,7 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import loginService from "../../services/loginService.js";
 import { Container, Card } from "react-bootstrap";
 import logo from "../../assets/images/bouffon_chat_icon.png";
+import miscUtil from "../../util/miscUtil.js"
 
 export default function SignInPage() {
   const navigate = useNavigate();
@@ -12,10 +13,10 @@ export default function SignInPage() {
     const authData = await loginService.logIntoAPI(idToken);
 
     if (authData) {
-      localStorage.setItem("profile", JSON.stringify(authData.profile));
+      miscUtil.setProfile(authData.profile);
       navigate("/main");
     } else {
-      localStorage.removeItem("profile");
+      miscUtil.clearProfile();
     }
   };
 

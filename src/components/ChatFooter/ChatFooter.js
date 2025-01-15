@@ -55,6 +55,7 @@ export default function ChatFooter() {
             const updatedList = chatUtil.replaceChat(chatListData, updatedChat);
             setChatListData(updatedList);
             setActiveChat(updatedChat);
+            miscUtil.setTrackedChatId(updatedChat._id)
         } else {
             setErrorResponse(response);
         }
@@ -73,13 +74,16 @@ export default function ChatFooter() {
                     const chatResponse = await apiUtil.apiGet(`/v1/chat/${newChatId}`);
 
                     if (chatResponse.success) {
-                        sessionStorage("curChatId", newChatId)
-                        setActiveChat(chatResponse.body.chats[0]);
+                        const selected = chatResponse.body.chats[0]
+                        setActiveChat(selected);
+                        miscUtil.setTrackedChatId(selected._id)
                     } else {
                         setActiveChat(miscUtil.emptyChat);
+                        miscUtil.setTrackedChatId('')
                     }
                 } else {
                     setActiveChat(miscUtil.emptyChat);
+                    miscUtil.setTrackedChatId('')
                 }
 
                 setChatListData(updatedList);
@@ -99,6 +103,7 @@ export default function ChatFooter() {
     useEffect(() => {
         async function processMessage() {
             const { chat, userMessage } = updateActiveChat
+            miscUtil.setTrackedChatId(chat._id)
 
             const initialExchanges = chat.exchanges
             const initialUpdated = {
@@ -118,7 +123,7 @@ export default function ChatFooter() {
             const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage })
     
             if (response.success) {
-                const curChatId = sessionStorage.getItem("curChatId")
+                const curChatId = miscUtil.getTrackedChatId()
 
                 if (curChatId === chat._id) {
                     const exchangeData = response.body;

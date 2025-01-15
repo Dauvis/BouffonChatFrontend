@@ -1,5 +1,7 @@
+import miscUtil from "./miscUtil";
+
 function isAuthenticated() {
-  const profile = localStorage.getItem("profile");
+  const profile = miscUtil.getProfile();
   return profile !== null;
 };
 
