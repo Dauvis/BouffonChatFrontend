@@ -10,7 +10,7 @@ import ChatCreateModal from "../ChatCreateModal";
 import chatUtil from "../../util/chatUtil.js";
 import apiUtil from "../../util/apiUtil.js";
 
-export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
+export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
     const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
 
     const profile = miscUtil.getProfile();
@@ -76,7 +76,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack}) {
                         <Button variant="link" onClick={() => alert("Coming soon")}><Image /> Image tool</Button>
                     </Nav.Item>
                     <hr className="my-3" />
-                    <ChatList />
+                    <ChatList searchData={searchData} setSearchData={setSearchData} />
                 </Nav>
             </Offcanvas.Body>
         </Offcanvas>

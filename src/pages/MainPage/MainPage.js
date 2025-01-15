@@ -7,11 +7,13 @@ import ChatContent from "../../components/ChatContent";
 
 export default function MainPage() {
     const [showOffcanvas, setShowOffcanvas] = useState(false);
+    const [ searchData, setSearchData ] = useState({archived: false, keyword: '' });
 
     return (
         <>
             <NavHeader icon={( <List />)} callBack={() => setShowOffcanvas(true)}/>
-            <MainOffcanvas offcanvasState={showOffcanvas} closeCallBack={() => setShowOffcanvas(false)} />
+            <MainOffcanvas offcanvasState={showOffcanvas} closeCallBack={() => setShowOffcanvas(false)} 
+                searchData={searchData} setSearchData={setSearchData}/>
             <main>
                 <ChatContent />
             </main>

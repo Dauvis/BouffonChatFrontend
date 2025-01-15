@@ -8,9 +8,8 @@ import ErrorRedirect from "../ErrorRedirect/ErrorRedirect.js";
 import chatUtil from "../../util/chatUtil.js";
 import miscUtil from "../../util/miscUtil.js";
 
-export default function ChatList() {
+export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat } = useContext(ChatDataContext);
-    const [ searchData, setSearchData ] = useState({archived: false, keyword: '' });    
     const [ errorResponse, setErrorRespons ] = useState('');
 
     async function clickCallback(clickedChatId) {
@@ -50,8 +49,8 @@ export default function ChatList() {
         <>
         <Card>
             <Card.Body>
-                <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} />
-                <FormCheck type="switch" id="archived" label="Show archived" onChange={handleSearchChanged} />
+                <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} value={searchData.keyword} />
+                <FormCheck type="switch" id="archived" label="Show archived" onChange={handleSearchChanged} value={searchData.archived} />
             </Card.Body>
         </Card>
         <Card>
