@@ -143,8 +143,18 @@ export default function ChatFooter() {
                     setActiveChat(updated);
                 }
             } else {
-                alert("There was an issue accessing the assistant. Please wait a few minutes and try again")
-                setMessageText(userMessage)
+                if (response.status === 400 && response.body.errorCode === "TokenLimit") {
+                    alert(response.body.message);
+                } else {
+                    alert("There was an issue accessing the assistant. Please wait a few minutes and try again");
+                }
+
+                const curChatId = miscUtil.getTrackedChatId()
+
+                if (curChatId === chat._id) {
+                    setMessageText(userMessage);
+                    setActiveChat(chat);
+                }
             }    
         }
 

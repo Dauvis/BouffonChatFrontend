@@ -2,11 +2,7 @@ import { ChatDotsFill, ChatFill, BoxSeam } from "react-bootstrap-icons";
 import { Badge } from "react-bootstrap";
 
 function chatLimitPercent(chat) {
-    if (chat.model === "gpt-4o-mini") {
-        return 100 * (chat.tokens / 25000);
-    }
-
-    if (chat.model === "gpt-40") {
+    if (chat.model === "gpt-4o-mini" || chat.model === "gpt-4o") {
         return 100 * (chat.tokens / 25000);
     }
 
