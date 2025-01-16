@@ -21,10 +21,6 @@ export default function ChatFooter() {
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
     const sendButtonRef = useRef(null);
 
-    function showInfoClosed() {
-        setShowInfo(false);
-    }
-
     async function handleRenameClosed(newName) {
         setShowRename(false);
 
@@ -157,8 +153,50 @@ export default function ChatFooter() {
         }
     }, [updateActiveChat, setActiveChat] )
 
-    async function handleSendClicked() {
-        setUpdateActiveChat({ chat: activeChat, userMessage: messageText })
+    async function handleUndoClicked() {
+        const response = await apiUtil.apiPost(`/v1/chat/${activeChat._id}/revert`, {});
+
+        if (response.success) {
+            if (response.status !== 204) {
+                const exchange = response.body.exchange;
+                const curExchanges = activeChat.exchanges;
+
+                const updated = {
+                    ...activeChat,
+                    exchanges: curExchanges.filter(e => e._id !== exchange._id)
+                };
+
+                setActiveChat(updated);
+                setMessageText(exchange.userMessage);
+            } else {
+                alert("No more messages to undo");
+            }
+        } else {
+            setErrorResponse(response);
+        }
+    }
+
+    async function handleRedoClicked() {
+        const response = await apiUtil.apiPost(`/v1/chat/${activeChat._id}/restore`, {});
+
+        if (response.success) {
+            if (response.status !== 204) {
+                const exchange = response.body.exchange;
+                const curExchanges = activeChat.exchanges;
+
+                const updated = {
+                    ...activeChat,
+                    exchanges: [...curExchanges, exchange]
+                };
+
+                setActiveChat(updated);
+                setMessageText("");
+            } else {
+                alert("No more messages to redo");
+            }
+        } else {
+            setErrorResponse(response);
+        }
     }
 
     const limitPercent = chatUtil.chatLimitPercent(activeChat);
@@ -172,7 +210,7 @@ export default function ChatFooter() {
 
     return (
         <footer>
-            <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={showInfoClosed} />
+            <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={() => setShowInfo(false)} />
             <ChatRenameModal show={showRename} curName={activeChat.name} closeCallback={handleRenameClosed} />
             <YesNoModal show={showDeleteModal} message="Are you sure you want to delete this chat?" closeCallback={handleCloseShowDeleteModal} />
             <Container>
@@ -196,8 +234,8 @@ export default function ChatFooter() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowInfo(true)} ><InfoCircle /> Info</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={() => alert("Coming soon")} ><ArrowClockwise /> Redo</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleUndoClicked} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleRedoClicked} ><ArrowClockwise /> Redo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowRename(true)} ><Pencil /> Rename</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={convertClicked} >{convertIcon} {convertText}</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowDeleteModal(true)} ><Trash /> Delete</Dropdown.Item>
@@ -205,7 +243,10 @@ export default function ChatFooter() {
                         </Dropdown>
                         </Col>
                         <Col xs={4} className="text-end">
-                        <Button ref={sendButtonRef} variant="primary" disabled={disabled || archived} onClick={handleSendClicked}><SendFill /> Send</Button>
+                        <Button ref={sendButtonRef} variant="primary" disabled={disabled || archived} 
+                            onClick={() => setUpdateActiveChat({ chat: activeChat, userMessage: messageText })}>
+                                <SendFill /> Send
+                        </Button>
                         </Col>
                     </Row>
                 </Card.Body>                

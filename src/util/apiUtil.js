@@ -27,7 +27,7 @@ async function apiPost(endpoint, body) {
     });
 
     if (response.ok) {
-      const data = await response.json();
+      const data = response.status === 204 ? {} : await response.json();
       return apiResponse(true, response.status, data);
     } else {
       const errorData = await response.json();
