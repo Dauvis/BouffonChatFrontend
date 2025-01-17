@@ -7,7 +7,6 @@ export const ChatDataContext = createContext();
 export const ChatDataProvider = ({ children }) => {
     const [chatListData, setChatListData] = useState([]);
     const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
-    const [ updateActiveChat, setUpdateActiveChat ] = useState(false);
 
     useEffect(() => {
         const getChatData = async() => {
@@ -37,7 +36,7 @@ export const ChatDataProvider = ({ children }) => {
 
 
     return (
-        <ChatDataContext.Provider value={{chatListData, setChatListData, activeChat, setActiveChat, updateActiveChat, setUpdateActiveChat }}>
+        <ChatDataContext.Provider value={{chatListData, setChatListData, activeChat, setActiveChat }}>
             {children}
         </ChatDataContext.Provider>
     );

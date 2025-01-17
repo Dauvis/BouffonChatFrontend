@@ -1,6 +1,6 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
 import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
 import chatUtil from "../../util/chatUtil";
@@ -12,14 +12,13 @@ import YesNoModal from "../YesNoModal";
 import miscUtil from "../../util/miscUtil";
 
 export default function ChatFooter() {
-    const { activeChat, setActiveChat, chatListData, setChatListData, updateActiveChat, setUpdateActiveChat } = useContext(ChatDataContext);
+    const { activeChat, setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showRename, setShowRename ] = useState(false);
     const [ errorResponse, setErrorResponse ] = useState('');
     const [ showDeleteModal, setShowDeleteModal ] = useState(false);
     const [ messageText, setMessageText ] = useState('');
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
-    const sendButtonRef = useRef(null);
 
     async function handleRenameClosed(newName) {
         setShowRename(false);
@@ -97,71 +96,65 @@ export default function ChatFooter() {
         setMessageText(target.value);
     }
 
-    useEffect(() => {
-        async function processMessage() {
-            const { chat, userMessage } = updateActiveChat
-            miscUtil.setTrackedChatId(chat._id)
+    async function processMessage() {
+        const chat = activeChat;
+        const userMessage = messageText;
+        miscUtil.setTrackedChatId(chat._id)
 
-            const initialExchanges = chat.exchanges
-            const initialUpdated = {
-                ...chat,
-                exchanges: [
-                    ...initialExchanges,
-                    { 
-                        userMessage,
-                        assistantMessage: '',
-                        _id: "000000000000000000000000"
-                    }
-                ]
+        const initialExchanges = chat.exchanges
+        const initialUpdated = {
+            ...chat,
+            exchanges: [
+                ...initialExchanges,
+                { 
+                    userMessage,
+                    assistantMessage: '',
+                    _id: "000000000000000000000000"
+                }
+            ]
+        }
+
+        setMessageText("")
+        setActiveChat(initialUpdated);
+        const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage })
+
+        if (response.success) {
+            const curChatId = miscUtil.getTrackedChatId()
+
+            if (curChatId === chat._id) {
+                const exchangeData = response.body;
+                const curExchanges = chat.exchanges
+                const updated = {
+                    ...chat,
+                    tokens: exchangeData.tokens,
+                    lastActivity: Date.now(),
+                    exchanges: [
+                        ...curExchanges,
+                        { 
+                            userMessage, 
+                            assistantMessage: exchangeData.assistantMessage, 
+                            _id: exchangeData.exchangeId
+                        }
+                    ]
+                }
+
+                setActiveChat(updated);
+            }
+        } else {
+            if (response.status === 400 && response.body.errorCode === "TokenLimit") {
+                alert(response.body.message);
+            } else {
+                alert(`There was an issue accessing the assistant: ${response.body.message}`);
             }
 
-            setMessageText("")
-            setActiveChat(initialUpdated);
-            const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage })
-    
-            if (response.success) {
-                const curChatId = miscUtil.getTrackedChatId()
+            const curChatId = miscUtil.getTrackedChatId()
 
-                if (curChatId === chat._id) {
-                    sendButtonRef.current.scrollIntoView({behavior: "smooth"});
-                    const exchangeData = response.body;
-                    const curExchanges = chat.exchanges
-                    const updated = {
-                        ...chat,
-                        tokens: exchangeData.tokens,
-                        lastActivity: Date.now(),
-                        exchanges: [
-                            ...curExchanges,
-                            { 
-                                userMessage, 
-                                assistantMessage: exchangeData.assistantMessage, 
-                                _id: exchangeData.exchangeId
-                            }
-                        ]
-                    }
-    
-                    setActiveChat(updated);
-                }
-            } else {
-                if (response.status === 400 && response.body.errorCode === "TokenLimit") {
-                    alert(response.body.message);
-                } else {
-                    alert(`There was an issue accessing the assistant: ${response.body.message}`);
-                }
-
-                const curChatId = miscUtil.getTrackedChatId()
-
-                if (curChatId === chat._id) {
-                    setMessageText(userMessage);
-                    setActiveChat(chat);
-                }
-            }    
-        }
-
-        if (updateActiveChat) {
-            processMessage()
-        }
-    }, [updateActiveChat, setActiveChat] )
+            if (curChatId === chat._id) {
+                setMessageText(userMessage);
+                setActiveChat(chat);
+            }
+        }    
+    }
 
     async function handleUndoClicked() {
         const response = await apiUtil.apiPost(`/v1/chat/${activeChat._id}/revert`, {});
@@ -253,8 +246,7 @@ export default function ChatFooter() {
                         </Dropdown>
                         </Col>
                         <Col xs={4} className="text-end">
-                        <Button ref={sendButtonRef} variant="primary" disabled={disabled || archived} 
-                            onClick={() => setUpdateActiveChat({ chat: activeChat, userMessage: messageText })}>
+                        <Button variant="primary" disabled={disabled || archived} onClick={() => processMessage()}>
                                 <SendFill /> Send
                         </Button>
                         </Col>
