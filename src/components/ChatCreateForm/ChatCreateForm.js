@@ -4,9 +4,9 @@ import { OptionsContext } from "../../contexts/OptionsContext";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatCreateForm.css"
 import apiUtil from "../../util/apiUtil";
-import ErrorRedirect from "../ErrorRedirect";
 import chatUtil from "../../util/chatUtil";
 import miscUtil from "../../util/miscUtil";
+import ErrorHandler from "../ErrorHandler";
 
 export default function ChatCreateForm({ parameters, closeCallback }) {
     const options = useContext(OptionsContext);
@@ -40,11 +40,9 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
         }
     }
 
-    if (errorResponse) {
-        return (<ErrorRedirect errorResponse={errorResponse} />)
-    }
-
     return (
+        <>
+        { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
         <Form action={handleFormAction}>
             <Row>
                 <Col>
@@ -99,5 +97,6 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
             </Row>
 
         </Form>
+        </>
     );
 }

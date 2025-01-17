@@ -8,12 +8,12 @@ import TemplateListByCategory from "../../components/TemplateListByCategory";
 import "./TemplatePage.css"
 import TemplateList from "../../components/TemplateList/TemplateList";
 import apiUtil from "../../util/apiUtil.js";
-import ErrorRedirect from "../../components/ErrorRedirect";
 import TemplateModal from "../../components/TemplateModal";
 import YesNoModal from "../../components/YesNoModal";
 import miscUtil from "../../util/miscUtil.js";
 import chatUtil from "../../util/chatUtil.js";
 import ChatCreateModal from "../../components/ChatCreateModal";
+import ErrorHandler from "../../components/ErrorHandler";
 
 export default function TemplatePage() {
   const navigate = useNavigate();
@@ -144,13 +144,10 @@ export default function TemplatePage() {
 
   const navIcon = (<XLg />);
 
-  if (errorResponse) {
-    return (<ErrorRedirect errorResponse={errorResponse} />);
-  }
-
   return (
     <>
       <NavHeader icon={navIcon} callBack={goToMainPage} />
+      { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
       <main>
         <TemplateModal show={modalData.show} defaultData={modalData.data} categories={categoryList} 
           closeCallback={modalClosedCallback} />

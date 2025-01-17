@@ -3,12 +3,15 @@ import {useRef, useState, useContext } from "react";
 import { OptionsContext } from "../../contexts/OptionsContext.js";
 import apiUtil from "../../util/apiUtil.js"
 import "./TemplateForm.css"
+import ErrorHandler from "../ErrorHandler";
 
 export default function TemplateForm({defaultData, categories, closeCallback}) {
     const categoryRef = useRef();
     const options = useContext(OptionsContext);
     const [categoryToggle, setCategoryToggle] = useState(false);
+    const [ errorMessage, setErrorMessage ] = useState("");
 
+    // It's funky but it keeps the modal from prematurely closing
     function handleCategorySelected(category, event) {
         event.preventDefault();
         event.stopPropagation();
@@ -38,6 +41,10 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
     async function createNewTemplate(data) {
         const response = await apiUtil.apiPost("/v1/template", data);
 
+        if (!response.success) {
+            setErrorMessage(response.body.message);
+        }
+
         return response.success ? response.body.template : null;
     }
 
@@ -45,8 +52,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
         const response = await apiUtil.apiPut(`/v1/template/${data._id}`, data);
 
         if (!response.success) {
-            console.log(data);
-            console.log(`Error: ${response.status} Message: ${response.body.message}`);
+            setErrorMessage(response.body.message);
         }
 
         return response.success ? data : null;
@@ -64,6 +70,8 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
     const modelOptions = options.modelOptionsList();
 
     return (
+        <>
+        { errorMessage ? <ErrorHandler redirect={false} message={errorMessage} /> : null}
         <Form action={handleFormAction}>
             <Container>
                 <Row>
@@ -145,5 +153,6 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
                 </Row>
             </Container>
         </Form>
+        </>
     );
 }

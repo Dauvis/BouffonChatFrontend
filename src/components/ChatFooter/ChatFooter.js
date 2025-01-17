@@ -6,10 +6,10 @@ import "./ChatFooter.css"
 import chatUtil from "../../util/chatUtil";
 import ChatInfoModal from "../ChatInfoModal";
 import apiUtil from "../../util/apiUtil";
-import ErrorRedirect from "../ErrorRedirect";
 import ChatRenameModal from "../ChatRenameModal";
 import YesNoModal from "../YesNoModal";
 import miscUtil from "../../util/miscUtil";
+import ErrorHandler from "../ErrorHandler";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
@@ -207,12 +207,9 @@ export default function ChatFooter() {
     const disabled = !activeChat._id;
     const archived = activeChat.type === "archived";
 
-    if (errorResponse) {
-        return (<ErrorRedirect errorResponse={errorResponse} />);
-    }
-
     return (
         <footer>
+            {errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
             <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={() => setShowInfo(false)} />
             <ChatRenameModal show={showRename} curName={activeChat.name} closeCallback={handleRenameClosed} />
             <YesNoModal show={showDeleteModal} message="Are you sure you want to delete this chat?" closeCallback={handleCloseShowDeleteModal} />

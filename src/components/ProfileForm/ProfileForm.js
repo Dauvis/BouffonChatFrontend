@@ -7,8 +7,8 @@ import loginService from "../../services/loginService.js";
 import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
 import LoadingWait from "../LoadingWait/LoadingWait.js";
-import ErrorRedirect from "../ErrorRedirect";
 import miscUtil from "../../util/miscUtil.js";
+import ErrorHandler from "../ErrorHandler";
 
 export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();
@@ -66,12 +66,10 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
         }
     }
 
-    if (errorResponse) {
-        return (<ErrorRedirect errorResponse={errorResponse} />);
-    }
-
     return (
         profile ?
+            <>
+            { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
             <Form action={saveProfile}>
                 {errorMsg ? <Alert variant="danger">{errorMsg}</Alert> : null}
                 <Row>
@@ -126,6 +124,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
                     </Col>
                 </Row>
             </Form>
+            </>
             : <LoadingWait text="Please wait. Loading profile" />
     );
 }

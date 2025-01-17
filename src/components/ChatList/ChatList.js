@@ -4,9 +4,9 @@ import ChatListItem from "../ChatListItem";
 import { ChatDataContext } from "../../contexts/ChatDataContext.js";
 import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
-import ErrorRedirect from "../ErrorRedirect/ErrorRedirect.js";
 import chatUtil from "../../util/chatUtil.js";
 import miscUtil from "../../util/miscUtil.js";
+import ErrorHandler from "../ErrorHandler";
 
 export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat } = useContext(ChatDataContext);
@@ -41,12 +41,9 @@ export default function ChatList({searchData, setSearchData }) {
         <ChatListItem key={c._id} isActive={c._id === activeChat._id} type={c.type} name={c.name} id={c._id} clickCallback={clickCallback}/>
     ));
 
-    if (errorResponse) {
-        return (<ErrorRedirect errorResponse={errorResponse} />);
-    }
-
     return (
         <>
+        { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
         <Card>
             <Card.Body>
                 <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} value={searchData.keyword} />
