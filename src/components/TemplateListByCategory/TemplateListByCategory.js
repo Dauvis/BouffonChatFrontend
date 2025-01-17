@@ -27,7 +27,8 @@ export default function TemplateListByCategory({ templates, currentTemplate, cat
         return acc;
     }, {});
 
-    const items = categories.map(category => {
+    const sortedCats = categories.sort();
+    const items = sortedCats.map(category => {
         const catItems = groupedTemplates[category].map(entry => (
             <TemplateListItem key={entry._id} templateId={entry._id} name={entry.name} active={entry._id === currentTemplate._id} itemCallback={itemCallback} />
         ));

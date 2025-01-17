@@ -146,7 +146,7 @@ export default function ChatFooter() {
                 if (response.status === 400 && response.body.errorCode === "TokenLimit") {
                     alert(response.body.message);
                 } else {
-                    alert("There was an issue accessing the assistant. Please wait a few minutes and try again");
+                    alert(`There was an issue accessing the assistant: ${response.body.message}`);
                 }
 
                 const curChatId = miscUtil.getTrackedChatId()
