@@ -35,7 +35,7 @@ function getTemplateMRU() {
 
 function addTemplateMRU(template) {
     const current = getTemplateMRU() || [];
-    const filtered = current.filter(t => t._id !== template._id);
+    const filtered = current.filter(t => t.id !== template._id);
     const updated = ([{ id: template._id, name: template.name }, ...filtered]).slice(0, 10)
     localStorage.setItem("templateMRU", JSON.stringify(updated));
 }
