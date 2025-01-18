@@ -12,7 +12,7 @@ import miscUtil from "../../util/miscUtil";
 import ErrorHandler from "../ErrorHandler";
 
 export default function ChatFooter() {
-    const { activeChat, setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
+    const { activeChat, setActiveChat, chatListData, setChatListData, loadChatData } = useContext(ChatDataContext);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showRename, setShowRename ] = useState(false);
     const [ errorResponse, setErrorResponse ] = useState('');
@@ -25,6 +25,15 @@ export default function ChatFooter() {
 
         if (newName) {
             await saveChatChanges({ type: activeChat.type, name: newName});
+        }
+    }
+
+    async function handleChatError(response) {
+        if (response.status === 404) {
+            alert("Chat does not exist");
+            await loadChatData();
+        } else {
+            setErrorResponse(response);
         }
     }
 
@@ -53,7 +62,7 @@ export default function ChatFooter() {
             setActiveChat(updatedChat);
             miscUtil.setTrackedChatId(updatedChat._id)
         } else {
-            setErrorResponse(response);
+            await handleChatError(response);
         }
     }
 
@@ -84,7 +93,7 @@ export default function ChatFooter() {
 
                 setChatListData(updatedList);
             } else {
-                setErrorResponse(response);
+                await handleChatError(response);
             }
         }
 
@@ -99,9 +108,9 @@ export default function ChatFooter() {
     async function processMessage() {
         const chat = activeChat;
         const userMessage = messageText;
-        miscUtil.setTrackedChatId(chat._id)
+        miscUtil.setTrackedChatId(chat._id);
 
-        const initialExchanges = chat.exchanges
+        const initialExchanges = chat.exchanges;
         const initialUpdated = {
             ...chat,
             exchanges: [
@@ -112,18 +121,18 @@ export default function ChatFooter() {
                     _id: "000000000000000000000000"
                 }
             ]
-        }
+        };
 
-        setMessageText("")
+        setMessageText("");
         setActiveChat(initialUpdated);
-        const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage })
+        const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage });
 
         if (response.success) {
-            const curChatId = miscUtil.getTrackedChatId()
+            const curChatId = miscUtil.getTrackedChatId();
 
             if (curChatId === chat._id) {
                 const exchangeData = response.body;
-                const curExchanges = chat.exchanges
+                const curExchanges = chat.exchanges;
                 const updated = {
                     ...chat,
                     tokens: exchangeData.tokens,
@@ -144,7 +153,7 @@ export default function ChatFooter() {
             if (response.status === 400 && response.body.errorCode === "TokenLimit") {
                 alert(response.body.message);
             } else {
-                alert(`There was an issue accessing the assistant: ${response.body.message}`);
+                await handleChatError(response);
             }
 
             const curChatId = miscUtil.getTrackedChatId()
@@ -175,7 +184,7 @@ export default function ChatFooter() {
                 alert("No more messages to undo");
             }
         } else {
-            setErrorResponse(response);
+            await handleChatError(response);
         }
     }
 
@@ -198,7 +207,7 @@ export default function ChatFooter() {
                 alert("No more messages to redo");
             }
         } else {
-            setErrorResponse(response);
+            await handleChatError(response);
         }
     }
 

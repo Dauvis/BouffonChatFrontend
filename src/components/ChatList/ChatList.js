@@ -9,8 +9,8 @@ import miscUtil from "../../util/miscUtil.js";
 import ErrorHandler from "../ErrorHandler";
 
 export default function ChatList({searchData, setSearchData }) {
-    const { chatListData, activeChat, setActiveChat } = useContext(ChatDataContext);
-    const [ errorResponse, setErrorRespons ] = useState('');
+    const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
+    const [ errorResponse, setErrorResponse ] = useState('');
 
     async function clickCallback(clickedChatId) {
         const chatResponse = await apiUtil.apiGet(`/v1/chat/${clickedChatId}`);
@@ -20,7 +20,12 @@ export default function ChatList({searchData, setSearchData }) {
             setActiveChat(selected);
             miscUtil.setTrackedChatId(selected._id)
         } else {
-            setErrorRespons(chatResponse);
+            if (chatResponse.status === 404) {
+                alert("Chat does not exist");
+                await loadChatData();
+            } else {
+                setErrorResponse(chatResponse);
+            }
         }
     }
 

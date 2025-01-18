@@ -9,34 +9,34 @@ export const ChatDataProvider = ({ children }) => {
     const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
 
     useEffect(() => {
-        const getChatData = async() => {
-            const chatListResponse = await apiUtil.apiGet("/v1/chat");
-
-            if (chatListResponse.success) {
-                const chatList = chatListResponse.body.chats;
-                const firstChatId = chatList.length ? chatList[0]._id : '';
-                let firstChat = miscUtil.emptyChat;
-
-                if (firstChatId) {
-                    const chatResponse = await apiUtil.apiGet(`/v1/chat/${firstChatId}`);
-
-                    if (chatResponse.success) {
-                        firstChat = chatResponse.body.chats[0];
-                    }
-                }
-
-                setChatListData(chatList);
-                setActiveChat(firstChat);
-                miscUtil.setTrackedChatId(firstChat._id)
-            }
-        }
-
-        getChatData();
+        loadChatData();
     }, []);
+
+    async function loadChatData() {
+        const chatListResponse = await apiUtil.apiGet("/v1/chat");
+
+        if (chatListResponse.success) {
+            const chatList = chatListResponse.body.chats;
+            const firstChatId = chatList.length ? chatList[0]._id : '';
+            let firstChat = miscUtil.emptyChat;
+
+            if (firstChatId) {
+                const chatResponse = await apiUtil.apiGet(`/v1/chat/${firstChatId}`);
+
+                if (chatResponse.success) {
+                    firstChat = chatResponse.body.chats[0];
+                }
+            }
+
+            setChatListData(chatList);
+            setActiveChat(firstChat);
+            miscUtil.setTrackedChatId(firstChat?._id)
+        }
+    }
 
 
     return (
-        <ChatDataContext.Provider value={{chatListData, setChatListData, activeChat, setActiveChat }}>
+        <ChatDataContext.Provider value={{chatListData, setChatListData, activeChat, setActiveChat, loadChatData }}>
             {children}
         </ChatDataContext.Provider>
     );
