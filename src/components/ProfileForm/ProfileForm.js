@@ -66,10 +66,13 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
         }
     }
 
+    if (errorResponse) {
+        return (<ErrorHandler errorResponse={errorResponse} />);
+    }
+
     return (
         profile ?
             <>
-            { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
             <Form action={saveProfile}>
                 {errorMsg ? <Alert variant="danger">{errorMsg}</Alert> : null}
                 <Row>

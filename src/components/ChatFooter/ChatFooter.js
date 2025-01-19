@@ -110,6 +110,11 @@ export default function ChatFooter() {
         const userMessage = messageText;
         miscUtil.setTrackedChatId(chat._id);
 
+        if (!userMessage) {
+            alert("You must enter a message");
+            return;
+        }
+
         const initialExchanges = chat.exchanges;
         const initialUpdated = {
             ...chat,

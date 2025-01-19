@@ -9,7 +9,10 @@ export const OptionsProvider = ({ children }) => {
     useEffect(() => {
         const getAllOptions = async() => {
             const response = await apiUtil.apiGet("/v1/options/all");
-            setOptions(response.body);            
+
+            if (response.success) {
+                setOptions(response.body);
+            }
         }
 
         getAllOptions();

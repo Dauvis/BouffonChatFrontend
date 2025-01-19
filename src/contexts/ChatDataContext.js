@@ -1,12 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import apiUtil from "../util/apiUtil.js";
 import miscUtil from "../util/miscUtil.js"
+import { useNavigate } from "react-router-dom";
 
 export const ChatDataContext = createContext();
 
 export const ChatDataProvider = ({ children }) => {
     const [chatListData, setChatListData] = useState([]);
     const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadChatData();
@@ -31,6 +33,17 @@ export const ChatDataProvider = ({ children }) => {
             setChatListData(chatList);
             setActiveChat(firstChat);
             miscUtil.setTrackedChatId(firstChat?._id)
+        } else {
+            navigate("/error", 
+                { 
+                    state: 
+                    { 
+                        errorStatus: chatListResponse.status, 
+                        errorCode: chatListResponse.body.errorCode,
+                        errorText: chatListResponse.body.message 
+                    } 
+                }
+            );
         }
     }
 

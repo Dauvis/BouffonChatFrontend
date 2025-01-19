@@ -10,9 +10,13 @@ export default function ErrorPage({status, message, code}) {
     const errorText = message || location.state?.errorText || "There was an error but we cannot tell what kind of error it was.";
     const errorCode = code || location.state?.errorCode || "";
 
-    const goToMainPage = () => {
+    function goToMainPage() {
         navigate("/main");
     };
+
+    function goToSignin() {
+        navigate("/sign-in");
+    }
 
     return (
         <>
@@ -26,7 +30,8 @@ export default function ErrorPage({status, message, code}) {
                                     {errorCode ? <p><em>Code: {errorCode}</em></p> : null}
                                     <p>{errorText}</p>
                                 </Card.Text>
-                                <Button variant="secondary" onClick={goToMainPage}>Return to app</Button>
+                                <Button variant="secondary" onClick={goToMainPage} style={{ marginRight: "0.5rem"}}>Return to app</Button>
+                                <Button variant="secondary" onClick={goToSignin}>Sign into app</Button>
                             </Card.Body>
                         </Card>
                     </Col>

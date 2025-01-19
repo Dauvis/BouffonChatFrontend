@@ -70,12 +70,14 @@ export default function ChatContent() {
                         <ChevronDoubleDown className="chat-content-scroll-icon" />
                     </Button>
                     : null}
-                <ChatTitle title={activeChat.name} />
                 <Container>
+                    <ChatTitle title={activeChat.name} />
                     {content}
                 </Container>
             </>
             :
-            <Alert variant="secondary" className="text-center">No chats fetched</Alert>
+            <Container>
+                <Alert variant="secondary" className="text-center">No chats fetched</Alert>
+            </Container>
     );
 }
