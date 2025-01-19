@@ -1,1 +1,1 @@
-export {default} from "./LoadingWait.js"
+export {default} from "./LoadingWait.jsx"

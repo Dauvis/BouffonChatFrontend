@@ -1,6 +1,6 @@
 import {Container, Form, Row, Col, Dropdown, Button, InputGroup} from "react-bootstrap";
 import {useRef, useState, useContext } from "react";
-import { OptionsContext } from "../../contexts/OptionsContext.js";
+import { OptionsContext } from "../../contexts/OptionsContext.jsx";
 import apiUtil from "../../util/apiUtil.js"
 import "./TemplateForm.css"
 import ErrorHandler from "../ErrorHandler";

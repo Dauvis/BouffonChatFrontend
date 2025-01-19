@@ -1,1 +1,1 @@
-export {default} from "./TemplateModal.js"
+export {default} from "./TemplateModal.jsx"

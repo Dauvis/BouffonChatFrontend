@@ -1,1 +1,1 @@
-export {default} from "./MessageBlock.js"
+export {default} from "./MessageBlock.jsx"

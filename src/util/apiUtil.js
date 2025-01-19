@@ -10,7 +10,7 @@ function apiResponse(success, status, body) {
 };
 
 function getEndpointUri(endpoint) {
-  return `${process.env.REACT_APP_API_URL}/api${endpoint}`;
+  return `${import.meta.env.VITE_URL}/api${endpoint}`;
 }
 
 async function apiPost(endpoint, body) {

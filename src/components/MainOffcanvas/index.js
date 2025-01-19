@@ -1,1 +1,1 @@
-export {default} from "./MainOffcanvas.js";
+export {default} from "./MainOffcanvas.jsx";

@@ -1,1 +1,1 @@
-export {default} from "./ChatList.js"
+export {default} from "./ChatList.jsx"

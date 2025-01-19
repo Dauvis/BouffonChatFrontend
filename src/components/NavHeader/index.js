@@ -1,1 +1,1 @@
-export {default} from "./NavHeader.js";
+export {default} from "./NavHeader.jsx";

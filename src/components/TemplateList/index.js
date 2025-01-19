@@ -1,1 +1,1 @@
-export {default} from "./TemplateList.js"
+export {default} from "./TemplateList.jsx"

@@ -1,1 +1,1 @@
-export {default} from "./SignInPage.js"
+export {default} from "./SignInPage.jsx"

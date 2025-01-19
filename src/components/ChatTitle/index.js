@@ -1,1 +1,1 @@
-export {default} from "./ChatTitle.js"
+export {default} from "./ChatTitle.jsx"

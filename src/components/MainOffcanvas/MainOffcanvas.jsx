@@ -7,7 +7,7 @@ import "./MainOffcanvas.css";
 import ColorModeButton from "../ColorModeButton";
 import { useState } from "react";
 import ChatCreateModal from "../ChatCreateModal";
-import chatUtil from "../../util/chatUtil.js";
+import chatUtil from "../../util/chatUtil.jsx";
 import apiUtil from "../../util/apiUtil.js";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {

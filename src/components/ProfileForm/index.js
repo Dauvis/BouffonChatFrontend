@@ -1,1 +1,1 @@
-export {default} from './ProfileForm.js'
+export {default} from './ProfileForm.jsx'

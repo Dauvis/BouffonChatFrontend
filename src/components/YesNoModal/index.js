@@ -1,1 +1,1 @@
-export {default} from "./YesNoModal.js"
+export {default} from "./YesNoModal.jsx"

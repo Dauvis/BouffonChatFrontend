@@ -1,1 +1,1 @@
-export {default} from "./ColorModeButton.js"
+export {default} from "./ColorModeButton.jsx"

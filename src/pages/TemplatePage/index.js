@@ -1,1 +1,1 @@
-export {default} from "./TemplatePage.js"
+export {default} from "./TemplatePage.jsx"

@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { Card, FormCheck, FormControl, ListGroup } from "react-bootstrap";
 import ChatListItem from "../ChatListItem";
-import { ChatDataContext } from "../../contexts/ChatDataContext.js";
+import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
 import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
-import chatUtil from "../../util/chatUtil.js";
+import chatUtil from "../../util/chatUtil.jsx";
 import miscUtil from "../../util/miscUtil.js";
 import ErrorHandler from "../ErrorHandler";
 

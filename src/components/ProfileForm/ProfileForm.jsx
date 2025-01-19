@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 import { BoxArrowRight } from "react-bootstrap-icons";
-import { OptionsContext } from "../../contexts/OptionsContext.js";
+import { OptionsContext } from "../../contexts/OptionsContext.jsx";
 import loginService from "../../services/loginService.js";
 import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
-import LoadingWait from "../LoadingWait/LoadingWait.js";
+import LoadingWait from "../LoadingWait";
 import miscUtil from "../../util/miscUtil.js";
 import ErrorHandler from "../ErrorHandler";
 

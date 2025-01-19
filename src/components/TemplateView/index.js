@@ -1,1 +1,1 @@
-export {default} from './TemplateView.js'
+export {default} from './TemplateView.jsx'

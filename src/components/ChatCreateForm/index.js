@@ -1,1 +1,1 @@
-export {default} from "./ChatCreateForm.js"
+export {default} from "./ChatCreateForm.jsx"

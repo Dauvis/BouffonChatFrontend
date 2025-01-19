@@ -3,7 +3,7 @@ import { ChevronDoubleDown, ChevronDoubleUp } from "react-bootstrap-icons";
 import { useContext, useEffect, useState } from "react";
 import MessageBlock from "../MessageBlock";
 import ChatTitle from "../ChatTitle";
-import { ChatDataContext } from "../../contexts/ChatDataContext.js";
+import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
 import "./ChatContent.css"
 
 export default function ChatContent() {

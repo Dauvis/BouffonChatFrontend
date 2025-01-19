@@ -1,1 +1,1 @@
-export {default} from "./ChatInfoModal.js"
+export {default} from "./ChatInfoModal.jsx"

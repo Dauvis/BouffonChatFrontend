@@ -1,14 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useTheme } from "./contexts/ColorModeContext.js"
+import { useTheme } from "./contexts/ColorModeContext.jsx"
 import SignInPage from './pages/SignInPage';
 import MainPage from './pages/MainPage';
 import ErrorPage from './pages/ErrorPage';
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "./PrivateRoute.jsx";
 import ProfilePage from "./pages/ProfilePage";
 import TemplatePage from "./pages/TemplatePage";
-import { OptionsProvider } from "./contexts/OptionsContext.js";
-import { ChatDataProvider } from "./contexts/ChatDataContext.js";
+import { OptionsProvider } from "./contexts/OptionsContext.jsx";
+import { ChatDataProvider } from "./contexts/ChatDataContext.jsx";
 
 export default function AppRouter() {
     const { theme } = useTheme();

@@ -6,12 +6,12 @@ import NavHeader from "../../components/NavHeader";
 import TemplateView from "../../components/TemplateView";
 import TemplateListByCategory from "../../components/TemplateListByCategory";
 import "./TemplatePage.css"
-import TemplateList from "../../components/TemplateList/TemplateList";
+import TemplateList from "../../components/TemplateList";
 import apiUtil from "../../util/apiUtil.js";
 import TemplateModal from "../../components/TemplateModal";
 import YesNoModal from "../../components/YesNoModal";
 import miscUtil from "../../util/miscUtil.js";
-import chatUtil from "../../util/chatUtil.js";
+import chatUtil from "../../util/chatUtil.jsx";
 import ChatCreateModal from "../../components/ChatCreateModal";
 import ErrorHandler from "../../components/ErrorHandler";
 

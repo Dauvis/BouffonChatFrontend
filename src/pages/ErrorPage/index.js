@@ -1,1 +1,1 @@
-export {default} from "./ErrorPage.js"
+export {default} from "./ErrorPage.jsx"

@@ -40,7 +40,7 @@ export default function SignInPage() {
             insightful. Sign in to start connecting and discovering the
             limitless possibilities of conversation!            
           </Card.Text>
-          <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
             <GoogleLogin onSuccess={onSuccess} onError={onError} />
           </GoogleOAuthProvider>
         </Card.Body>
