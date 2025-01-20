@@ -36,7 +36,7 @@ export default function TemplatePage() {
       if (response.success) {
         const allTemplates = response.body.templates;
         setTemplateList(allTemplates);
-        setCurrentTemplate(allTemplates ? allTemplates[0] : null);
+        setCurrentTemplate(allTemplates.length ? allTemplates[0] : miscUtil.emptyTemplate);
         setCategoryList([...new Set(allTemplates.map(entry => entry.category))]);
       } else {
         setErrorResponse(response);

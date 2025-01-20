@@ -31,6 +31,10 @@ export const OptionsProvider = ({ children }) => {
     }
 
     function modelLabel(model) {
+        if (!model) {
+            return "";
+        }
+        
         const curModel = options?.models ? options.models.find(o => o.value === model) : null;
         return curModel?.label || '';    
     }
