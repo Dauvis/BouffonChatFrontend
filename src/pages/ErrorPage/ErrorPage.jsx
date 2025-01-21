@@ -27,8 +27,8 @@ export default function ErrorPage({status, message, code}) {
                             <Card.Body>
                                 <Card.Title>Error: {errorStatus} <EmojiFrownFill color="darkgreen" /></Card.Title>
                                 <Card.Text>
-                                    {errorCode ? <p><em>Code: {errorCode}</em></p> : null}
-                                    <p>{errorText}</p>
+                                    {errorCode ? <span><em>Code: {errorCode}</em></span> : null}
+                                    <span>{errorText}</span>
                                 </Card.Text>
                                 <Button variant="secondary" onClick={goToMainPage} style={{ marginRight: "0.5rem"}}>Return to app</Button>
                                 <Button variant="secondary" onClick={goToSignin}>Sign into app</Button>
