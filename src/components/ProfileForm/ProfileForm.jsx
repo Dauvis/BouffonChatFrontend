@@ -8,6 +8,7 @@ import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
 import LoadingWait from "../LoadingWait";
 import miscUtil from "../../util/miscUtil.js";
+import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
 
 export default function ProfileForm({ saveCallback, cancelCallback }) {
@@ -19,7 +20,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
 
     const [profile, setProfile] = useState(null);
     const [errorMsg, setErrorMsg] = useState("");
-    const [errorResponse, setErrorResponse] = useState(null);
+    const [errorInfo, setErrorInfo] = useState(null);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -28,8 +29,8 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
             if (response.success) {
                 setProfile(response.body.profile);
             } else {
-                setErrorResponse(response);
-                console.log(`Error fetching profile: ${response.body.message}`);
+                const errInfo = errorUtil.handleApiError(response);
+                setErrorInfo(errInfo);
             }
         }
 
@@ -56,7 +57,8 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
 
         if (!response.success) {
             if (response.status === 401) {
-                setErrorResponse(response);
+                const errInfo = errorUtil.handleApiError(response);
+                setErrorInfo(errInfo);
             } else {
                 setErrorMsg(response.body.message);
             }
@@ -66,8 +68,8 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
         }
     }
 
-    if (errorResponse) {
-        return (<ErrorHandler errorResponse={errorResponse} />);
+    if (errorInfo) {
+        return (<ErrorHandler errorInfo={errorInfo} />);
     }
 
     return (

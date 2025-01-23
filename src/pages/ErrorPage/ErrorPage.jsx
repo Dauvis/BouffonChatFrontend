@@ -2,13 +2,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { EmojiFrownFill } from "react-bootstrap-icons";
 
-export default function ErrorPage({status, message, code}) {
+export default function ErrorPage({ args }) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const errorStatus = status || location.state?.errorStatus || "Unknown";
-    const errorText = message || location.state?.errorText || "There was an error but we cannot tell what kind of error it was.";
-    const errorCode = code || location.state?.errorCode || "";
+    const errorStatus = args?.status || location.state?.errorInfo?.status || "Unknown";
+    const errorText = args?.message || location.state?.errorInfo?.message || "There was an error but we cannot identify what kind of error it was.";
+    const errorCode = args?.code || location.state?.errorInfo?.code || "";
 
     function goToMainPage() {
         navigate("/main");
@@ -26,9 +26,9 @@ export default function ErrorPage({status, message, code}) {
                         <Card className="bg-body-tertiary">
                             <Card.Body>
                                 <Card.Title>Error: {errorStatus} <EmojiFrownFill color="darkgreen" /></Card.Title>
+                                { errorCode ? <Card.Text><em>Code: {errorCode}</em></Card.Text> : null}
                                 <Card.Text>
-                                    {errorCode ? <span><em>Code: {errorCode}</em></span> : null}
-                                    <span>{errorText}</span>
+                                    {errorText}
                                 </Card.Text>
                                 <Button variant="secondary" onClick={goToMainPage} style={{ marginRight: "0.5rem"}}>Return to app</Button>
                                 <Button variant="secondary" onClick={goToSignin}>Sign into app</Button>

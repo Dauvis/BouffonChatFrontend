@@ -46,7 +46,7 @@ export default function AppRouter() {
                 </PrivateRoute>} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/error" element={<ErrorPage />} />
-            <Route path="*" element={<ErrorPage status="404" message="The page that you are looking for does not exist." />} />
+            <Route path="*" element={<ErrorPage args={{ status: 404, message: "The page that you are looking for does not exist."}} />} />
         </Routes>
     );
 }

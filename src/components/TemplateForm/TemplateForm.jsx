@@ -4,12 +4,13 @@ import { OptionsContext } from "../../contexts/OptionsContext.jsx";
 import apiUtil from "../../util/apiUtil.js"
 import "./TemplateForm.css"
 import ErrorHandler from "../ErrorHandler";
+import errorUtil from "../../util/errorUtil.js";
 
 export default function TemplateForm({defaultData, categories, closeCallback}) {
     const categoryRef = useRef();
     const options = useContext(OptionsContext);
     const [categoryToggle, setCategoryToggle] = useState(false);
-    const [ errorMessage, setErrorMessage ] = useState("");
+    const [ errorInfo, setErrorInfo ] = useState("");
 
     // It's funky but it keeps the modal from prematurely closing
     function handleCategorySelected(category, event) {
@@ -42,7 +43,8 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
         const response = await apiUtil.apiPost("/v1/template", data);
 
         if (!response.success) {
-            setErrorMessage(response.body.message);
+            const errInfo = errorUtil.handleApiError(response);
+            setErrorInfo(errInfo);
         }
 
         return response.success ? response.body.template : null;
@@ -52,7 +54,8 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
         const response = await apiUtil.apiPut(`/v1/template/${data._id}`, data);
 
         if (!response.success) {
-            setErrorMessage(response.body.message);
+            const errInfo = errorUtil.handleApiError(response);
+            setErrorInfo(errInfo);
         }
 
         return response.success ? data : null;
@@ -71,7 +74,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
 
     return (
         <>
-        { errorMessage ? <ErrorHandler redirect={false} message={errorMessage} /> : null}
+        { errorInfo ? <ErrorHandler redirect={false} errorInfo={errorInfo} /> : null}
         <Form action={handleFormAction}>
             <Container>
                 <Row>

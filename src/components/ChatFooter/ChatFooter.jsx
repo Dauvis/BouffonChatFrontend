@@ -10,12 +10,13 @@ import ChatRenameModal from "../ChatRenameModal";
 import YesNoModal from "../YesNoModal";
 import miscUtil from "../../util/miscUtil";
 import ErrorHandler from "../ErrorHandler";
+import errorUtil from "../../util/errorUtil";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData, loadChatData } = useContext(ChatDataContext);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showRename, setShowRename ] = useState(false);
-    const [ errorResponse, setErrorResponse ] = useState('');
+    const [ errorInfo, setErrorInfo ] = useState('');
     const [ showDeleteModal, setShowDeleteModal ] = useState(false);
     const [ messageText, setMessageText ] = useState('');
     const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
@@ -33,7 +34,8 @@ export default function ChatFooter() {
             alert("Chat does not exist");
             await loadChatData();
         } else {
-            setErrorResponse(response);
+            const errInfo = errorUtil.handleApiError(response);
+            setErrorInfo(errInfo);
         }
     }
 
@@ -223,7 +225,7 @@ export default function ChatFooter() {
 
     return (
         <footer>
-            {errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
+            {errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
             <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={() => setShowInfo(false)} />
             <ChatRenameModal show={showRename} curName={activeChat.name} closeCallback={handleRenameClosed} />
             <YesNoModal show={showDeleteModal} message="Are you sure you want to delete this chat?" closeCallback={handleCloseShowDeleteModal} />

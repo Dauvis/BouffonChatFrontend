@@ -5,6 +5,7 @@ import MessageBlock from "../MessageBlock";
 import ChatTitle from "../ChatTitle";
 import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
 import "./ChatContent.css"
+import VisibilityRefresh from "../VisibilityRefresh";
 
 export default function ChatContent() {
     const { activeChat } = useContext(ChatDataContext);
@@ -60,6 +61,7 @@ export default function ChatContent() {
     return (
         activeChat._id ?
             <>
+                <VisibilityRefresh />
                 {scrollButton === "up"
                     ? <Button variant="secondary" className="chat-content-scroll-up" onClick={() => setScrollButtonClicked("up")}>
                         <ChevronDoubleUp className="chat-content-scroll-icon" />
@@ -77,7 +79,7 @@ export default function ChatContent() {
             </>
             :
             <Container>
-                <Alert variant="secondary" className="text-center">No chats fetched</Alert>
+                <Alert variant="secondary" className="text-center">Select or create a chat</Alert>
             </Container>
     );
 }

@@ -14,6 +14,7 @@ import miscUtil from "../../util/miscUtil.js";
 import chatUtil from "../../util/chatUtil.jsx";
 import ChatCreateModal from "../../components/ChatCreateModal";
 import ErrorHandler from "../../components/ErrorHandler";
+import errorUtil from "../../util/errorUtil.js";
 
 export default function TemplatePage() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function TemplatePage() {
   const [templateList, setTemplateList] = useState([]);
   const [currentTemplate, setCurrentTemplate] = useState(miscUtil.emptyTemplate);
   const [categoryList, setCategoryList] = useState([]);
-  const [errorResponse, setErrorResponse] = useState('');
+  const [errorInfo, setErrorInfo] = useState('');
   const [modalData, setModalData] = useState({show: false});
   const [yesNoModalData, setYesNoModalData] = useState({show: false, message: ''});
   const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
@@ -39,8 +40,8 @@ export default function TemplatePage() {
         setCurrentTemplate(allTemplates.length ? allTemplates[0] : miscUtil.emptyTemplate);
         setCategoryList([...new Set(allTemplates.map(entry => entry.category))]);
       } else {
-        setErrorResponse(response);
-        console.log(`Error fetching templates: ${response.body.message}`);
+        const errInfo = errorUtil.handleApiError(response);
+        setErrorInfo(errInfo);
       }
     }
 
@@ -124,7 +125,8 @@ export default function TemplatePage() {
         setCategoryList(updatedCatList);
         setCurrentTemplate(newCurrent);
       } else {
-        setErrorResponse(response);
+        const errInfo = errorUtil.handleApiError(response);
+        setErrorInfo(errInfo);
       }
     }
 
@@ -147,7 +149,7 @@ export default function TemplatePage() {
   return (
     <>
       <NavHeader icon={navIcon} callBack={goToMainPage} />
-      { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
+      { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
       <main>
         <TemplateModal show={modalData.show} defaultData={modalData.data} categories={categoryList} 
           closeCallback={modalClosedCallback} />

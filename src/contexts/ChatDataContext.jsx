@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import apiUtil from "../util/apiUtil.js";
 import miscUtil from "../util/miscUtil.js"
 import { useNavigate } from "react-router-dom";
+import errorUtil from "../util/errorUtil.js";
 
 export const ChatDataContext = createContext();
 
@@ -14,36 +15,27 @@ export const ChatDataProvider = ({ children }) => {
         loadChatData();
     }, []);
 
-    async function loadChatData() {
+    async function loadChatData(defaultChatId = "") {
         const chatListResponse = await apiUtil.apiGet("/v1/chat");
 
         if (chatListResponse.success) {
             const chatList = chatListResponse.body.chats;
-            const firstChatId = chatList.length ? chatList[0]._id : '';
-            let firstChat = miscUtil.emptyChat;
+            let selected = miscUtil.emptyChat;
 
-            if (firstChatId) {
-                const chatResponse = await apiUtil.apiGet(`/v1/chat/${firstChatId}`);
+            if (defaultChatId) {
+                const chatResponse = await apiUtil.apiGet(`/v1/chat/${defaultChatId}`);
 
                 if (chatResponse.success) {
-                    firstChat = chatResponse.body.chats[0];
+                    selected = chatResponse.body.chats[0];
                 }
             }
 
             setChatListData(chatList);
-            setActiveChat(firstChat);
-            miscUtil.setTrackedChatId(firstChat?._id)
+            setActiveChat(selected);
+            miscUtil.setTrackedChatId(selected?._id);
         } else {
-            navigate("/error", 
-                { 
-                    state: 
-                    { 
-                        errorStatus: chatListResponse.status, 
-                        errorCode: chatListResponse.body.errorCode,
-                        errorText: chatListResponse.body.message 
-                    } 
-                }
-            );
+            const errorInfo = errorUtil.handleApiError(chatListResponse);
+            navigate(errorInfo.redirect, { state: errorInfo });
         }
     }
 

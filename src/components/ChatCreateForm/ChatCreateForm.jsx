@@ -6,12 +6,13 @@ import "./ChatCreateForm.css"
 import apiUtil from "../../util/apiUtil";
 import chatUtil from "../../util/chatUtil";
 import miscUtil from "../../util/miscUtil";
+import errorUtil from "../../util/errorUtil";
 import ErrorHandler from "../ErrorHandler";
 
 export default function ChatCreateForm({ parameters, closeCallback }) {
     const options = useContext(OptionsContext);
     const { setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
-    const [ errorResponse, setErrorResponse ] = useState('');
+    const [ errorInfo, setErrorInfo ] = useState('');
 
     const toneOptions = options.toneOptionsList();
     const modelOptions = options.modelOptionsList();
@@ -36,13 +37,14 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
             miscUtil.setTrackedChatId(newChat._id)
             closeCallback();
         } else {
-            setErrorResponse(response);
+            const errInfo = errorUtil.handleApiError(response);
+            setErrorInfo(errInfo);
         }
     }
 
     return (
         <>
-        { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
+        { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
         <Form action={handleFormAction}>
             <Row>
                 <Col>

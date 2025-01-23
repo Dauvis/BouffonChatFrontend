@@ -6,11 +6,12 @@ import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
 import chatUtil from "../../util/chatUtil.jsx";
 import miscUtil from "../../util/miscUtil.js";
+import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
 
 export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
-    const [ errorResponse, setErrorResponse ] = useState('');
+    const [ errorInfo, setErrorInfo ] = useState('');
 
     async function clickCallback(clickedChatId) {
         const chatResponse = await apiUtil.apiGet(`/v1/chat/${clickedChatId}`);
@@ -24,7 +25,8 @@ export default function ChatList({searchData, setSearchData }) {
                 alert("Chat does not exist");
                 await loadChatData();
             } else {
-                setErrorResponse(chatResponse);
+                const errInfo = errorUtil.handleApiError(chatResponse);
+                setErrorInfo(errInfo);
             }
         }
     }
@@ -48,7 +50,7 @@ export default function ChatList({searchData, setSearchData }) {
 
     return (
         <>
-        { errorResponse ? <ErrorHandler errorResponse={errorResponse} /> : null }
+        { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
         <Card>
             <Card.Body>
                 <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} value={searchData.keyword} />
