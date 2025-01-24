@@ -35,7 +35,7 @@ export const ChatDataProvider = ({ children }) => {
             miscUtil.setTrackedChatId(selected?._id);
         } else {
             const errorInfo = errorUtil.handleApiError(chatListResponse);
-            navigate(errorInfo.redirect, { state: errorInfo });
+            navigate(errorInfo.redirect, { state: {errorInfo} });
         }
     }
 

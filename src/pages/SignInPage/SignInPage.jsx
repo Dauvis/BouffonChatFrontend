@@ -10,23 +10,25 @@ export default function SignInPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const message = location.state?.errorInfo?.message || "";
+    const message = location.state?.errorInfo?.args.message || "";
 
     const onSuccess = async (response) => {
         const idToken = response.credential;
-        const authData = await loginService.logIntoAPI(idToken);
+        const loginResponse = await loginService.logIntoAPI(idToken);
 
-        if (authData) {
-            miscUtil.setProfile(authData.profile);
+        if (loginResponse.success) {
+            miscUtil.setProfile(loginResponse.body.profile);
             navigate("/main");
-        } else {
+        } else {            
             miscUtil.clearProfile();
+            const errorInfo = errorUtil.handleApiError(loginResponse);
+            navigate(errorInfo.redirect, { state: {errorInfo} });
         }
     };
 
     const onError = () => {
         const errorInfo = errorUtil.handleInternalError("NotAuthenticated", "Authentication with Google failed. Please try again later.")
-        navigate(errorInfo.redirect, { state: { errorInfo } });
+        navigate(errorInfo.redirect, { state: {errorInfo} });
     };
 
     return (
