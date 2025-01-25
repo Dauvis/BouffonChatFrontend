@@ -30,7 +30,6 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
 
         closeCallBack();
         const parameters = chatUtil.initNewParameters(profile, template);
-        miscUtil.addTemplateMRU(template);
         setShowCreate({show: true, parameters});
     }
 

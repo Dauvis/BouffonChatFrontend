@@ -75,24 +75,8 @@ export default function ChatFooter() {
 
             if (response.success) {
                 const updatedList = chatUtil.removeChat(chatListData, curChatId);
-                const newChatId = updatedList.length ? updatedList[0]._id : '';
-
-                if (newChatId) {
-                    const chatResponse = await apiUtil.apiGet(`/v1/chat/${newChatId}`);
-
-                    if (chatResponse.success) {
-                        const selected = chatResponse.body.chats[0]
-                        setActiveChat(selected);
-                        miscUtil.setTrackedChatId(selected._id)
-                    } else {
-                        setActiveChat(miscUtil.emptyChat);
-                        miscUtil.setTrackedChatId('')
-                    }
-                } else {
-                    setActiveChat(miscUtil.emptyChat);
-                    miscUtil.setTrackedChatId('')
-                }
-
+                setActiveChat(miscUtil.emptyChat);
+                miscUtil.setTrackedChatId('')
                 setChatListData(updatedList);
             } else {
                 await handleChatError(response);

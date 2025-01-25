@@ -30,14 +30,14 @@ function getTheme(theme) {
 }
 
 function getTemplateMRU() {
-    return JSON.parse(localStorage.getItem("templateMRU"))
+    const profile = getProfile();
+    return profile.templateMRU;
 }
 
-function addTemplateMRU(template) {
-    const current = getTemplateMRU() || [];
-    const filtered = current.filter(t => t.id !== template._id);
-    const updated = ([{ id: template._id, name: template.name }, ...filtered]).slice(0, 10)
-    localStorage.setItem("templateMRU", JSON.stringify(updated));
+function setTemplateMRU(mru) {
+    const profile = getProfile();
+    profile.templateMRU = mru;
+    setProfile(profile);
 }
 
 const emptyTemplate = {
@@ -67,6 +67,6 @@ const emptyChat = {
 }
 
 const miscUtil = { getProfile, setProfile, clearProfile, emptyTemplate, emptyChat, 
-    setTheme, getTheme, setTrackedChatId, getTrackedChatId, getTemplateMRU, addTemplateMRU }
+    setTheme, getTheme, setTrackedChatId, getTrackedChatId, getTemplateMRU, setTemplateMRU }
 
 export default miscUtil;

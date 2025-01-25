@@ -87,7 +87,8 @@ function initNewParameters(profile, template) {
         tone: template.tone || profile.defaultTone,
         model: template.model || profile.defaultModel,
         instructions: template.instructions || profile.defaultInstructions,
-        notes: template.notes
+        notes: template.notes,
+        template: template ? { id: template._id, name: template.name } : null
     }
 }
 
