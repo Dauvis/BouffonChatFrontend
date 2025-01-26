@@ -1,7 +1,7 @@
-import miscUtil from "./miscUtil";
+import localStoreUtil from "./localStoreUtil";
 
 function isAuthenticated() {
-  const profile = miscUtil.getProfile();
+  const profile = localStoreUtil.getProfile();
   return profile !== null;
 };
 

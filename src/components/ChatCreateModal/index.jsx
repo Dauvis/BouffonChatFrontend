@@ -2,16 +2,15 @@ import { Modal } from "react-bootstrap";
 import ChatCreateForm from "../ChatCreateForm";
 import PropTypes from "prop-types";
 
-export default function ChatCreateModal({ show, parameters, closeCallback }) {
+export default function ChatCreateModal({ parameters, closeCallback }) {
 
     ChatCreateModal.propTypes = {
-        show: PropTypes.bool.isRequired,
         parameters: PropTypes.any.isRequired,
         closeCallback: PropTypes.func.isRequired
     };
 
     return (
-        <Modal show={show} onHide={closeCallback}>
+        <Modal show={true} onHide={closeCallback}>
             <Modal.Header closeButton>
                 <Modal.Title>New chat</Modal.Title>
             </Modal.Header>

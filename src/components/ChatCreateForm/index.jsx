@@ -5,10 +5,10 @@ import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatCreateForm.css"
 import apiUtil from "../../util/apiUtil";
 import chatUtil from "../../util/chatUtil";
-import miscUtil from "../../util/miscUtil";
 import errorUtil from "../../util/errorUtil";
 import ErrorHandler from "../ErrorHandler";
 import PropTypes from "prop-types";
+import localStoreUtil from "../../util/localStoreUtil";
 
 export default function ChatCreateForm({ parameters, closeCallback }) {
     const options = useContext(OptionsContext);
@@ -45,13 +45,13 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
             const newList = chatUtil.addChat(chatListData, { _id: newChat._id, name: newChat.name, type: newChat.type });
             setChatListData(newList);
             setActiveChat(newChat);
-            miscUtil.setTrackedChatId(newChat._id)
+            localStoreUtil.setTrackedChatId(newChat._id)
 
             if (newMRU) {
-                miscUtil.setTemplateMRU(newMRU);
+                localStoreUtil.setTemplateMRU(newMRU);
             }
 
-            closeCallback();
+            closeCallback(false);
         } else {
             const errInfo = errorUtil.handleApiError(response);
             setErrorInfo(errInfo);
@@ -111,7 +111,7 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
             <Row>
                 <Col className="chat-create-footer">
                     <Button variant="primary" type="submit" className="template-form-button">Save</Button>
-                    <Button variant="secondary" className="template-form-button" onClick={() => closeCallback()}>Cancel</Button>
+                    <Button variant="secondary" className="template-form-button" onClick={() => closeCallback(true)}>Cancel</Button>
                     <Form.Check type="switch" className="chat-create-temp" id="temporary" name="temporary" label="Temporary" defaultChecked={true} />
                 </Col>
             </Row>

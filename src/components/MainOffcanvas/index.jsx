@@ -10,9 +10,10 @@ import ChatCreateModal from "../ChatCreateModal";
 import chatUtil from "../../util/chatUtil.js";
 import apiUtil from "../../util/apiUtil.js";
 import PropTypes from "prop-types";
+import localStoreUtil from "../../util/localStoreUtil.js";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
-    const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
+    const [ showCreate, setShowCreate] = useState("");
 
     MainOffcanvas.propTypes = {
         offcanvasState: PropTypes.bool.isRequired,
@@ -21,7 +22,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
         setSearchData: PropTypes.func.isRequired,
     }
 
-    const profile = miscUtil.getProfile();
+    const profile = localStoreUtil.getProfile();
 
     async function createNewChat(templateId) {
         let template = miscUtil.emptyTemplate;
@@ -38,21 +39,21 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
 
         closeCallBack();
         const parameters = chatUtil.initNewParameters(profile, template);
-        setShowCreate({show: true, parameters});
+        setShowCreate(parameters);
     }
 
     function handleCreateCallback() {
-        setShowCreate({show: false, parameters:'' });
+        setShowCreate("");
     }
 
-    const templateMru = miscUtil.getTemplateMRU() || [];
+    const templateMru = localStoreUtil.getTemplateMRU();
     const mruOptions = templateMru.map(entry => (
         <Dropdown.Item key={entry.id} as="button" onClick={() => createNewChat(entry.id)}>{entry.name}</Dropdown.Item>
     ));
 
     return (
         <>
-        <ChatCreateModal show={showCreate.show} parameters={showCreate.parameters} closeCallback={handleCreateCallback} />
+        { showCreate ? <ChatCreateModal parameters={showCreate.parameters} closeCallback={handleCreateCallback} /> : null }
         <Offcanvas show={offcanvasState} placement="end" onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title>Menu</Offcanvas.Title>

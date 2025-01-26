@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import miscUtil from '../util/miscUtil';
 import PropTypes from 'prop-types';
+import localStoreUtil from '../util/localStoreUtil';
 
 // Create a Context
 const ColorModeContext = createContext();
@@ -14,12 +15,12 @@ export function ColorModeProvider({ children }) {
   }
 
   useEffect(() => {
-    setTheme(miscUtil.getTheme());
+    setTheme(localStoreUtil.getTheme());
   }, []);
 
   function toggleTheme() {
     const newTheme = miscUtil.getTheme() === "light" ? "dark" : "light";
-    miscUtil.setTheme(newTheme);
+    localStoreUtil.setTheme(newTheme);
     setTheme(newTheme);
   };
 

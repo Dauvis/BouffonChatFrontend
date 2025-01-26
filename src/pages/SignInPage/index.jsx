@@ -1,10 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import loginService from "../../services/loginService.js";
 import { Container, Card, Alert } from "react-bootstrap";
+
 import logo from "../../assets/images/bouffon_chat_icon.png";
-import miscUtil from "../../util/miscUtil.js"
-import errorUtil from "../../util/errorUtil.js";
+
+import loginService from "../../services/loginService";
+import errorUtil from "../../util/errorUtil";
+import localStoreUtil from "../../util/localStoreUtil";
 
 export default function SignInPage() {
     const navigate = useNavigate();
@@ -17,18 +19,18 @@ export default function SignInPage() {
         const loginResponse = await loginService.logIntoAPI(idToken);
 
         if (loginResponse.success) {
-            miscUtil.setProfile(loginResponse.body.profile);
+            localStoreUtil.setProfile(loginResponse.body.profile);
             navigate("/main");
-        } else {            
-            miscUtil.clearProfile();
+        } else {
+            localStoreUtil.clearProfile();
             const errorInfo = errorUtil.handleApiError(loginResponse);
-            navigate(errorInfo.redirect, { state: {errorInfo} });
+            navigate(errorInfo.redirect, { state: { errorInfo } });
         }
     };
 
     const onError = () => {
         const errorInfo = errorUtil.handleInternalError("NotAuthenticated", "Authentication with Google failed. Please try again later.")
-        navigate(errorInfo.redirect, { state: {errorInfo} });
+        navigate(errorInfo.redirect, { state: { errorInfo } });
     };
 
     return (

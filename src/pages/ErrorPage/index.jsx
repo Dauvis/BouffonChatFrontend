@@ -15,14 +15,6 @@ export default function ErrorPage({ args }) {
     const errorText = args?.message || location.state?.errorInfo?.message || "There was an error but we cannot identify what kind of error it was.";
     const errorCode = args?.code || location.state?.errorInfo?.code || "";
 
-    function goToMainPage() {
-        navigate("/main");
-    };
-
-    function goToSignin() {
-        navigate("/sign-in");
-    }
-
     return (
         <>
             <Container className="vh-100 d-flex justify-content-center align-items-center">
@@ -31,12 +23,12 @@ export default function ErrorPage({ args }) {
                         <Card className="bg-body-tertiary">
                             <Card.Body>
                                 <Card.Title>Error: {errorStatus} <EmojiFrownFill color="darkgreen" /></Card.Title>
-                                { errorCode ? <Card.Text><em>Code: {errorCode}</em></Card.Text> : null}
+                                {errorCode ? <Card.Text><em>Code: {errorCode}</em></Card.Text> : null}
                                 <Card.Text>
                                     {errorText}
                                 </Card.Text>
-                                <Button variant="secondary" onClick={goToMainPage} style={{ marginRight: "0.5rem"}}>Return to app</Button>
-                                <Button variant="secondary" onClick={goToSignin}>Sign into app</Button>
+                                <Button variant="secondary" onClick={() => navigate("/main")} style={{ marginRight: "0.5rem" }}>Return to app</Button>
+                                <Button variant="secondary" onClick={() => navigate("/sign-in")}>Sign into app</Button>
                             </Card.Body>
                         </Card>
                     </Col>

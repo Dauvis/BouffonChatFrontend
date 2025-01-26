@@ -7,10 +7,10 @@ import loginService from "../../services/loginService.js";
 import apiUtil from "../../util/apiUtil.js";
 import './ProfileForm.css'
 import LoadingWait from "../LoadingWait";
-import miscUtil from "../../util/miscUtil.js";
 import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
 import PropTypes from "prop-types";
+import localStoreUtil from "../../util/localStoreUtil.js";
 
 export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
 
     const logOutOfApp = async () => {
         await loginService.logOutOfAPI();
-        miscUtil.clearProfile();
+        localStoreUtil.clearProfile();
         navigate('/sign-in');
     }
 
@@ -69,7 +69,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
                 setErrorMsg(response.body.message);
             }
         } else {
-            miscUtil.setProfile(profile);
+            localStoreUtil.setProfile(profile);
             saveCallback();
         }
     }

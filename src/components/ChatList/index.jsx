@@ -5,10 +5,10 @@ import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
 import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
 import chatUtil from "../../util/chatUtil.js";
-import miscUtil from "../../util/miscUtil.js";
 import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
 import PropTypes from "prop-types";
+import localStoreUtil from "../../util/localStoreUtil.js";
 
 export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
@@ -25,7 +25,7 @@ export default function ChatList({searchData, setSearchData }) {
         if (chatResponse.success) {
             const selected = chatResponse.body.chats[0]
             setActiveChat(selected);
-            miscUtil.setTrackedChatId(selected._id)
+            localStoreUtil.setTrackedChatId(selected._id)
         } else {
             if (chatResponse.status === 404) {
                 alert("Chat does not exist");

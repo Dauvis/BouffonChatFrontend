@@ -11,13 +11,14 @@ import YesNoModal from "../YesNoModal";
 import miscUtil from "../../util/miscUtil";
 import ErrorHandler from "../ErrorHandler";
 import errorUtil from "../../util/errorUtil";
+import localStoreUtil from "../../util/localStoreUtil";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData, loadChatData } = useContext(ChatDataContext);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showRename, setShowRename ] = useState(false);
-    const [ errorInfo, setErrorInfo ] = useState('');
-    const [ showDeleteModal, setShowDeleteModal ] = useState(false);
+    const [ errorInfo, setErrorInfo ] = useState("");
+    const [ yesNoModalData, setYesNoModalData ] = useState("");
     const [ messageText, setMessageText ] = useState('');
 
     function convertButtonInfo(type) {
@@ -78,10 +79,14 @@ export default function ChatFooter() {
             const updatedList = chatUtil.replaceChat(chatListData, updatedChat);
             setChatListData(updatedList);
             setActiveChat(updatedChat);
-            miscUtil.setTrackedChatId(updatedChat._id)
+            localStoreUtil.setTrackedChatId(updatedChat._id)
         } else {
             await handleChatError(response);
         }
+    }
+
+    function handleDeleteChatClicked() {
+        setYesNoModalData("Are you sure you want to delete this chat?");
     }
 
     async function handleCloseShowDeleteModal({result}) {
@@ -92,14 +97,14 @@ export default function ChatFooter() {
             if (response.success) {
                 const updatedList = chatUtil.removeChat(chatListData, curChatId);
                 setActiveChat(miscUtil.emptyChat);
-                miscUtil.setTrackedChatId('')
+                localStoreUtil.setTrackedChatId('')
                 setChatListData(updatedList);
             } else {
                 await handleChatError(response);
             }
         }
 
-        setShowDeleteModal(false);
+        setYesNoModalData("");
     }
 
     function handleMessageChanged(event) {
@@ -110,7 +115,7 @@ export default function ChatFooter() {
     async function processMessage() {
         const chat = activeChat;
         const userMessage = messageText;
-        miscUtil.setTrackedChatId(chat._id);
+        localStoreUtil.setTrackedChatId(chat._id);
 
         if (!userMessage) {
             alert("You must enter a message");
@@ -135,7 +140,7 @@ export default function ChatFooter() {
         const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage });
 
         if (response.success) {
-            const curChatId = miscUtil.getTrackedChatId();
+            const curChatId = localStoreUtil.getTrackedChatId();
 
             if (curChatId === chat._id) {
                 const exchangeData = response.body;
@@ -225,10 +230,10 @@ export default function ChatFooter() {
 
     return (
         <footer>
-            {errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
+            { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
+            { yesNoModalData ? <YesNoModal message={yesNoModalData} closeCallback={handleCloseShowDeleteModal} /> : null }
             <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={() => setShowInfo(false)} />
             <ChatRenameModal show={showRename} curName={activeChat.name} closeCallback={handleRenameClosed} />
-            <YesNoModal show={showDeleteModal} message="Are you sure you want to delete this chat?" closeCallback={handleCloseShowDeleteModal} />
             <Container>
             <Card className="bg-body-tertiary">
                 <Card.Body>
@@ -254,7 +259,7 @@ export default function ChatFooter() {
                                 <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleRedoClicked} ><ArrowClockwise /> Redo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowRename(true)} ><Pencil /> Rename</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={convertClicked} >{convertIcon} {convertText}</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowDeleteModal(true)} ><Trash /> Delete</Dropdown.Item>
+                                <Dropdown.Item as="button" disabled={disabled} onClick={handleDeleteChatClicked} ><Trash /> Delete</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                         </Col>

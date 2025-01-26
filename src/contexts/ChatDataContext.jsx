@@ -4,6 +4,7 @@ import miscUtil from "../util/miscUtil.js"
 import { useNavigate } from "react-router-dom";
 import errorUtil from "../util/errorUtil.js";
 import PropTypes from "prop-types";
+import localStoreUtil from "../util/localStoreUtil.js";
 
 export const ChatDataContext = createContext();
 
@@ -37,7 +38,7 @@ export function ChatDataProvider({ children }) {
 
             setChatListData(chatList);
             setActiveChat(selected);
-            miscUtil.setTrackedChatId(selected?._id);
+            localStoreUtil.setTrackedChatId(selected?._id);
         } else {
             const errorInfo = errorUtil.handleApiError(chatListResponse);
             navigate(errorInfo.redirect, { state: {errorInfo} });
