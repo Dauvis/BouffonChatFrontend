@@ -28,7 +28,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
         let template = miscUtil.emptyTemplate;
 
         if (templateId) {
-            const response = await apiUtil.apiGet(`/v1/template/${templateId}`);
+            const response = await apiUtil.get(`/v1/template/${templateId}`);
 
             if (response.success) {
                 template = response.body.templates[0];
@@ -53,7 +53,7 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
 
     return (
         <>
-        { showCreate ? <ChatCreateModal parameters={showCreate.parameters} closeCallback={handleCreateCallback} /> : null }
+        { showCreate ? <ChatCreateModal parameters={showCreate} closeCallback={handleCreateCallback} /> : null }
         <Offcanvas show={offcanvasState} placement="end" onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title>Menu</Offcanvas.Title>

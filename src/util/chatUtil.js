@@ -1,53 +1,9 @@
-function chatLimitPercent(chat) {
-    if (chat.model === "gpt-4o-mini" || chat.model === "gpt-4o") {
-        return 100 * (chat.tokens / 25000);
-    }
-
-    return 0;
-}
-
-function chatLimitVariant(percent) {
-    let limitVariant = "info";
-
-    if (percent >= 90) {
-        limitVariant = "danger";
-    } else if (percent >= 75) {
-        limitVariant = "warning";
-    }
-
-    return limitVariant;
-}
-
-function filterChatList(chatList, keyword, showArchived) {
-    const lowerKeyword = keyword.toLocaleLowerCase();
-    let filteredList = chatList;
-
-    if (!showArchived) {
-        filteredList = filteredList.filter(c => c.type !== "archived");
-    }
-
-    if (keyword) {
-        filteredList = filteredList.filter(c => c.name.toLocaleLowerCase().includes(lowerKeyword));
-    }
-
-    return filteredList;
-}
-
-function replaceChat(chatList, updated) {
-    return chatList.map(c => (
-        c._id === updated._id ? updated : c
-    ));
-}
-
-function removeChat(chatList, chatId) {
-    return chatList.filter(c => c._id !== chatId);
-}
-
-function addChat(chatList, newChat) {
-    const list = [ ...chatList, newChat ];
-    return list.sort((a, b) => a.name.localeCompare(b.name));
-}
-
+/**
+ * creates new chat parameters using profile and template
+ * @param {object} profile 
+ * @param {object} template 
+ * @returns parameters object for new chat dialog
+ */
 function initNewParameters(profile, template) {
     return {
         name: '',
@@ -59,7 +15,10 @@ function initNewParameters(profile, template) {
     }
 }
 
-const chatUtil = { chatLimitPercent, chatLimitVariant, 
-    filterChatList, replaceChat, removeChat, initNewParameters, addChat };
+function abridgeChat(chat) {
+    return { _id: chat._id, name: chat.name, type: chat.type };
+}
+
+const chatUtil = { initNewParameters, abridgeChat };
 
 export default chatUtil;

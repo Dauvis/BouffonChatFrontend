@@ -4,11 +4,12 @@ import { OptionsContext } from "../../contexts/OptionsContext";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatCreateForm.css"
 import apiUtil from "../../util/apiUtil";
-import chatUtil from "../../util/chatUtil";
 import errorUtil from "../../util/errorUtil";
 import ErrorHandler from "../ErrorHandler";
 import PropTypes from "prop-types";
 import localStoreUtil from "../../util/localStoreUtil";
+import miscUtil from "../../util/miscUtil";
+import chatUtil from "../../util/chatUtil";
 
 export default function ChatCreateForm({ parameters, closeCallback }) {
     const options = useContext(OptionsContext);
@@ -37,12 +38,14 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
             template: templateId ? { id: templateId, name: templateName } : null
         }
 
-        const response = await apiUtil.apiPost("/v1/chat", data);
+        const response = await apiUtil.post("/v1/chat", data);
 
         if (response.success) {
             const newChat = response.body.chat;
             const newMRU = response.body.mru;
-            const newList = chatUtil.addChat(chatListData, { _id: newChat._id, name: newChat.name, type: newChat.type });
+            const abridged = chatUtil.abridgeChat(newChat);
+            const unsortedList = miscUtil.addOrReplaceInArray(chatListData, abridged, "_id");
+            const newList = unsortedList.sort((a, b) => a.name.localeCompare(b.name));
             setChatListData(newList);
             setActiveChat(newChat);
             localStoreUtil.setTrackedChatId(newChat._id)

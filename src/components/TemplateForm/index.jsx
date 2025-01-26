@@ -47,7 +47,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
     }
 
     async function createNewTemplate(data) {
-        const response = await apiUtil.apiPost("/v1/template", data);
+        const response = await apiUtil.post("/v1/template", data);
 
         if (!response.success) {
             const errInfo = errorUtil.handleApiError(response);
@@ -58,7 +58,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
     }
 
     async function updateTemplate(data) {
-        const response = await apiUtil.apiPut(`/v1/template/${data._id}`, data);
+        const response = await apiUtil.put(`/v1/template/${data._id}`, data);
 
         if (!response.success) {
             const errInfo = errorUtil.handleApiError(response);

@@ -30,7 +30,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const response = await apiUtil.apiGet("/v1/profile");
+            const response = await apiUtil.get("/v1/profile");
 
             if (response.success) {
                 setProfile(response.body.profile);
@@ -59,7 +59,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
     }
 
     const saveProfile = async () => {
-        const response = await apiUtil.apiPut("/v1/profile", profile);
+        const response = await apiUtil.put("/v1/profile", profile);
 
         if (!response.success) {
             if (response.status === 401) {

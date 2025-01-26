@@ -3,7 +3,6 @@ import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash,
 import { useContext, useState } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
-import chatUtil from "../../util/chatUtil";
 import ChatInfoModal from "../ChatInfoModal";
 import apiUtil from "../../util/apiUtil";
 import ChatRenameModal from "../ChatRenameModal";
@@ -12,6 +11,7 @@ import miscUtil from "../../util/miscUtil";
 import ErrorHandler from "../ErrorHandler";
 import errorUtil from "../../util/errorUtil";
 import localStoreUtil from "../../util/localStoreUtil";
+import chatFooterLogic from "./chatFooterLogic";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData, loadChatData } = useContext(ChatDataContext);
@@ -67,7 +67,7 @@ export default function ChatFooter() {
     }
 
     async function saveChatChanges(changes) {
-        const response = await apiUtil.apiPatch(`/v1/chat/${activeChat._id}`, changes);
+        const response = await apiUtil.patch(`/v1/chat/${activeChat._id}`, changes);
 
         if (response.success) {
             const updatedChat = {
@@ -76,7 +76,8 @@ export default function ChatFooter() {
                 type: changes.type
             }
 
-            const updatedList = chatUtil.replaceChat(chatListData, updatedChat);
+            const abridged = miscUtil.abridgeChat(updatedChat);
+            const updatedList = miscUtil.addOrReplaceInArray(chatListData, abridged, "_id");
             setChatListData(updatedList);
             setActiveChat(updatedChat);
             localStoreUtil.setTrackedChatId(updatedChat._id)
@@ -92,10 +93,10 @@ export default function ChatFooter() {
     async function handleCloseShowDeleteModal({result}) {
         if (result) {
             const curChatId = activeChat._id;
-            const response = await apiUtil.apiDelete(`/v1/chat/${curChatId}`)
+            const response = await apiUtil.remove(`/v1/chat/${curChatId}`)
 
             if (response.success) {
-                const updatedList = chatUtil.removeChat(chatListData, curChatId);
+                const updatedList = miscUtil.removeFromArray(chatListData, curChatId, "_id");
                 setActiveChat(miscUtil.emptyChat);
                 localStoreUtil.setTrackedChatId('')
                 setChatListData(updatedList);
@@ -137,7 +138,7 @@ export default function ChatFooter() {
 
         setMessageText("");
         setActiveChat(initialUpdated);
-        const response = await apiUtil.apiPost("/v1/message", { chatId: chat._id, message: userMessage });
+        const response = await apiUtil.post("/v1/message", { chatId: chat._id, message: userMessage });
 
         if (response.success) {
             const curChatId = localStoreUtil.getTrackedChatId();
@@ -178,7 +179,7 @@ export default function ChatFooter() {
     }
 
     async function handleUndoClicked() {
-        const response = await apiUtil.apiPost(`/v1/chat/${activeChat._id}/revert`, {});
+        const response = await apiUtil.post(`/v1/chat/${activeChat._id}/revert`, {});
 
         if (response.success) {
             if (response.status !== 204) {
@@ -201,7 +202,7 @@ export default function ChatFooter() {
     }
 
     async function handleRedoClicked() {
-        const response = await apiUtil.apiPost(`/v1/chat/${activeChat._id}/restore`, {});
+        const response = await apiUtil.post(`/v1/chat/${activeChat._id}/restore`, {});
 
         if (response.success) {
             if (response.status !== 204) {
@@ -223,8 +224,8 @@ export default function ChatFooter() {
         }
     }
 
-    const limitPercent = chatUtil.chatLimitPercent(activeChat);
-    const limitVariant = chatUtil.chatLimitVariant(limitPercent);
+    const limitPercent = chatFooterLogic.chatLimitPercent(activeChat);
+    const limitVariant = chatFooterLogic.chatLimitVariant(limitPercent);
     const disabled = !activeChat._id;
     const archived = activeChat.type === "archived";
 

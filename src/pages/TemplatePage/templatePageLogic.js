@@ -4,7 +4,7 @@ import errorUtil from "../../util/errorUtil";
 
 async function processDeletion(curTemplateId, curCategory, showCategoryView, templateList) {
     const curIndex = templateList.findIndex(t => t._id === curTemplateId);
-    const response = await apiUtil.apiDelete(`/v1/template/${curTemplateId}`);
+    const response = await apiUtil.remove(`/v1/template/${curTemplateId}`);
 
     if (response.success) {
         const updatedTempList = templateList.filter(t => t._id !== curTemplateId);

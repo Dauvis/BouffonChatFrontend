@@ -25,6 +25,13 @@ const emptyChat = {
     exchanges: []
 }
 
+/**
+ * adds or replaces a value in an array based state
+ * @param {array} state 
+ * @param {function} setState 
+ * @param {object} value 
+ * @param {string} key 
+ */
 function stateAddOrReplace(state, setState, value, key) {
     if (!Array.isArray(state)) {
         throw new Error("Call to stateAddOrReplace called with a non-array state");
@@ -43,6 +50,12 @@ function stateAddOrReplace(state, setState, value, key) {
     }
 }
 
+/**
+ * generates a unique list of values for a property in an array
+ * @param {array} valueList 
+ * @param {string} key 
+ * @returns array of unique valus for property
+ */
 function uniqueListFromArray(valueList, key) {
     if (!Array.isArray(valueList)) {
         throw new Error("Call to uniqueListFromArray called with a non-array");
@@ -51,6 +64,46 @@ function uniqueListFromArray(valueList, key) {
     return [...new Set(valueList.map(entry => entry[key]))];
 }
 
-const miscUtil = { emptyTemplate, emptyChat, stateAddOrReplace, uniqueListFromArray }
+/**
+ * adds or replaces a value in an array
+ * @param {array} valueList 
+ * @param {object} value 
+ * @param {string} key 
+ * @returns array with value added or replaced
+ */
+function addOrReplaceInArray(valueList, value, key) {
+    if (!Array.isArray(valueList)) {
+        throw new Error("Call to addOrReplaceInArray called with a non-array");
+    }
+
+    if (valueList.some(v => v[key] === value[key])) {
+        return valueList.map(v => (v[key] === value[key] ? value : v));
+    } else {
+        return [...valueList, value];
+    }
+}
+
+/**
+ * removes value from array
+ * @param {array} valueList 
+ * @param {any} value
+ * @param {string} key 
+ * @returns array with value removed
+ */
+function removeFromArray(valueList, value, key) {
+    if (!Array.isArray(valueList)) {
+        throw new Error("Call to removeFromArray called with a non-array");
+    }
+
+    const isObject = (typeof value === 'object');
+
+    if (isObject) {
+        return valueList.filter(v => v[key] !== value[key]);
+    } else {
+        return valueList.filter(v => v[key] !== value);
+    }
+}
+
+const miscUtil = { emptyTemplate, emptyChat, stateAddOrReplace, uniqueListFromArray, addOrReplaceInArray, removeFromArray }
 
 export default miscUtil;

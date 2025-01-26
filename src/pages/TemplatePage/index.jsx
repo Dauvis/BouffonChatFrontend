@@ -37,7 +37,7 @@ export default function TemplatePage() {
 
     useEffect(() => {
         const fetchTemplates = async () => {
-            const response = await apiUtil.apiGet("/v1/template");
+            const response = await apiUtil.get("/v1/template");
 
             if (response.success) {
                 const allTemplates = response.body.templates;

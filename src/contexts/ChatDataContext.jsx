@@ -1,35 +1,36 @@
 import { createContext, useEffect, useState } from "react";
-import apiUtil from "../util/apiUtil.js";
-import miscUtil from "../util/miscUtil.js"
 import { useNavigate } from "react-router-dom";
-import errorUtil from "../util/errorUtil.js";
 import PropTypes from "prop-types";
-import localStoreUtil from "../util/localStoreUtil.js";
+
+import apiUtil from "../util/apiUtil";
+import miscUtil from "../util/miscUtil"
+import errorUtil from "../util/errorUtil";
+import localStoreUtil from "../util/localStoreUtil";
 
 export const ChatDataContext = createContext();
 
 export function ChatDataProvider({ children }) {
-    const [chatListData, setChatListData] = useState([]);
-    const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
-    const navigate = useNavigate();
-
     ChatDataProvider.propTypes = {
         children: PropTypes.node.isRequired,
     };
+
+    const [chatListData, setChatListData] = useState([]);
+    const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadChatData();
     }, []);
 
     async function loadChatData(defaultChatId = "") {
-        const chatListResponse = await apiUtil.apiGet("/v1/chat");
+        const chatListResponse = await apiUtil.get("/v1/chat");
 
         if (chatListResponse.success) {
             const chatList = chatListResponse.body.chats;
             let selected = miscUtil.emptyChat;
 
             if (defaultChatId) {
-                const chatResponse = await apiUtil.apiGet(`/v1/chat/${defaultChatId}`);
+                const chatResponse = await apiUtil.get(`/v1/chat/${defaultChatId}`);
 
                 if (chatResponse.success) {
                     selected = chatResponse.body.chats[0];
@@ -38,7 +39,7 @@ export function ChatDataProvider({ children }) {
 
             setChatListData(chatList);
             setActiveChat(selected);
-            localStoreUtil.setTrackedChatId(selected?._id);
+            localStoreUtil.setTrackedChatId(selected._id);
         } else {
             const errorInfo = errorUtil.handleApiError(chatListResponse);
             navigate(errorInfo.redirect, { state: {errorInfo} });

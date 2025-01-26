@@ -4,11 +4,11 @@ import ChatListItem from "../ChatListItem";
 import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
 import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
-import chatUtil from "../../util/chatUtil.js";
 import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
 import PropTypes from "prop-types";
 import localStoreUtil from "../../util/localStoreUtil.js";
+import chatListLogic from "./chatListLogic";
 
 export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
@@ -20,7 +20,7 @@ export default function ChatList({searchData, setSearchData }) {
     }
 
     async function clickCallback(clickedChatId) {
-        const chatResponse = await apiUtil.apiGet(`/v1/chat/${clickedChatId}`);
+        const chatResponse = await apiUtil.get(`/v1/chat/${clickedChatId}`);
 
         if (chatResponse.success) {
             const selected = chatResponse.body.chats[0]
@@ -48,7 +48,7 @@ export default function ChatList({searchData, setSearchData }) {
         setSearchData(newSearchData);
     }
 
-    const filteredList = chatUtil.filterChatList(chatListData, searchData.keyword, searchData.archived);
+    const filteredList = chatListLogic.filter(chatListData, searchData);
 
     const listItems = filteredList.map(c => (
         <ChatListItem key={c._id} isActive={c._id === activeChat._id} type={c.type} name={c.name} id={c._id} clickCallback={clickCallback}/>
