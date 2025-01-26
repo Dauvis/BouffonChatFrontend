@@ -1,7 +1,7 @@
 import { Accordion, Alert, ListGroup } from "react-bootstrap"
 import { useState, useEffect } from "react";
 import "./TemplateListByCategory.css"
-import LoadingWait from "../LoadingWait/LoadingWait";
+import LoadingWait from "../LoadingWait";
 import TemplateListItem from "../TemplateListItem";
 import PropTypes from "prop-types";
 
