@@ -7,11 +7,19 @@ import "./MainOffcanvas.css";
 import ColorModeButton from "../ColorModeButton";
 import { useState } from "react";
 import ChatCreateModal from "../ChatCreateModal";
-import chatUtil from "../../util/chatUtil.jsx";
+import chatUtil from "../../util/chatUtil.js";
 import apiUtil from "../../util/apiUtil.js";
+import PropTypes from "prop-types";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
     const [ showCreate, setShowCreate] = useState({show: false, parameters:''});
+
+    MainOffcanvas.propTypes = {
+        offcanvasState: PropTypes.bool.isRequired,
+        closeCallBack: PropTypes.func.isRequired,
+        searchData: PropTypes.any.isRequired,
+        setSearchData: PropTypes.func.isRequired,
+    }
 
     const profile = miscUtil.getProfile();
 

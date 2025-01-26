@@ -5,12 +5,19 @@ import apiUtil from "../../util/apiUtil.js"
 import "./TemplateForm.css"
 import ErrorHandler from "../ErrorHandler";
 import errorUtil from "../../util/errorUtil.js";
+import PropTypes from "prop-types";
 
 export default function TemplateForm({defaultData, categories, closeCallback}) {
     const categoryRef = useRef();
     const options = useContext(OptionsContext);
     const [categoryToggle, setCategoryToggle] = useState(false);
     const [ errorInfo, setErrorInfo ] = useState("");
+
+    TemplateForm.propTypes = {
+        defaultData: PropTypes.any.isRequired,
+        categories: PropTypes.array.isRequired,
+        closeCallback: PropTypes.func.isRequired,
+    }
 
     // It's funky but it keeps the modal from prematurely closing
     function handleCategorySelected(category, event) {

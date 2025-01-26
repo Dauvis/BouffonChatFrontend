@@ -10,10 +10,16 @@ import LoadingWait from "../LoadingWait";
 import miscUtil from "../../util/miscUtil.js";
 import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
+import PropTypes from "prop-types";
 
 export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();
     const options = useContext(OptionsContext);
+
+    ProfileForm.propTypes = {
+        saveCallback: PropTypes.func.isRequired,
+        cancelCallback: PropTypes.func.isRequired,
+    }
 
     const toneOptions = options.toneOptionsList();
     const modelOptions = options.modelOptionsList();

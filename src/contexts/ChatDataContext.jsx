@@ -3,13 +3,18 @@ import apiUtil from "../util/apiUtil.js";
 import miscUtil from "../util/miscUtil.js"
 import { useNavigate } from "react-router-dom";
 import errorUtil from "../util/errorUtil.js";
+import PropTypes from "prop-types";
 
 export const ChatDataContext = createContext();
 
-export const ChatDataProvider = ({ children }) => {
+export function ChatDataProvider({ children }) {
     const [chatListData, setChatListData] = useState([]);
     const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
     const navigate = useNavigate();
+
+    ChatDataProvider.propTypes = {
+        children: PropTypes.node.isRequired,
+    };
 
     useEffect(() => {
         loadChatData();

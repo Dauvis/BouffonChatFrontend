@@ -8,11 +8,17 @@ import chatUtil from "../../util/chatUtil";
 import miscUtil from "../../util/miscUtil";
 import errorUtil from "../../util/errorUtil";
 import ErrorHandler from "../ErrorHandler";
+import PropTypes from "prop-types";
 
 export default function ChatCreateForm({ parameters, closeCallback }) {
     const options = useContext(OptionsContext);
     const { setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
     const [ errorInfo, setErrorInfo ] = useState('');
+
+    ChatCreateForm.propTypes = {
+        parameters: PropTypes.any.isRequired,
+        closeCallback: PropTypes.func.isRequired,
+    }
 
     const toneOptions = options.toneOptionsList();
     const modelOptions = options.modelOptionsList();

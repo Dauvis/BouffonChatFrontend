@@ -1,13 +1,18 @@
 import { createContext, useEffect, useState } from "react";
 import apiUtil from "../util/apiUtil.js";
+import PropTypes from "prop-types";
 
 export const OptionsContext = createContext();
 
 export const OptionsProvider = ({ children }) => {
     const [options, setOptions] = useState(null);
 
+    OptionsProvider.propTypes = {
+        children: PropTypes.node.isRequired,
+    };
+
     useEffect(() => {
-        const getAllOptions = async() => {
+        const getAllOptions = async () => {
             const response = await apiUtil.apiGet("/v1/options/all");
 
             if (response.success) {
@@ -34,13 +39,13 @@ export const OptionsProvider = ({ children }) => {
         if (!model) {
             return "";
         }
-        
+
         const curModel = options?.models ? options.models.find(o => o.value === model) : null;
-        return curModel?.label || '';    
+        return curModel?.label || '';
     }
 
     return (
-        <OptionsContext.Provider value={{options, toneOptionsList, modelOptionsList, modelLabel }}>
+        <OptionsContext.Provider value={{ options, toneOptionsList, modelOptionsList, modelLabel }}>
             {children}
         </OptionsContext.Provider>
     );

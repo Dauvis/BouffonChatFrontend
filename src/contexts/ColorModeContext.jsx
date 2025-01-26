@@ -1,12 +1,17 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import miscUtil from '../util/miscUtil';
+import PropTypes from 'prop-types';
 
 // Create a Context
 const ColorModeContext = createContext();
 
 // Define a provider component
-export const ColorModeProvider = ({ children }) => {
+export function ColorModeProvider({ children }) {
   const [theme, setTheme] = useState('light');
+
+  ColorModeProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+  }
 
   useEffect(() => {
     setTheme(miscUtil.getTheme());

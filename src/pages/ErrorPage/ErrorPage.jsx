@@ -1,10 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { EmojiFrownFill } from "react-bootstrap-icons";
+import PropTypes from "prop-types";
 
 export default function ErrorPage({ args }) {
     const location = useLocation();
     const navigate = useNavigate();
+
+    ErrorPage.propTypes = {
+        args: PropTypes.any,
+    }
 
     const errorStatus = args?.status || location.state?.errorInfo?.status || "Unknown";
     const errorText = args?.message || location.state?.errorInfo?.message || "There was an error but we cannot identify what kind of error it was.";

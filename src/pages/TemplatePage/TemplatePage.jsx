@@ -11,7 +11,7 @@ import apiUtil from "../../util/apiUtil.js";
 import TemplateModal from "../../components/TemplateModal";
 import YesNoModal from "../../components/YesNoModal";
 import miscUtil from "../../util/miscUtil.js";
-import chatUtil from "../../util/chatUtil.jsx";
+import chatUtil from "../../util/chatUtil.js";
 import ChatCreateModal from "../../components/ChatCreateModal";
 import ErrorHandler from "../../components/ErrorHandler";
 import errorUtil from "../../util/errorUtil.js";

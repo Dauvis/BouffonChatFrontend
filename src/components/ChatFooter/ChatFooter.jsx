@@ -1,5 +1,5 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
-import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
+import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill, ChatDotsFill, ChatFill } from "react-bootstrap-icons";
 import { useContext, useState } from "react";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 import "./ChatFooter.css"
@@ -19,7 +19,23 @@ export default function ChatFooter() {
     const [ errorInfo, setErrorInfo ] = useState('');
     const [ showDeleteModal, setShowDeleteModal ] = useState(false);
     const [ messageText, setMessageText ] = useState('');
-    const { icon: convertIcon, text: convertText } = chatUtil.convertButtonInfo(activeChat.type);
+
+    function convertButtonInfo(type) {
+        const convertIcon = (type === "active") ? <ChatDotsFill /> : <ChatFill />;
+        let convertText = "Save";
+        
+        if (type === "temp") {
+            convertText = "Save as active";
+        } else if (type === "active") {
+            convertText = "Save as archived";
+        } else if (type === "archived") {
+            convertText = "Restore as active";
+        }
+    
+        return { icon: convertIcon, text: convertText };
+    }
+
+    const { icon: convertIcon, text: convertText } = convertButtonInfo(activeChat.type);
 
     async function handleRenameClosed(newName) {
         setShowRename(false);

@@ -23,7 +23,7 @@ function setTheme(theme) {
     localStorage.setItem("theme", theme);
 }
 
-function getTheme(theme) {
+function getTheme() {
     const curTheme = localStorage.getItem("theme");
 
     return curTheme || "light";

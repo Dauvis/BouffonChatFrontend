@@ -4,14 +4,20 @@ import ChatListItem from "../ChatListItem";
 import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
 import "./ChatList.css";
 import apiUtil from "../../util/apiUtil.js";
-import chatUtil from "../../util/chatUtil.jsx";
+import chatUtil from "../../util/chatUtil.js";
 import miscUtil from "../../util/miscUtil.js";
 import errorUtil from "../../util/errorUtil.js";
 import ErrorHandler from "../ErrorHandler";
+import PropTypes from "prop-types";
 
 export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
     const [ errorInfo, setErrorInfo ] = useState('');
+
+    ChatList.propTypes = {
+        searchData: PropTypes.any.isRequired,
+        setSearchData: PropTypes.func.isRequired,
+    }
 
     async function clickCallback(clickedChatId) {
         const chatResponse = await apiUtil.apiGet(`/v1/chat/${clickedChatId}`);

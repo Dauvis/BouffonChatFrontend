@@ -3,9 +3,17 @@ import { useState, useEffect } from "react";
 import "./TemplateListByCategory.css"
 import LoadingWait from "../LoadingWait/LoadingWait";
 import TemplateListItem from "../TemplateListItem";
+import PropTypes from "prop-types";
 
 export default function TemplateListByCategory({ templates, currentTemplate, categories, itemCallback }) {
     const [curActiveKey, setCurActiveKey] = useState('');
+
+    TemplateListByCategory.propTypes = {
+        templates: PropTypes.array.isRequired,
+        currentTemplate: PropTypes.any,
+        categories: PropTypes.array.isRequired,
+        itemCallback: PropTypes.func.isRequired,
+    }
 
     useEffect(() => {
         setCurActiveKey(currentTemplate.category)

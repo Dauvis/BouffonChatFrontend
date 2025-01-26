@@ -1,9 +1,16 @@
 import { Modal, Table } from "react-bootstrap";
 import { useContext } from "react";
 import { OptionsContext } from "../../contexts/OptionsContext";
+import PropTypes from "prop-types";
 
 export default function ChatInfoModal({show, chat, closeCallback}) {
     const options = useContext(OptionsContext);
+
+    ChatInfoModal.propTypes = {
+        show: PropTypes.bool.isRequired,
+        chat: PropTypes.any.isRequired,
+        closeCallback: PropTypes.func.isRequired,
+    }
     
     const modelLabel = options.modelLabel(chat.model);
 

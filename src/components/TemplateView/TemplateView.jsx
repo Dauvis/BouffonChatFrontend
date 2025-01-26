@@ -1,9 +1,14 @@
 import { Container, Row, Col, FormGroup, FormLabel, FormControl } from "react-bootstrap"
 import { useContext } from "react";
 import { OptionsContext } from "../../contexts/OptionsContext";
+import PropTypes from "prop-types";
 
 export default function TemplateView({current}) {
     const options = useContext(OptionsContext);
+
+    TemplateView.propTypes = {
+        current: PropTypes.any.isRequired,
+    }
 
     const curModelLabel = options.modelLabel(current.model);
 

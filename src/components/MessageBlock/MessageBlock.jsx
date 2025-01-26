@@ -1,10 +1,16 @@
 import { Card, Spinner } from "react-bootstrap";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import PropTypes from "prop-types";
 
 import "./MessageBlock.css";
 
 export default function MessageBlock({ isUser, message }) {
+    MessageBlock.propTypes = {
+        isUser: PropTypes.bool.isRequired,
+        message: PropTypes.string
+    }
+    
     const components = {
         a: ({ children, href }) => (
             <a href={href} target="_blank" rel="noopener noreferrer">

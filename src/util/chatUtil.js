@@ -1,27 +1,9 @@
-import { ChatDotsFill, ChatFill, BoxSeam } from "react-bootstrap-icons";
-import { Badge } from "react-bootstrap";
-
 function chatLimitPercent(chat) {
     if (chat.model === "gpt-4o-mini" || chat.model === "gpt-4o") {
         return 100 * (chat.tokens / 25000);
     }
 
     return 0;
-}
-
-function convertButtonInfo(type) {
-    const convertIcon = (type === "active") ? <ChatDotsFill /> : <ChatFill />;
-    let convertText = "Save";
-    
-    if (type === "temp") {
-        convertText = "Save as active";
-    } else if (type === "active") {
-        convertText = "Save as archived";
-    } else if (type === "archived") {
-        convertText = "Restore as active";
-    }
-
-    return { icon: convertIcon, text: convertText };
 }
 
 function chatLimitVariant(percent) {
@@ -34,21 +16,6 @@ function chatLimitVariant(percent) {
     }
 
     return limitVariant;
-}
-
-function listItemBadge(type) {
-    let icon = <ChatDotsFill />;
-    let variant = "primary";
-
-    if (type === "archived") {
-        icon = <BoxSeam />;
-        variant = "secondary";
-    } else if (type === "temp") {
-        icon = <ChatFill />;
-        variant = "warning";
-    }
-
-    return ( <Badge pill bg={variant}>{icon}</Badge> );
 }
 
 function filterChatList(chatList, keyword, showArchived) {
@@ -92,7 +59,7 @@ function initNewParameters(profile, template) {
     }
 }
 
-const chatUtil = { chatLimitPercent, convertButtonInfo, chatLimitVariant, listItemBadge, 
+const chatUtil = { chatLimitPercent, chatLimitVariant, 
     filterChatList, replaceChat, removeChat, initNewParameters, addChat };
 
 export default chatUtil;
