@@ -1,25 +1,29 @@
 import { Col, Form, Row, Button } from "react-bootstrap";
 import { useContext, useState } from "react";
+import PropTypes from "prop-types";
+
 import { OptionsContext } from "../../contexts/OptionsContext";
 import { ChatDataContext } from "../../contexts/ChatDataContext";
-import "./ChatCreateForm.css"
+
+import ErrorHandler from "../ErrorHandler";
+
 import apiUtil from "../../util/apiUtil";
 import errorUtil from "../../util/errorUtil";
-import ErrorHandler from "../ErrorHandler";
-import PropTypes from "prop-types";
 import localStoreUtil from "../../util/localStoreUtil";
 import miscUtil from "../../util/miscUtil";
 import chatUtil from "../../util/chatUtil";
 
-export default function ChatCreateForm({ parameters, closeCallback }) {
-    const options = useContext(OptionsContext);
-    const { setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
-    const [ errorInfo, setErrorInfo ] = useState('');
+import "./ChatCreateForm.css"
 
+export default function ChatCreateForm({ parameters, closeCallback }) {
     ChatCreateForm.propTypes = {
         parameters: PropTypes.any.isRequired,
         closeCallback: PropTypes.func.isRequired,
     }
+
+    const options = useContext(OptionsContext);
+    const { setActiveChat, chatListData, setChatListData } = useContext(ChatDataContext);
+    const [ errorInfo, setErrorInfo ] = useState('');
 
     const toneOptions = options.toneOptionsList();
     const modelOptions = options.modelOptionsList();
@@ -118,7 +122,6 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
                     <Form.Check type="switch" className="chat-create-temp" id="temporary" name="temporary" label="Temporary" defaultChecked={true} />
                 </Col>
             </Row>
-
         </Form>
         </>
     );

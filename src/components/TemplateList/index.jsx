@@ -1,6 +1,7 @@
 import { ListGroup } from "react-bootstrap"
-import TemplateListItem from "../TemplateListItem";
 import PropTypes from "prop-types";
+
+import TemplateListItem from "../TemplateListItem";
 
 export default function TemplateList({templates, currentTemplate, itemCallback}) {
     TemplateList.propTypes = {

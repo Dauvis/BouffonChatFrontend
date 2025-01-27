@@ -5,7 +5,7 @@
  * @param {boolean} showArchived 
  * @returns array of chats that meet criteria
  */
-function filter(chatList, { keyword, showArchived }) {
+function filter(chatList, keyword, showArchived) {
     const lowerKeyword = keyword.toLocaleLowerCase();
     let filteredList = chatList;
 

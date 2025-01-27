@@ -1,6 +1,7 @@
 import { Modal } from "react-bootstrap";
-import TemplateForm from "../TemplateForm";
 import PropTypes from "prop-types";
+
+import TemplateForm from "../TemplateForm";
 
 export default function TemplateModal({ defaultData, categories, closeCallback }) {
     TemplateModal.propTypes = {

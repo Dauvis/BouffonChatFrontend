@@ -1,9 +1,9 @@
 import { Modal } from "react-bootstrap";
-import ChatCreateForm from "../ChatCreateForm";
 import PropTypes from "prop-types";
 
-export default function ChatCreateModal({ parameters, closeCallback }) {
+import ChatCreateForm from "../ChatCreateForm";
 
+export default function ChatCreateModal({ parameters, closeCallback }) {
     ChatCreateModal.propTypes = {
         parameters: PropTypes.any.isRequired,
         closeCallback: PropTypes.func.isRequired

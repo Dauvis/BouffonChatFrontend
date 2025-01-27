@@ -2,15 +2,19 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 import { BoxArrowRight } from "react-bootstrap-icons";
-import { OptionsContext } from "../../contexts/OptionsContext.jsx";
-import loginService from "../../services/loginService.js";
-import apiUtil from "../../util/apiUtil.js";
-import './ProfileForm.css'
-import LoadingWait from "../LoadingWait";
-import errorUtil from "../../util/errorUtil.js";
-import ErrorHandler from "../ErrorHandler";
 import PropTypes from "prop-types";
-import localStoreUtil from "../../util/localStoreUtil.js";
+
+import { OptionsContext } from "../../contexts/OptionsContext.jsx";
+
+import LoadingWait from "../LoadingWait";
+import ErrorHandler from "../ErrorHandler";
+
+import loginService from "../../services/loginService";
+import apiUtil from "../../util/apiUtil";
+import errorUtil from "../../util/errorUtil";
+import localStoreUtil from "../../util/localStoreUtil";
+
+import './ProfileForm.css'
 
 export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();

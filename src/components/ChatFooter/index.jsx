@@ -1,17 +1,22 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
-import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill, ChatDotsFill, ChatFill } from "react-bootstrap-icons";
+import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
 import { useContext, useState } from "react";
+
 import { ChatDataContext } from "../../contexts/ChatDataContext";
-import "./ChatFooter.css"
+
 import ChatInfoModal from "../ChatInfoModal";
-import apiUtil from "../../util/apiUtil";
 import ChatRenameModal from "../ChatRenameModal";
 import YesNoModal from "../YesNoModal";
-import miscUtil from "../../util/miscUtil";
 import ErrorHandler from "../ErrorHandler";
+
+import apiUtil from "../../util/apiUtil";
+import miscUtil from "../../util/miscUtil";
 import errorUtil from "../../util/errorUtil";
 import localStoreUtil from "../../util/localStoreUtil";
 import chatFooterLogic from "./chatFooterLogic";
+
+import "./ChatFooter.css"
+import ChatConvertButton from "./ChatConverButton";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData, loadChatData } = useContext(ChatDataContext);
@@ -19,31 +24,14 @@ export default function ChatFooter() {
     const [ showRename, setShowRename ] = useState(false);
     const [ errorInfo, setErrorInfo ] = useState("");
     const [ yesNoModalData, setYesNoModalData ] = useState("");
-    const [ messageText, setMessageText ] = useState('');
-
-    function convertButtonInfo(type) {
-        const convertIcon = (type === "active") ? <ChatDotsFill /> : <ChatFill />;
-        let convertText = "Save";
-        
-        if (type === "temp") {
-            convertText = "Save as active";
-        } else if (type === "active") {
-            convertText = "Save as archived";
-        } else if (type === "archived") {
-            convertText = "Restore as active";
-        }
-    
-        return { icon: convertIcon, text: convertText };
-    }
-
-    const { icon: convertIcon, text: convertText } = convertButtonInfo(activeChat.type);
+    const [ messageText, setMessageText ] = useState("");
 
     async function handleRenameClosed(newName) {
-        setShowRename(false);
-
         if (newName) {
             await saveChatChanges({ type: activeChat.type, name: newName});
         }
+
+        setShowRename(false);
     }
 
     async function handleChatError(response) {
@@ -67,22 +55,14 @@ export default function ChatFooter() {
     }
 
     async function saveChatChanges(changes) {
-        const response = await apiUtil.patch(`/v1/chat/${activeChat._id}`, changes);
+        const response = await chatFooterLogic.saveChat(activeChat, chatListData, changes);
 
         if (response.success) {
-            const updatedChat = {
-                ...activeChat,
-                name: changes.name,
-                type: changes.type
-            }
-
-            const abridged = miscUtil.abridgeChat(updatedChat);
-            const updatedList = miscUtil.addOrReplaceInArray(chatListData, abridged, "_id");
-            setChatListData(updatedList);
-            setActiveChat(updatedChat);
-            localStoreUtil.setTrackedChatId(updatedChat._id)
+            setChatListData(response.chatList);
+            setActiveChat(response.active);
+            localStoreUtil.setTrackedChatId(response.active._id);
         } else {
-            await handleChatError(response);
+            await handleChatError(response.errorResponse);
         }
     }
 
@@ -92,16 +72,14 @@ export default function ChatFooter() {
 
     async function handleCloseShowDeleteModal({result}) {
         if (result) {
-            const curChatId = activeChat._id;
-            const response = await apiUtil.remove(`/v1/chat/${curChatId}`)
+            const response = await chatFooterLogic.deleteChat(activeChat._id, chatListData);
 
             if (response.success) {
-                const updatedList = miscUtil.removeFromArray(chatListData, curChatId, "_id");
                 setActiveChat(miscUtil.emptyChat);
                 localStoreUtil.setTrackedChatId('')
-                setChatListData(updatedList);
+                setChatListData(response.chatList);
             } else {
-                await handleChatError(response);
+                await handleChatError(response.errorResponse);
             }
         }
 
@@ -114,52 +92,26 @@ export default function ChatFooter() {
     }
 
     async function processMessage() {
-        const chat = activeChat;
         const userMessage = messageText;
-        localStoreUtil.setTrackedChatId(chat._id);
 
         if (!userMessage) {
             alert("You must enter a message");
             return;
         }
 
-        const initialExchanges = chat.exchanges;
-        const initialUpdated = {
-            ...chat,
-            exchanges: [
-                ...initialExchanges,
-                { 
-                    userMessage,
-                    assistantMessage: '',
-                    _id: "000000000000000000000000"
-                }
-            ]
-        };
-
+        const chat = activeChat;
+        const initialUpdated = chatFooterLogic.chatWithPlaceholder(chat, userMessage);
         setMessageText("");
         setActiveChat(initialUpdated);
+        localStoreUtil.setTrackedChatId(chat._id);
+
         const response = await apiUtil.post("/v1/message", { chatId: chat._id, message: userMessage });
 
         if (response.success) {
             const curChatId = localStoreUtil.getTrackedChatId();
 
             if (curChatId === chat._id) {
-                const exchangeData = response.body;
-                const curExchanges = chat.exchanges;
-                const updated = {
-                    ...chat,
-                    tokens: exchangeData.tokens,
-                    lastActivity: Date.now(),
-                    exchanges: [
-                        ...curExchanges,
-                        { 
-                            userMessage, 
-                            assistantMessage: exchangeData.assistantMessage, 
-                            _id: exchangeData.exchangeId
-                        }
-                    ]
-                }
-
+                const updated = chatFooterLogic.addExchangeData(chat, userMessage, response.body);
                 setActiveChat(updated);
             }
         } else {
@@ -184,13 +136,7 @@ export default function ChatFooter() {
         if (response.success) {
             if (response.status !== 204) {
                 const exchange = response.body.exchange;
-                const curExchanges = activeChat.exchanges;
-
-                const updated = {
-                    ...activeChat,
-                    exchanges: curExchanges.filter(e => e._id !== exchange._id)
-                };
-
+                const updated = chatFooterLogic.removeExchange(activeChat, exchange);
                 setActiveChat(updated);
                 setMessageText(exchange.userMessage);
             } else {
@@ -207,13 +153,7 @@ export default function ChatFooter() {
         if (response.success) {
             if (response.status !== 204) {
                 const exchange = response.body.exchange;
-                const curExchanges = activeChat.exchanges;
-
-                const updated = {
-                    ...activeChat,
-                    exchanges: [...curExchanges, exchange]
-                };
-
+                const updated = chatFooterLogic.addExchange(activeChat, exchange);
                 setActiveChat(updated);
                 setMessageText("");
             } else {
@@ -233,8 +173,8 @@ export default function ChatFooter() {
         <footer>
             { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
             { yesNoModalData ? <YesNoModal message={yesNoModalData} closeCallback={handleCloseShowDeleteModal} /> : null }
-            <ChatInfoModal show={showInfo} chat={activeChat} closeCallback={() => setShowInfo(false)} />
-            <ChatRenameModal show={showRename} curName={activeChat.name} closeCallback={handleRenameClosed} />
+            { showInfo ? <ChatInfoModal chat={activeChat} closeCallback={() => setShowInfo(false)} /> : null }
+            { showRename ? <ChatRenameModal curName={activeChat.name} closeCallback={handleRenameClosed} /> : null }
             <Container>
             <Card className="bg-body-tertiary">
                 <Card.Body>
@@ -259,7 +199,7 @@ export default function ChatFooter() {
                                 <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleUndoClicked} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleRedoClicked} ><ArrowClockwise /> Redo</Dropdown.Item>
                                 <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowRename(true)} ><Pencil /> Rename</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled} onClick={convertClicked} >{convertIcon} {convertText}</Dropdown.Item>
+                                <ChatConvertButton disabled={disabled} type={activeChat.type} clickedCallBack={convertClicked} />
                                 <Dropdown.Item as="button" disabled={disabled} onClick={handleDeleteChatClicked} ><Trash /> Delete</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>

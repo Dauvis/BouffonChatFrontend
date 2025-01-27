@@ -1,15 +1,18 @@
 import { Alert, Container, Button } from "react-bootstrap";
 import { ChevronDoubleDown, ChevronDoubleUp } from "react-bootstrap-icons";
 import { useContext, useEffect, useState } from "react";
+
+import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
+
 import MessageBlock from "../MessageBlock";
 import ChatTitle from "../ChatTitle";
-import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
-import "./ChatContent.css"
 import VisibilityRefresh from "../VisibilityRefresh";
+
+import "./ChatContent.css"
 
 export default function ChatContent() {
     const { activeChat } = useContext(ChatDataContext);
-    const [scrollButton, setScrollButton] = useState('');
+    const [scrollButton, setScrollButton] = useState("");
     const [scrollButtonClicked, setScrollButtonClicked] = useState("")
 
     useEffect(() => {
@@ -18,17 +21,15 @@ export default function ChatContent() {
             const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
             const count = activeChat ? activeChat.exchanges.length : 0;
 
-            let buttonName = '';
-
             if (count >= 4) {
                 if (scrolledFromTop > totalHeight / 2) {
-                    buttonName = "up";
+                    setScrollButton("up");
                 } else if (scrolledFromTop < totalHeight / 2) {
-                    buttonName = "down";
+                    setScrollButton("down");
                 }
+            } else {
+                setScrollButton("");
             }
-
-            setScrollButton(buttonName);
         };
 
         window.addEventListener('scroll', onScroll);
@@ -47,7 +48,7 @@ export default function ChatContent() {
         }
     }, [scrollButtonClicked])
 
-    let content = (<Alert variant="secondary" className="text-center" style={{ marginTop: "0.5rem" }}>Enter a message to start the chat.</Alert>);
+    let content = null;
 
     if (activeChat.exchanges.length) {
         content = activeChat.exchanges.map(exchg => (
@@ -56,6 +57,10 @@ export default function ChatContent() {
                 <MessageBlock isUser={false} message={exchg.assistantMessage} />
             </div>
         ));
+    } else {
+        content = <Alert variant="secondary" className="text-center" style={{ marginTop: "0.5rem" }}>
+            Enter a message to start the chat.
+        </Alert>
     }
 
     return (
@@ -77,7 +82,7 @@ export default function ChatContent() {
                     {content}
                 </Container>
             </>
-            :
+        :
             <Container>
                 <Alert variant="secondary" className="text-center">Select or create a chat</Alert>
             </Container>

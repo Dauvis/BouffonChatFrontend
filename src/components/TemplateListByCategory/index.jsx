@@ -1,9 +1,11 @@
 import { Accordion, Alert, ListGroup } from "react-bootstrap"
 import { useState, useEffect } from "react";
-import "./TemplateListByCategory.css"
+import PropTypes from "prop-types";
+
 import LoadingWait from "../LoadingWait";
 import TemplateListItem from "../TemplateListItem";
-import PropTypes from "prop-types";
+
+import "./TemplateListByCategory.css"
 
 export default function TemplateListByCategory({ templates, currentTemplate, categories, itemCallback }) {
     const [curActiveKey, setCurActiveKey] = useState('');

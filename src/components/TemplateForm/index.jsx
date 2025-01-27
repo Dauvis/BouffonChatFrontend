@@ -1,23 +1,27 @@
 import {Container, Form, Row, Col, Dropdown, Button, InputGroup} from "react-bootstrap";
 import {useRef, useState, useContext } from "react";
-import { OptionsContext } from "../../contexts/OptionsContext.jsx";
-import apiUtil from "../../util/apiUtil.js"
-import "./TemplateForm.css"
-import ErrorHandler from "../ErrorHandler";
-import errorUtil from "../../util/errorUtil.js";
 import PropTypes from "prop-types";
 
-export default function TemplateForm({defaultData, categories, closeCallback}) {
-    const categoryRef = useRef();
-    const options = useContext(OptionsContext);
-    const [categoryToggle, setCategoryToggle] = useState(false);
-    const [ errorInfo, setErrorInfo ] = useState("");
+import { OptionsContext } from "../../contexts/OptionsContext.jsx";
 
+import ErrorHandler from "../ErrorHandler";
+
+import apiUtil from "../../util/apiUtil"
+import errorUtil from "../../util/errorUtil";
+
+import "./TemplateForm.css"
+
+export default function TemplateForm({defaultData, categories, closeCallback}) {
     TemplateForm.propTypes = {
         defaultData: PropTypes.any.isRequired,
         categories: PropTypes.array.isRequired,
         closeCallback: PropTypes.func.isRequired,
     }
+
+    const categoryRef = useRef();
+    const options = useContext(OptionsContext);
+    const [categoryToggle, setCategoryToggle] = useState(false);
+    const [ errorInfo, setErrorInfo ] = useState("");
 
     // It's funky but it keeps the modal from prematurely closing
     function handleCategorySelected(category, event) {

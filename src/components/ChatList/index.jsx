@@ -1,23 +1,27 @@
 import { useContext, useState } from "react";
 import { Card, FormCheck, FormControl, ListGroup } from "react-bootstrap";
-import ChatListItem from "../ChatListItem";
+import PropTypes from "prop-types";
+
 import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
-import "./ChatList.css";
+
+import ChatListItem from "../ChatListItem";
+import ErrorHandler from "../ErrorHandler";
+
 import apiUtil from "../../util/apiUtil.js";
 import errorUtil from "../../util/errorUtil.js";
-import ErrorHandler from "../ErrorHandler";
-import PropTypes from "prop-types";
 import localStoreUtil from "../../util/localStoreUtil.js";
+
+import "./ChatList.css";
 import chatListLogic from "./chatListLogic";
 
 export default function ChatList({searchData, setSearchData }) {
-    const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
-    const [ errorInfo, setErrorInfo ] = useState('');
-
     ChatList.propTypes = {
         searchData: PropTypes.any.isRequired,
         setSearchData: PropTypes.func.isRequired,
     }
+
+    const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
+    const [ errorInfo, setErrorInfo ] = useState('');
 
     async function clickCallback(clickedChatId) {
         const chatResponse = await apiUtil.get(`/v1/chat/${clickedChatId}`);
@@ -48,7 +52,7 @@ export default function ChatList({searchData, setSearchData }) {
         setSearchData(newSearchData);
     }
 
-    const filteredList = chatListLogic.filter(chatListData, searchData);
+    const filteredList = chatListLogic.filter(chatListData, searchData.keyword, searchData.archived);
 
     const listItems = filteredList.map(c => (
         <ChatListItem key={c._id} isActive={c._id === activeChat._id} type={c.type} name={c.name} id={c._id} clickCallback={clickCallback}/>

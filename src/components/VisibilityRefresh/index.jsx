@@ -1,14 +1,15 @@
 import { useEffect, useState, useContext } from 'react';
-import { ChatDataContext } from '../../contexts/ChatDataContext.jsx';
 import PropTypes from 'prop-types';
 
-export default function VisibilityRefresh({ idleTimeThreshold = 5 * 60 * 1000 }) {
-    const [lastInactiveTime, setLastInactiveTime] = useState(null);
-    const { activeChat, loadChatData } = useContext(ChatDataContext);
+import { ChatDataContext } from '../../contexts/ChatDataContext.jsx';
 
+export default function VisibilityRefresh({ idleTimeThreshold = 5 * 60 * 1000 }) {
     VisibilityRefresh.propTypes = {
         idleTimeThreshold: PropTypes.number
     }
+
+    const [lastInactiveTime, setLastInactiveTime] = useState(null);
+    const { activeChat, loadChatData } = useContext(ChatDataContext);
 
     useEffect(() => {
         function handleVisibilityChange() {

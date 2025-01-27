@@ -1,26 +1,29 @@
 import { Offcanvas, Nav, Button, Dropdown } from "react-bootstrap";
 import { PersonSquare, ChatLeftDots, JournalPlus, Image } from "react-bootstrap-icons";
-import ChatList from "../ChatList";
 import { Link } from "react-router-dom";
-import miscUtil from "../../util/miscUtil.js"
-import "./MainOffcanvas.css";
-import ColorModeButton from "../ColorModeButton";
 import { useState } from "react";
-import ChatCreateModal from "../ChatCreateModal";
-import chatUtil from "../../util/chatUtil.js";
-import apiUtil from "../../util/apiUtil.js";
 import PropTypes from "prop-types";
-import localStoreUtil from "../../util/localStoreUtil.js";
+
+import ChatList from "../ChatList";
+import ColorModeButton from "../ColorModeButton";
+import ChatCreateModal from "../ChatCreateModal";
+
+import miscUtil from "../../util/miscUtil"
+import chatUtil from "../../util/chatUtil";
+import apiUtil from "../../util/apiUtil";
+import localStoreUtil from "../../util/localStoreUtil";
+
+import "./MainOffcanvas.css";
 
 export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
-    const [ showCreate, setShowCreate] = useState("");
-
     MainOffcanvas.propTypes = {
         offcanvasState: PropTypes.bool.isRequired,
         closeCallBack: PropTypes.func.isRequired,
         searchData: PropTypes.any.isRequired,
         setSearchData: PropTypes.func.isRequired,
     }
+
+    const [ showCreate, setShowCreate] = useState("");
 
     const profile = localStoreUtil.getProfile();
 

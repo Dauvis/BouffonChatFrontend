@@ -1,7 +1,8 @@
 import { Container, Navbar, Button } from "react-bootstrap";
+import PropTypes from "prop-types";
+
 import logo from "../../assets/images/bouffon_chat_icon.png";
 import './NavHeader.css'
-import PropTypes from "prop-types";
 
 export default function NavHeader({icon, callBack}) {
     NavHeader.propTypes = {

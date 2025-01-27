@@ -1,6 +1,7 @@
 import { Container, Card } from "react-bootstrap"
-import './ChatTitle.css'
 import PropTypes from "prop-types";
+
+import './ChatTitle.css'
 
 export default function ChatTitle({title}) {
     ChatTitle.propTypes = {
