@@ -8,6 +8,7 @@ import ChatInfoModal from "../ChatInfoModal";
 import ChatRenameModal from "../ChatRenameModal";
 import YesNoModal from "../YesNoModal";
 import ErrorHandler from "../ErrorHandler";
+import AlertModal from "../AlertModal";
 
 import apiUtil from "../../util/apiUtil";
 import miscUtil from "../../util/miscUtil";
@@ -17,18 +18,21 @@ import chatFooterLogic from "./chatFooterLogic";
 
 import "./ChatFooter.css"
 import ChatConvertButton from "./ChatConverButton";
+import ChatStatusInfo from "./ChatStatusInfo";
 
 export default function ChatFooter() {
     const { activeChat, setActiveChat, chatListData, setChatListData, loadChatData } = useContext(ChatDataContext);
-    const [ showInfo, setShowInfo ] = useState(false);
-    const [ showRename, setShowRename ] = useState(false);
-    const [ errorInfo, setErrorInfo ] = useState("");
-    const [ yesNoModalData, setYesNoModalData ] = useState("");
-    const [ messageText, setMessageText ] = useState("");
+    const [showInfo, setShowInfo] = useState(false);
+    const [showRename, setShowRename] = useState(false);
+    const [errorInfo, setErrorInfo] = useState("");
+    const [yesNoModalData, setYesNoModalData] = useState("");
+    const [messageText, setMessageText] = useState("");
+    const [actionOpen, setActionOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
 
     async function handleRenameClosed(newName) {
         if (newName) {
-            await saveChatChanges({ type: activeChat.type, name: newName});
+            await saveChatChanges({ type: activeChat.type, name: newName });
         }
 
         setShowRename(false);
@@ -36,7 +40,7 @@ export default function ChatFooter() {
 
     async function handleChatError(response) {
         if (response.status === 404) {
-            alert("Chat does not exist");
+            setAlertMessage("Chat could not be found.");
             await loadChatData();
         } else {
             const errInfo = errorUtil.handleApiError(response);
@@ -70,7 +74,7 @@ export default function ChatFooter() {
         setYesNoModalData("Are you sure you want to delete this chat?");
     }
 
-    async function handleCloseShowDeleteModal({result}) {
+    async function handleCloseShowDeleteModal({ result }) {
         if (result) {
             const response = await chatFooterLogic.deleteChat(activeChat._id, chatListData);
 
@@ -95,7 +99,7 @@ export default function ChatFooter() {
         const userMessage = messageText;
 
         if (!userMessage) {
-            alert("You must enter a message");
+            setAlertMessage("You must enter a message");
             return;
         }
 
@@ -116,7 +120,7 @@ export default function ChatFooter() {
             }
         } else {
             if (response.status === 400 && response.body.errorCode === "TokenLimit") {
-                alert(response.body.message);
+                setAlertMessage(response.body.message);
             } else {
                 await handleChatError(response);
             }
@@ -127,7 +131,7 @@ export default function ChatFooter() {
                 setMessageText(userMessage);
                 setActiveChat(chat);
             }
-        }    
+        }
     }
 
     async function handleUndoClicked() {
@@ -140,7 +144,7 @@ export default function ChatFooter() {
                 setActiveChat(updated);
                 setMessageText(exchange.userMessage);
             } else {
-                alert("No more messages to undo");
+                setAlertMessage("No more messages to undo");
             }
         } else {
             await handleChatError(response);
@@ -157,7 +161,7 @@ export default function ChatFooter() {
                 setActiveChat(updated);
                 setMessageText("");
             } else {
-                alert("No more messages to redo");
+                setAlertMessage("No more messages to redo");
             }
         } else {
             await handleChatError(response);
@@ -171,47 +175,65 @@ export default function ChatFooter() {
 
     return (
         <footer>
-            { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
-            { yesNoModalData ? <YesNoModal message={yesNoModalData} closeCallback={handleCloseShowDeleteModal} /> : null }
-            { showInfo ? <ChatInfoModal chat={activeChat} closeCallback={() => setShowInfo(false)} /> : null }
-            { showRename ? <ChatRenameModal curName={activeChat.name} closeCallback={handleRenameClosed} /> : null }
+            {errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null}
+            {yesNoModalData ? <YesNoModal message={yesNoModalData} closeCallback={handleCloseShowDeleteModal} /> : null}
+            {showInfo ? <ChatInfoModal chat={activeChat} closeCallback={() => setShowInfo(false)} /> : null}
+            {showRename ? <ChatRenameModal curName={activeChat.name} closeCallback={handleRenameClosed} /> : null}
+            {alertMessage ? <AlertModal message={alertMessage} closeCallback={() => setAlertMessage("")} /> : null }
             <Container>
-            <Card className="bg-body-tertiary">
-                <Card.Body>
-                    <Row>
-                        <Col>
-                        <FormControl as="textarea" disabled={disabled || archived} placeholder="Enter message..." value={messageText} onChange={handleMessageChanged}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                        <ProgressBar variant={limitVariant} className="chat-footer-progress" now={limitPercent}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={8}>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="secondary">
-                                <List /> Actions...
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowInfo(true)} ><InfoCircle /> Info</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleUndoClicked} ><ArrowCounterclockwise /> Undo</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleRedoClicked} ><ArrowClockwise /> Redo</Dropdown.Item>
-                                <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowRename(true)} ><Pencil /> Rename</Dropdown.Item>
-                                <ChatConvertButton disabled={disabled} type={activeChat.type} clickedCallBack={convertClicked} />
-                                <Dropdown.Item as="button" disabled={disabled} onClick={handleDeleteChatClicked} ><Trash /> Delete</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        </Col>
-                        <Col xs={4} className="text-end">
-                        <Button variant="primary" disabled={disabled || archived} onClick={() => processMessage()}>
-                                <SendFill /> Send
-                        </Button>
-                        </Col>
-                    </Row>
-                </Card.Body>                
-            </Card>
+                <Card className="bg-body-tertiary">
+                    <Card.Body>
+                        <Row>
+                            <Col>
+                                <ChatStatusInfo type={activeChat.type} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <FormControl as="textarea" disabled={disabled || archived} placeholder="Enter message"
+                                    value={messageText} onChange={handleMessageChanged} aria-label="Message/prompt input" />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <ProgressBar variant={limitVariant} className="chat-footer-progress" now={limitPercent} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={8}>
+                                <Dropdown onToggle={(isOpen) => setActionOpen(isOpen)}>
+                                    <Dropdown.Toggle variant="secondary" aria-label="Available chat actions" aria-haspopup={true}
+                                        aria-expanded={actionOpen} aria-controls="action-menu">
+                                        <List /> Actions...
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu id="action-menu">
+                                        <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowInfo(true)} aria-label="Chat information">
+                                            <InfoCircle /> Info
+                                        </Dropdown.Item>
+                                        <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleUndoClicked} aria-label="Undo previous prompt">
+                                            <ArrowCounterclockwise /> Undo
+                                        </Dropdown.Item>
+                                        <Dropdown.Item as="button" disabled={disabled || archived} onClick={handleRedoClicked} >
+                                            <ArrowClockwise /> Redo
+                                        </Dropdown.Item>
+                                        <Dropdown.Item as="button" disabled={disabled} onClick={() => setShowRename(true)} aria-label="Restore previous undo">
+                                            <Pencil /> Rename
+                                        </Dropdown.Item>
+                                        <ChatConvertButton disabled={disabled} type={activeChat.type} clickedCallBack={convertClicked} />
+                                        <Dropdown.Item as="button" disabled={disabled} onClick={handleDeleteChatClicked} aria-label="Delete chat">
+                                            <Trash /> Delete
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                                <Button variant="primary" disabled={disabled || archived} onClick={() => processMessage()} aria-label="Send message">
+                                    <SendFill /> Send
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Card.Body>
+                </Card>
             </Container>
         </footer>
     );

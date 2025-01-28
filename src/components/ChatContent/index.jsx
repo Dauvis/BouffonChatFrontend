@@ -52,10 +52,10 @@ export default function ChatContent() {
 
     if (activeChat.exchanges.length) {
         content = activeChat.exchanges.map(exchg => (
-            <div key={exchg._id}>
+            <section key={exchg._id}>
                 <MessageBlock isUser={true} message={exchg.userMessage} />
                 <MessageBlock isUser={false} message={exchg.assistantMessage} />
-            </div>
+            </section>
         ));
     } else {
         content = <Alert variant="secondary" className="text-center" style={{ marginTop: "0.5rem" }}>
@@ -68,23 +68,23 @@ export default function ChatContent() {
             <>
                 <VisibilityRefresh />
                 {scrollButton === "up"
-                    ? <Button variant="secondary" className="chat-content-scroll-up" onClick={() => setScrollButtonClicked("up")}>
+                    ? <Button variant="secondary" className="chat-content-scroll-up" onClick={() => setScrollButtonClicked("up")} aria-label="Scroll to top">
                         <ChevronDoubleUp className="chat-content-scroll-icon" />
                     </Button>
                     : null}
                 {scrollButton === "down"
-                    ? <Button variant="secondary" className="chat-content-scroll-down" onClick={() => setScrollButtonClicked("down")}>
+                    ? <Button variant="secondary" className="chat-content-scroll-down" onClick={() => setScrollButtonClicked("down")} aria-label="Scroll to bottom">
                         <ChevronDoubleDown className="chat-content-scroll-icon" />
                     </Button>
                     : null}
-                <Container>
+                <Container aria-live="polite">
                     <ChatTitle title={activeChat.name} />
                     {content}
                 </Container>
             </>
         :
             <Container>
-                <Alert variant="secondary" className="text-center">Select or create a chat</Alert>
+                <Alert variant="secondary" className="text-center" role="alert">Select or create a chat</Alert>
             </Container>
     );
 }

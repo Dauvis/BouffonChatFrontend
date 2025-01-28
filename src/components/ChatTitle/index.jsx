@@ -1,18 +1,20 @@
-import { Container, Card } from "react-bootstrap"
+import { Container, Row, Col } from "react-bootstrap"
 import PropTypes from "prop-types";
 
 import './ChatTitle.css'
 
-export default function ChatTitle({title}) {
-    ChatTitle.propTypes = {
-        title: PropTypes.string
-    }
+ChatTitle.propTypes = {
+    title: PropTypes.string
+}
 
+export default function ChatTitle({title}) {
     return (
         <Container>
-            <Card className="chat-title bg-body-tertiary">
-                <Card.Text>{title}</Card.Text>
-            </Card>
+            <Row>
+                <Col>
+                    <h5 className="text-center card bg-body-tertiary chat-title">{title}</h5>
+                </Col>
+            </Row>
         </Container>
     )
 }

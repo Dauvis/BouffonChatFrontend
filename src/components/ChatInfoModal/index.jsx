@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 
 import { OptionsContext } from "../../contexts/OptionsContext";
 
+ChatInfoModal.propTypes = {
+    chat: PropTypes.any.isRequired,
+    closeCallback: PropTypes.func.isRequired,
+}
+
 export default function ChatInfoModal({chat, closeCallback}) {
-    ChatInfoModal.propTypes = {
-        chat: PropTypes.any.isRequired,
-        closeCallback: PropTypes.func.isRequired,
-    }
-    
     const options = useContext(OptionsContext);
 
     const modelLabel = options.modelLabel(chat.model);
@@ -23,23 +23,23 @@ export default function ChatInfoModal({chat, closeCallback}) {
             <Table size="sm">
                 <tbody>
                     <tr>
-                        <td>Name</td>
+                        <th scope="row">Name</th>
                         <td>{chat.name}</td>
                     </tr>                
                     <tr>
-                        <td>Tone</td>
+                        <th scope="row">Tone</th>
                         <td>{chat.tone}</td>
                     </tr>                
                     <tr>
-                        <td>Model</td>
+                        <th scope="row">Model</th>
                         <td>{modelLabel}</td>
                     </tr>                
                     <tr>
-                        <td>Instructions</td>
+                        <th scope="row">Instructions</th>
                         <td>{chat.instructions}</td>
                     </tr>                
                     <tr>
-                        <td>Notes</td>
+                        <th scope="row">Notes</th>
                         <td>{chat.notes}</td>
                     </tr>    
                 </tbody>            

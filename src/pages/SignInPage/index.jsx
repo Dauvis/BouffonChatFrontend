@@ -36,10 +36,10 @@ export default function SignInPage() {
     return (
         <Container className="vh-100 d-flex justify-content-center align-items-center">
             <Card className="mb3" style={{ maxWidth: '540px', borderStyle: 'none' }}>
-                <Card.Img variant="top" src={logo} />
+                <Card.Img variant="top" alt="Bouffon Chat logo" src={logo} />
                 <Card.Body>
-                    <Card.Title>Bouffon Chat</Card.Title>
-                    {message ? <Card.Text><Alert variant="danger">{message}</Alert></Card.Text> : null}
+                    <Card.Title as="h1">Bouffon Chat</Card.Title>
+                    {message ? <Card.Text><Alert variant="danger" role="alert">{message}</Alert></Card.Text> : null}
                     <Card.Text>
                         Welcome to Bouffon Chat! Dive into engaging conversations and
                         explore ideas with our intelligent chat system, powered by

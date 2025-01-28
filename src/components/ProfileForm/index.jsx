@@ -16,14 +16,14 @@ import localStoreUtil from "../../util/localStoreUtil";
 
 import './ProfileForm.css'
 
+ProfileForm.propTypes = {
+    saveCallback: PropTypes.func.isRequired,
+    cancelCallback: PropTypes.func.isRequired,
+}
+
 export default function ProfileForm({ saveCallback, cancelCallback }) {
     const navigate = useNavigate();
     const options = useContext(OptionsContext);
-
-    ProfileForm.propTypes = {
-        saveCallback: PropTypes.func.isRequired,
-        cancelCallback: PropTypes.func.isRequired,
-    }
 
     const toneOptions = options.toneOptionsList();
     const modelOptions = options.modelOptionsList();
@@ -86,7 +86,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
         profile ?
             <>
             <Form action={saveProfile}>
-                {errorMsg ? <Alert variant="danger">{errorMsg}</Alert> : null}
+                {errorMsg ? <Alert variant="danger" aria-live="assertive">{errorMsg}</Alert> : null}
                 <Row>
                     <Col sm={6}>
                         <Form.Group className="mb-3" controlId="name">

@@ -12,7 +12,7 @@ export default function MainPage() {
 
     return (
         <>
-            <NavHeader icon={(<List />)} callBack={() => setShowOffcanvas(true)} />
+            <NavHeader icon={(<List />)} callBack={() => setShowOffcanvas(true)} ariaLabel="Open main menu"/>
             <MainOffcanvas offcanvasState={showOffcanvas} closeCallBack={() => setShowOffcanvas(false)}
                 searchData={searchData} setSearchData={setSearchData} />
             <main>

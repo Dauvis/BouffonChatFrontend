@@ -3,16 +3,16 @@ import PropTypes from "prop-types";
 
 import ChatCreateForm from "../ChatCreateForm";
 
-export default function ChatCreateModal({ parameters, closeCallback }) {
-    ChatCreateModal.propTypes = {
-        parameters: PropTypes.any.isRequired,
-        closeCallback: PropTypes.func.isRequired
-    };
+ChatCreateModal.propTypes = {
+    parameters: PropTypes.any.isRequired,
+    closeCallback: PropTypes.func.isRequired
+};
 
+export default function ChatCreateModal({ parameters, closeCallback }) {
     return (
-        <Modal show={true} onHide={closeCallback}>
+        <Modal show={true} onHide={closeCallback} aria-labelledby="new-chat-title">
             <Modal.Header closeButton>
-                <Modal.Title>New chat</Modal.Title>
+                <Modal.Title id="new-chat-title">New chat</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {parameters ? <ChatCreateForm parameters={parameters} closeCallback={closeCallback} /> : null}

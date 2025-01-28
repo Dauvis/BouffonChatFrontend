@@ -4,21 +4,22 @@ import PropTypes from "prop-types";
 import logo from "../../assets/images/bouffon_chat_icon.png";
 import './NavHeader.css'
 
-export default function NavHeader({icon, callBack}) {
-    NavHeader.propTypes = {
-        icon: PropTypes.node.isRequired,
-        callBack: PropTypes.func.isRequired,
-    }
+NavHeader.propTypes = {
+    icon: PropTypes.node.isRequired,
+    callBack: PropTypes.func.isRequired,
+    ariaLabel: PropTypes.string.isRequired,
+}
 
+export default function NavHeader({icon, callBack, ariaLabel}) {
     const navBarButton = (
-        <Button variant="outline-secondary" className="nav-header-button" onClick={callBack}>{icon}</Button>
+        <Button variant="outline-secondary" className="nav-header-button" onClick={callBack} aria-label={ariaLabel}>{icon}</Button>
     );
 
     return (
         <header>
             <Navbar className="bg-body-tertiary" fixed="top">
                 <Container>
-                    <Navbar.Brand href="/main" className="nav-header-brand">
+                    <Navbar.Brand href="/main" className="nav-header-brand" aria-label="Home">
                         <img alt="Bouffon Chat Logo" src={logo} className="nav-header-logo d-inline-block align-top" />
                         <span>Bouffon Chat</span>
                     </Navbar.Brand>

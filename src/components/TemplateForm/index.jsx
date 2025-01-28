@@ -11,13 +11,13 @@ import errorUtil from "../../util/errorUtil";
 
 import "./TemplateForm.css"
 
-export default function TemplateForm({defaultData, categories, closeCallback}) {
-    TemplateForm.propTypes = {
-        defaultData: PropTypes.any.isRequired,
-        categories: PropTypes.array.isRequired,
-        closeCallback: PropTypes.func.isRequired,
-    }
+TemplateForm.propTypes = {
+    defaultData: PropTypes.any.isRequired,
+    categories: PropTypes.array.isRequired,
+    closeCallback: PropTypes.func.isRequired,
+}
 
+export default function TemplateForm({defaultData, categories, closeCallback}) {
     const categoryRef = useRef();
     const options = useContext(OptionsContext);
     const [categoryToggle, setCategoryToggle] = useState(false);
@@ -77,7 +77,9 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
     }
 
     const categoryItems = categories.map(entry => (
-        <Dropdown.Item key={entry} as="button" onClick={(e) => handleCategorySelected(entry, e)}>{entry}</Dropdown.Item>
+        <Dropdown.Item key={entry} as="button" onClick={(e) => handleCategorySelected(entry, e)} role="option">
+            {entry}
+        </Dropdown.Item>
     ))
 
     const toneOptions = options.toneOptionsList();
@@ -111,8 +113,8 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
                         <Form.Label>Category</Form.Label>
                         <InputGroup className="mb-3">
                             <Form.Control ref={categoryRef} type="text" name="category" id="category" required defaultValue={defaultData.category} />  
-                            <Dropdown show={categoryToggle} onToggle={toggleCategoryToggle}>
-                                <Dropdown.Toggle variant="outline-secondary"/>
+                            <Dropdown show={categoryToggle} onToggle={toggleCategoryToggle} role="listbox">
+                                <Dropdown.Toggle variant="outline-secondary" aria-haspopup={true}/>
                                 <Dropdown.Menu>
                                     {categoryItems}
                                 </Dropdown.Menu>

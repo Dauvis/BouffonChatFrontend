@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 
 import "./MessageBlock.css";
 
+MessageBlock.propTypes = {
+    isUser: PropTypes.bool.isRequired,
+    message: PropTypes.string
+}
+
 export default function MessageBlock({ isUser, message }) {
-    MessageBlock.propTypes = {
-        isUser: PropTypes.bool.isRequired,
-        message: PropTypes.string
-    }
-    
     const components = {
         a: ({ children, href }) => (
             <a href={href} target="_blank" rel="noopener noreferrer">
@@ -23,10 +23,12 @@ export default function MessageBlock({ isUser, message }) {
     const cardClass = `chat-content-message-common ${messageStyle}`;
 
     return (
-        <Card className={cardClass}>
+        <Card as="article" className={cardClass}>
             <Card.Body>
-                <Card.Title>{isUser ? "User" : "Assistant"}</Card.Title>
-                { message ? <Markdown components={components} remarkPlugins={[remarkGfm]}>{message}</Markdown> : <Spinner animation="border" /> }                
+                <Card.Title as="h5" role="heading">{isUser ? "User" : "Assistant"}</Card.Title>
+                { message ? 
+                <Markdown components={components} remarkPlugins={[remarkGfm]}>{message}</Markdown> : 
+                <Spinner animation="border" role="status" aria-live="polite"/> }                
             </Card.Body>
         </Card>
     );

@@ -140,14 +140,14 @@ export default function TemplatePage() {
                             <Container>
                                 <Row>
                                     <Col>
-                                        <ButtonToolbar className="template-page-toolbar">
-                                            <ButtonGroup className="me-2" aria-label="Templates">
+                                        <ButtonToolbar className="template-page-toolbar" role="toolbar">
+                                            <ButtonGroup className="me-2" aria-label="Templates" role="group">
                                                 <Button variant="secondary" aria-label="New template" onClick={handleNewClicked}><PlusLg /></Button>
                                                 <Button variant="secondary" aria-label="Edit template" onClick={handleEditClicked}><PencilFill /></Button>
                                                 <Button variant="secondary" aria-label="Delete template" onClick={handleDeleteClicked}><XLg /></Button>
                                                 <Button variant="secondary" aria-label="Create conversation" onClick={createNewChat}><ChatTextFill /></Button>
                                             </ButtonGroup>
-                                            <ButtonGroup className="me-2" aria-label="View">
+                                            <ButtonGroup className="me-2" aria-label="View" role="group">
                                                 <Button variant="secondary" id="showByCategory" aria-label="Show by category"
                                                     className={showCategoryView ? "active" : null} onClick={() => setShowCategoryView(true)}><Diagram3Fill /></Button>
                                                 <Button variant="secondary" id="showAsList" aria-label="Show as list"

@@ -2,3 +2,15 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
+.chat-status-info {
+    font-size:small
+}
+
+.chat-type-temp {
+    color: goldenrod
+}
+
+.chat-type-archived {
+    opacity: 50%;
+}

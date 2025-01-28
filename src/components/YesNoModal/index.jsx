@@ -1,17 +1,17 @@
 import { Modal, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 
+YesNoModal.propTypes = {
+    message: PropTypes.string.isRequired,
+    tag: PropTypes.string,
+    closeCallback: PropTypes.func.isRequired,
+}
+
 export default function YesNoModal({ message, tag, closeCallback }) {
-    YesNoModal.propTypes = {
-        message: PropTypes.string.isRequired,
-        tag: PropTypes.string,
-        closeCallback: PropTypes.func.isRequired,
-    }
-    
     return (
-        <Modal show={true} onHide={() => closeCallback({result: false, tag: tag})}>
+        <Modal aria-labelledby="dlg-title" show={true} onHide={() => closeCallback({result: false, tag: tag})}>
             <Modal.Header closeButton>
-                <Modal.Title>Bouffon Chat</Modal.Title>
+                <Modal.Title id="dlg-title">Bouffon Chat</Modal.Title>
             </Modal.Header>
             <Modal.Body>{message}</Modal.Body>
             <Modal.Footer>

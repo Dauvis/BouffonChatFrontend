@@ -2,26 +2,28 @@ import { useContext, useState } from "react";
 import { Card, FormCheck, FormControl, ListGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-import { ChatDataContext } from "../../contexts/ChatDataContext.jsx";
+import { ChatDataContext } from "../../contexts/ChatDataContext";
 
 import ChatListItem from "../ChatListItem";
 import ErrorHandler from "../ErrorHandler";
+import AlertModal from "../AlertModal";
 
-import apiUtil from "../../util/apiUtil.js";
-import errorUtil from "../../util/errorUtil.js";
-import localStoreUtil from "../../util/localStoreUtil.js";
+import apiUtil from "../../util/apiUtil";
+import errorUtil from "../../util/errorUtil";
+import localStoreUtil from "../../util/localStoreUtil";
 
 import "./ChatList.css";
 import chatListLogic from "./chatListLogic";
 
-export default function ChatList({searchData, setSearchData }) {
-    ChatList.propTypes = {
-        searchData: PropTypes.any.isRequired,
-        setSearchData: PropTypes.func.isRequired,
-    }
+ChatList.propTypes = {
+    searchData: PropTypes.any.isRequired,
+    setSearchData: PropTypes.func.isRequired,
+}
 
+export default function ChatList({searchData, setSearchData }) {
     const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
-    const [ errorInfo, setErrorInfo ] = useState('');
+    const [ errorInfo, setErrorInfo ] = useState("");
+    const [ alertText, setAlertText ] = useState("");
 
     async function clickCallback(clickedChatId) {
         const chatResponse = await apiUtil.get(`/v1/chat/${clickedChatId}`);
@@ -32,7 +34,7 @@ export default function ChatList({searchData, setSearchData }) {
             localStoreUtil.setTrackedChatId(selected._id)
         } else {
             if (chatResponse.status === 404) {
-                alert("Chat does not exist");
+                setAlertText("Chat does not exist");
                 await loadChatData();
             } else {
                 const errInfo = errorUtil.handleApiError(chatResponse);
@@ -61,9 +63,10 @@ export default function ChatList({searchData, setSearchData }) {
     return (
         <>
         { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
+        { alertText ? <AlertModal message={alertText} closeCallback={() => setAlertText("")} /> : null}
         <Card>
             <Card.Body>
-                <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} value={searchData.keyword} />
+                <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} value={searchData.keyword} aria-label="Search by name"/>
                 <FormCheck type="switch" id="archived" label="Show archived" onChange={handleSearchChanged} value={searchData.archived} />
             </Card.Body>
         </Card>

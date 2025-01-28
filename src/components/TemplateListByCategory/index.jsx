@@ -7,15 +7,15 @@ import TemplateListItem from "../TemplateListItem";
 
 import "./TemplateListByCategory.css"
 
+TemplateListByCategory.propTypes = {
+    templates: PropTypes.array.isRequired,
+    currentTemplate: PropTypes.any,
+    categories: PropTypes.array.isRequired,
+    itemCallback: PropTypes.func.isRequired,
+}
+
 export default function TemplateListByCategory({ templates, currentTemplate, categories, itemCallback }) {
     const [curActiveKey, setCurActiveKey] = useState('');
-
-    TemplateListByCategory.propTypes = {
-        templates: PropTypes.array.isRequired,
-        currentTemplate: PropTypes.any,
-        categories: PropTypes.array.isRequired,
-        itemCallback: PropTypes.func.isRequired,
-    }
 
     useEffect(() => {
         setCurActiveKey(currentTemplate.category)
@@ -47,7 +47,7 @@ export default function TemplateListByCategory({ templates, currentTemplate, cat
             <Accordion.Item key={category} eventKey={category}>
                 <Accordion.Header>{category}</Accordion.Header>
                 <Accordion.Body className="template-category-body">
-                    <ListGroup>
+                    <ListGroup role="list">
                         {catItems}
                     </ListGroup>
                 </Accordion.Body>
@@ -65,6 +65,6 @@ export default function TemplateListByCategory({ templates, currentTemplate, cat
             {items}
         </Accordion>
         :
-        <Alert variant="light" className="text-center">No templates fetched</Alert>
+        <Alert role="alert" variant="light" className="text-center">No templates fetched</Alert>
     )
 }

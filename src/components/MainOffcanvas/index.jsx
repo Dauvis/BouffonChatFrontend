@@ -1,5 +1,5 @@
-import { Offcanvas, Nav, Button, Dropdown } from "react-bootstrap";
-import { PersonSquare, ChatLeftDots, JournalPlus, Image } from "react-bootstrap-icons";
+import { Offcanvas, Nav, Dropdown } from "react-bootstrap";
+import { PersonSquare, ChatLeftDots, JournalPlus } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -15,15 +15,16 @@ import localStoreUtil from "../../util/localStoreUtil";
 
 import "./MainOffcanvas.css";
 
-export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
-    MainOffcanvas.propTypes = {
-        offcanvasState: PropTypes.bool.isRequired,
-        closeCallBack: PropTypes.func.isRequired,
-        searchData: PropTypes.any.isRequired,
-        setSearchData: PropTypes.func.isRequired,
-    }
+MainOffcanvas.propTypes = {
+    offcanvasState: PropTypes.bool.isRequired,
+    closeCallBack: PropTypes.func.isRequired,
+    searchData: PropTypes.any.isRequired,
+    setSearchData: PropTypes.func.isRequired,
+}
 
+export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
     const [ showCreate, setShowCreate] = useState("");
+    const [ newOpen, setNewOpen ] = useState(false);
 
     const profile = localStoreUtil.getProfile();
 
@@ -57,14 +58,14 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
     return (
         <>
         { showCreate ? <ChatCreateModal parameters={showCreate} closeCallback={handleCreateCallback} /> : null }
-        <Offcanvas show={offcanvasState} placement="end" onHide={closeCallBack}>
+        <Offcanvas aria-labelledby="main-menu-title" show={offcanvasState} placement="end" onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
-                <Offcanvas.Title>Menu</Offcanvas.Title>
+                <Offcanvas.Title id="main-menu-title">Menu</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
                 <Nav className="flex-column">
                     <Nav.Item>
-                        <Link to="/profile" className="chat-menu-link"><PersonSquare /> {profile.name}</Link>
+                        <Link to="/profile" className="chat-menu-link" aria-label="Navigate to profile"><PersonSquare /> {profile.name}</Link>
                     </Nav.Item>
                     <Nav.Item>
                         <ColorModeButton />
@@ -73,20 +74,22 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
                 <hr className="my-3" />
                 <Nav className="flex-column">
                     <Nav.Item>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="link"><ChatLeftDots /> New...</Dropdown.Toggle>
-                            <Dropdown.Menu>
+                        <Dropdown onToggle={(isOpen) => setNewOpen(isOpen)}>
+                            <Dropdown.Toggle variant="link" aria-haspopup="true" aria-expanded={newOpen} aria-controls="new-chat-menu">
+                                <ChatLeftDots /> New...
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu id="new-chat-menu">
                                 <Dropdown.Item as="button" onClick={() => createNewChat('')}>Conversation</Dropdown.Item>
                                 {mruOptions}
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav.Item>
                     <Nav.Item>
-                        <Link to="/template" className="chat-menu-link"><JournalPlus /> Manage templates</Link>
+                        <Link to="/template" className="chat-menu-link" aria-label="Navigate to template management"><JournalPlus /> Manage templates</Link>
                     </Nav.Item>
-                    <Nav.Item>
+                    {/* <Nav.Item>
                         <Button variant="link" onClick={() => alert("Coming soon")}><Image /> Image tool</Button>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <hr className="my-3" />
                     <ChatList searchData={searchData} setSearchData={setSearchData} />
                 </Nav>

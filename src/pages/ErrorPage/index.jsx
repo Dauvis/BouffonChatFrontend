@@ -22,7 +22,7 @@ export default function ErrorPage({ args }) {
                     <Col>
                         <Card className="bg-body-tertiary">
                             <Card.Body>
-                                <Card.Title>Error: {errorStatus} <EmojiFrownFill color="darkgreen" /></Card.Title>
+                                <Card.Title as="h1">Error: {errorStatus} <EmojiFrownFill color="darkgreen" /></Card.Title>
                                 {errorCode ? <Card.Text><em>Code: {errorCode}</em></Card.Text> : null}
                                 <Card.Text>
                                     {errorText}
