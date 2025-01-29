@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { Container, Card, Alert } from "react-bootstrap";
 
-import logo from "../../assets/images/bouffon_chat_icon.png";
+import logo from "../../assets/images/BouffonChatLogo.svg";
 
 import loginService from "../../services/loginService";
 import errorUtil from "../../util/errorUtil";
@@ -41,13 +41,12 @@ export default function SignInPage() {
                     <Card.Title as="h1">Bouffon Chat</Card.Title>
                     {message ? <Card.Text><Alert variant="danger" role="alert">{message}</Alert></Card.Text> : null}
                     <Card.Text>
-                        Welcome to Bouffon Chat! Dive into engaging conversations and
-                        explore ideas with our intelligent chat system, powered by
-                        advanced AI technology. Whether you are seeking answers,
-                        brainstorming creative solutions, or just looking to chat,
-                        Bouffon Chat is here to make your experience interactive and
-                        insightful. Sign in to start connecting and discovering the
-                        limitless possibilities of conversation!
+                    Welcome to Bouffon Chat! Immerse yourself in engaging conversations and explore 
+                    ideas with our sophisticated chat system, powered by GPT technology. Whether you 
+                    are looking for answers, brainstorming creative solutions, discovering a new recipe
+                    to try, or just eager to chat, Bouffon Chat leverages advanced AI to provide an 
+                    interactive and enriching experience. Sign in now to connect and unlock the endless 
+                    possibilities!
                     </Card.Text>
                     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
                         <GoogleLogin onSuccess={onSuccess} onError={onError} />
