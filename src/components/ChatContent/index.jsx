@@ -19,9 +19,10 @@ export default function ChatContent() {
         function onScroll() {
             const scrolledFromTop = window.scrollY;
             const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const count = activeChat ? activeChat.exchanges.length : 0;
+            const windowHeight = window.innerHeight;
+            const contentRatio = totalHeight / windowHeight;
 
-            if (count >= 4) {
+           if (contentRatio > 2) {
                 if (scrolledFromTop > totalHeight / 2) {
                     setScrollButton("up");
                 } else if (scrolledFromTop < totalHeight / 2) {
@@ -32,6 +33,7 @@ export default function ChatContent() {
             }
         };
 
+        onScroll();
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
     }, [activeChat]);
