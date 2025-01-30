@@ -109,7 +109,7 @@ export default function ChatFooter() {
         setActiveChat(initialUpdated);
         localStoreUtil.setTrackedChatId(chat._id);
 
-        const response = await apiUtil.post("/v1/message", { chatId: chat._id, message: userMessage });
+        const response = await apiUtil.post("/v1/message", { chatId: chat._id, message: userMessage }, false);
 
         if (response.success) {
             const curChatId = localStoreUtil.getTrackedChatId();

@@ -1,4 +1,5 @@
 import localStoreUtil from "./localStoreUtil";
+import { showOverlay, hideOverlay } from "../contexts/OverlayContext";
 
 /**
  * helper function to indicate user is logged in
@@ -39,8 +40,12 @@ function getEndpointUri(endpoint) {
  * @param {object} body 
  * @returns API call response object
  */
-async function post(endpoint, body) {
+async function post(endpoint, body, useOverlay = true) {
     const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
 
     try {
         const response = await fetch(endpointUri, {
@@ -62,6 +67,9 @@ async function post(endpoint, body) {
     } catch (error) {
         console.error(`Error posting to ${endpointUri}: ${error.message}`);
         return apiResponse(false, 500, {});
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
     }
 };
 
@@ -70,8 +78,12 @@ async function post(endpoint, body) {
  * @param {string} endpoint 
  * @returns API call response object
  */
-async function remove(endpoint) {
+async function remove(endpoint, useOverlay = true) {
     const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
 
     try {
         const response = await fetch(endpointUri, {
@@ -86,6 +98,9 @@ async function remove(endpoint) {
     } catch (error) {
         console.error(`Error deleting resource ${endpointUri}: ${error.message}`);
         return apiResponse(false, 500, {});
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
     }
 };
 
@@ -94,8 +109,12 @@ async function remove(endpoint) {
  * @param {string} endpoint 
  * @returns API call response object
  */
-async function get(endpoint) {
+async function get(endpoint, useOverlay = true) {
     const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
 
     try {
         const response = await fetch(endpointUri, {
@@ -115,6 +134,9 @@ async function get(endpoint) {
         }
     } catch (error) {
         console.error(`Error fetching resource ${endpointUri}: ${error.message}`);
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
     }
 }
 
@@ -124,8 +146,12 @@ async function get(endpoint) {
  * @param {object} body 
  * @returns API call response object
  */
-async function put(endpoint, body) {
+async function put(endpoint, body, useOverlay = true) {
     const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
 
     try {
         const response = await fetch(endpointUri, {
@@ -147,6 +173,9 @@ async function put(endpoint, body) {
     } catch (error) {
         console.error(`Error putting to ${endpointUri}: ${error.message}`);
         return apiResponse(false, 500, {});
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
     }
 };
 
@@ -156,8 +185,12 @@ async function put(endpoint, body) {
  * @param {object} body 
  * @returns API call response object
  */
-async function patch(endpoint, body) {
+async function patch(endpoint, body, useOverlay = true) {
     const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
 
     try {
         const response = await fetch(endpointUri, {
@@ -179,6 +212,9 @@ async function patch(endpoint, body) {
     } catch (error) {
         console.error(`Error putting to ${endpointUri}: ${error.message}`);
         return apiResponse(false, 500, {});
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
     }
 };
 
