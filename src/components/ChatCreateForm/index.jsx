@@ -89,7 +89,7 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
 
     return (
         <>
-        { errorInfo ? <ErrorHandler errorInfo={errorInfo} /> : null }
+        { errorInfo ? <ErrorHandler errorInfo={errorInfo} redirect={false} /> : null }
         <Form action={handleFormAction}>
             <Row>
                 <Col>
