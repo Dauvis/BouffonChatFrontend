@@ -1,6 +1,6 @@
 import { Container, Card, FormControl, Row, Col, ProgressBar, Dropdown, Button } from "react-bootstrap";
 import { List, InfoCircle, ArrowClockwise, ArrowCounterclockwise, Pencil, Trash, SendFill } from "react-bootstrap-icons";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 
@@ -29,6 +29,32 @@ export default function ChatFooter() {
     const [messageText, setMessageText] = useState("");
     const [actionOpen, setActionOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
+    const messageTextRef = useRef();
+
+    function autoResize() {
+        const control = messageTextRef.current;
+
+        if (control) {
+            const scrollY = document.documentElement.scrollHeight;
+            control.style.height = 'auto';
+            const newHeight = control.scrollHeight;
+            control.style.height = (newHeight > 500 ? 500 : newHeight) + 'px';
+            window.scrollTo(window.scrollX, scrollY);
+        }
+    }
+
+    useEffect(() => {
+        const control = messageTextRef.current;
+        if (control) {
+            control.addEventListener('input', autoResize);
+        }
+    
+        return () => {
+            if (control) {
+                control.removeEventListener('input', autoResize);
+            };
+        }
+    }, []);
 
     async function handleRenameClosed(newName) {
         if (newName) {
@@ -132,6 +158,8 @@ export default function ChatFooter() {
                 setActiveChat(chat);
             }
         }
+
+        autoResize();
     }
 
     async function handleUndoClicked() {
@@ -190,7 +218,8 @@ export default function ChatFooter() {
                         </Row>
                         <Row>
                             <Col>
-                                <FormControl as="textarea" disabled={disabled || archived} placeholder="Enter message"
+                                <FormControl ref={messageTextRef} as="textarea" className="autoresize-textarea" 
+                                    disabled={disabled || archived} placeholder="Enter message"
                                     value={messageText} onChange={handleMessageChanged} aria-label="Message/prompt input" />
                             </Col>
                         </Row>

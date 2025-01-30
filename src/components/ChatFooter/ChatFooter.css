@@ -14,3 +14,7 @@
 .chat-type-archived {
     opacity: 50%;
 }
+
+.autoresize-textarea {
+    resize: none;
+}
