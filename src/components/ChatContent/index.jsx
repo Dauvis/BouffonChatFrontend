@@ -34,6 +34,7 @@ export default function ChatContent() {
         };
 
         onScroll();
+        setScrollButtonClicked("down")
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
     }, [activeChat]);
