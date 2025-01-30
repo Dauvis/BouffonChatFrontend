@@ -9,7 +9,7 @@ export const OptionsProvider = ({ children }) => {
     OptionsProvider.propTypes = {
         children: PropTypes.node.isRequired,
     };
-
+    
     const [options, setOptions] = useState(null);
 
     useEffect(() => {
@@ -45,8 +45,16 @@ export const OptionsProvider = ({ children }) => {
         return curModel?.label || "";
     }
 
+    function findModel(model) {
+        if (!model) {
+            return null;
+        }
+
+        return options?.models ? options.models.find(o => o.value === model) : null;
+    }
+
     return (
-        <OptionsContext.Provider value={{ options, toneOptionsList, modelOptionsList, modelLabel }}>
+        <OptionsContext.Provider value={{ options, toneOptionsList, modelOptionsList, modelLabel, findModel }}>
             {children}
         </OptionsContext.Provider>
     );

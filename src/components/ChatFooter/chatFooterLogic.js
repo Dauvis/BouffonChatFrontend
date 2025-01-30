@@ -12,6 +12,10 @@ function chatLimitPercent(chat) {
         return 100 * (chat.tokens / 25000);
     }
 
+    if (chat.model === "o1-preview" || chat.model === "o1-mini") {
+        return 100 * (chat.tokens / 5000);
+    }
+
     return 0;
 }
 
