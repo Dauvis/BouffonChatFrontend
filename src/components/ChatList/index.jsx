@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { Card, FormCheck, FormControl, ListGroup } from "react-bootstrap";
-import PropTypes from "prop-types";
 
 import { ChatDataContext } from "../../contexts/ChatDataContext";
 
@@ -15,13 +14,8 @@ import localStoreUtil from "../../util/localStoreUtil";
 import "./ChatList.css";
 import chatListLogic from "./chatListLogic";
 
-ChatList.propTypes = {
-    searchData: PropTypes.any.isRequired,
-    setSearchData: PropTypes.func.isRequired,
-}
-
-export default function ChatList({searchData, setSearchData }) {
-    const { chatListData, activeChat, setActiveChat, loadChatData } = useContext(ChatDataContext);
+export default function ChatList() {
+    const { chatListData, activeChat, setActiveChat, loadChatData, searchData, setSearchData } = useContext(ChatDataContext);
     const [ errorInfo, setErrorInfo ] = useState("");
     const [ alertText, setAlertText ] = useState("");
 
@@ -67,7 +61,7 @@ export default function ChatList({searchData, setSearchData }) {
         <Card>
             <Card.Body>
                 <FormControl type="text" id="keyword" placeholder="Search by name" onChange={handleSearchChanged} value={searchData.keyword} aria-label="Search by name"/>
-                <FormCheck type="switch" id="archived" label="Show archived" onChange={handleSearchChanged} value={searchData.archived} />
+                <FormCheck type="switch" id="archived" label="Show archived" onChange={handleSearchChanged} checked={searchData.archived} />
             </Card.Body>
         </Card>
         <Card>

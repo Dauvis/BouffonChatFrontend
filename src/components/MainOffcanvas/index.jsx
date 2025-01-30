@@ -18,11 +18,9 @@ import "./MainOffcanvas.css";
 MainOffcanvas.propTypes = {
     offcanvasState: PropTypes.bool.isRequired,
     closeCallBack: PropTypes.func.isRequired,
-    searchData: PropTypes.any.isRequired,
-    setSearchData: PropTypes.func.isRequired,
 }
 
-export default function MainOffcanvas({ offcanvasState, closeCallBack, searchData, setSearchData }) {
+export default function MainOffcanvas({ offcanvasState, closeCallBack }) {
     const [ showCreate, setShowCreate] = useState("");
     const [ newOpen, setNewOpen ] = useState(false);
 
@@ -87,11 +85,8 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack, searchDat
                     <Nav.Item>
                         <Link to="/template" className="chat-menu-link" aria-label="Navigate to template management"><JournalPlus /> Manage templates</Link>
                     </Nav.Item>
-                    {/* <Nav.Item>
-                        <Button variant="link" onClick={() => alert("Coming soon")}><Image /> Image tool</Button>
-                    </Nav.Item> */}
                     <hr className="my-3" />
-                    <ChatList searchData={searchData} setSearchData={setSearchData} />
+                    <ChatList />
                 </Nav>
             </Offcanvas.Body>
         </Offcanvas>

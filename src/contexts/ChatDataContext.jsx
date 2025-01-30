@@ -16,6 +16,7 @@ export function ChatDataProvider({ children }) {
 
     const [chatListData, setChatListData] = useState([]);
     const [activeChat, setActiveChat] = useState(miscUtil.emptyChat);
+    const [searchData, setSearchData] = useState({archived: false, keyword: ""});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,7 +49,7 @@ export function ChatDataProvider({ children }) {
 
 
     return (
-        <ChatDataContext.Provider value={{chatListData, setChatListData, activeChat, setActiveChat, loadChatData }}>
+        <ChatDataContext.Provider value={{chatListData, setChatListData, activeChat, setActiveChat, loadChatData, searchData, setSearchData }}>
             {children}
         </ChatDataContext.Provider>
     );

@@ -8,13 +8,11 @@ import ChatContent from "../../components/ChatContent";
 
 export default function MainPage() {
     const [showOffcanvas, setShowOffcanvas] = useState(false);
-    const [searchData, setSearchData] = useState({ archived: false, keyword: '' });
 
     return (
         <>
             <NavHeader icon={(<List />)} callBack={() => setShowOffcanvas(true)} ariaLabel="Open main menu"/>
-            <MainOffcanvas offcanvasState={showOffcanvas} closeCallBack={() => setShowOffcanvas(false)}
-                searchData={searchData} setSearchData={setSearchData} />
+            <MainOffcanvas offcanvasState={showOffcanvas} closeCallBack={() => setShowOffcanvas(false)} />
             <main>
                 <ChatContent />
             </main>
