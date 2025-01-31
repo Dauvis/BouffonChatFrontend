@@ -134,6 +134,7 @@ export default function ChatFooter() {
         setMessageText("");
         setActiveChat(initialUpdated);
         localStoreUtil.setTrackedChatId(chat._id);
+        localStoreUtil.lockScroll(window.scrollY + 250);
 
         const response = await apiUtil.post("/v1/message", { chatId: chat._id, message: userMessage }, false);
 
@@ -160,6 +161,8 @@ export default function ChatFooter() {
         }
 
         autoResize();
+
+        setTimeout(() => localStoreUtil.lockScroll(0), 1000);        
     }
 
     async function handleUndoClicked() {

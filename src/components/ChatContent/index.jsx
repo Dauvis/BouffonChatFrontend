@@ -8,6 +8,8 @@ import MessageBlock from "../MessageBlock";
 import ChatTitle from "../ChatTitle";
 import VisibilityRefresh from "../VisibilityRefresh";
 
+import localStoreUtil from "../../util/localStoreUtil";
+
 import "./ChatContent.css"
 
 export default function ChatContent() {
@@ -22,7 +24,7 @@ export default function ChatContent() {
             const windowHeight = window.innerHeight;
             const contentRatio = totalHeight / windowHeight;
 
-           if (contentRatio > 2) {
+            if (contentRatio > 2) {
                 if (scrolledFromTop > totalHeight / 2) {
                     setScrollButton("up");
                 } else if (scrolledFromTop < totalHeight / 2) {
@@ -34,7 +36,7 @@ export default function ChatContent() {
         };
 
         onScroll();
-        setScrollButtonClicked("down")
+        setScrollButtonClicked("down");
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
     }, [activeChat]);
@@ -44,7 +46,9 @@ export default function ChatContent() {
             if (scrollButtonClicked === "up") {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+                const scrollLockY = localStoreUtil.lockScroll();
+                const destY = scrollLockY || document.documentElement.scrollHeight;
+                window.scrollTo({ top: destY, behavior: 'smooth' });
             }
 
             setScrollButtonClicked("");
@@ -85,7 +89,7 @@ export default function ChatContent() {
                     {content}
                 </Container>
             </>
-        :
+            :
             <Container>
                 <Alert variant="secondary" className="text-center" role="alert">Select or create a chat</Alert>
             </Container>

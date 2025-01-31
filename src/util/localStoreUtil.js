@@ -83,7 +83,15 @@ function setTemplateMRU(mru) {
     setProfile(profile);
 }
 
+function lockScroll(lock = null) {
+    if (lock == null) {
+        return Number(sessionStorage.getItem("scrollLock"));
+    } else {
+        sessionStorage.setItem("scrollLock", lock.toString());
+    }
+}
+
 const localStoreUtil = { getProfile, setProfile, clearProfile, setTheme, getTheme, 
-    setTrackedChatId, getTrackedChatId, getTemplateMRU, setTemplateMRU};
+    setTrackedChatId, getTrackedChatId, getTemplateMRU, setTemplateMRU, lockScroll};
 
 export default localStoreUtil;

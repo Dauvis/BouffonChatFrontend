@@ -1,7 +1,7 @@
 import { Container, Navbar, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-import logo from "../../assets/images/BouffonChatLogo.svg";
+import logo from "../../assets/images/BouffonChatLogo.png";
 import './NavHeader.css'
 
 NavHeader.propTypes = {
