@@ -174,6 +174,7 @@ export default function ChatFooter() {
                 const updated = chatFooterLogic.removeExchange(activeChat, exchange);
                 setActiveChat(updated);
                 setMessageText(exchange.userMessage);
+                setTimeout(() => autoResize(), 500);
             } else {
                 setAlertMessage("No more messages to undo");
             }
@@ -191,6 +192,7 @@ export default function ChatFooter() {
                 const updated = chatFooterLogic.addExchange(activeChat, exchange);
                 setActiveChat(updated);
                 setMessageText("");
+                setTimeout(() => autoResize(), 500);
             } else {
                 setAlertMessage("No more messages to redo");
             }
