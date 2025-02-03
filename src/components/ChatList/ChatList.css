@@ -1,8 +1,0 @@
-.chat-list-scroll {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.chat-list-scroll .list-group-item {
-    padding: 0.25rem;
-}

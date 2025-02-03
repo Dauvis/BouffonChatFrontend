@@ -11,7 +11,6 @@ import apiUtil from "../../util/apiUtil";
 import errorUtil from "../../util/errorUtil";
 import localStoreUtil from "../../util/localStoreUtil";
 
-import "./ChatList.css";
 import chatListLogic from "./chatListLogic";
 
 export default function ChatList() {

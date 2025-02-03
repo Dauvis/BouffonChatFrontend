@@ -1,5 +1,5 @@
 import { Offcanvas, Nav, Dropdown } from "react-bootstrap";
-import { PersonSquare, ChatLeftDots, JournalPlus } from "react-bootstrap-icons";
+import { PersonSquare, ChatLeftDots, JournalPlus, Tools } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 import ChatList from "../ChatList";
 import ColorModeButton from "../ColorModeButton";
 import ChatCreateModal from "../ChatCreateModal";
+import ExportModal from "../ExportModal";
+import ImportModal from "../ImportModal";
 
 import miscUtil from "../../util/miscUtil"
 import chatUtil from "../../util/chatUtil";
@@ -20,9 +22,15 @@ MainOffcanvas.propTypes = {
     closeCallBack: PropTypes.func.isRequired,
 }
 
+const noModal = 0;
+const createModal = 1;
+const exportModal = 2;
+const importModal = 3;
+
 export default function MainOffcanvas({ offcanvasState, closeCallBack }) {
-    const [ showCreate, setShowCreate] = useState("");
+    const [ modalState, setModalState ] = useState({ modal: noModal, args: {} });
     const [ newOpen, setNewOpen ] = useState(false);
+    const [ toolsOpen, setToolsOpen ] = useState(false);
 
     const profile = localStoreUtil.getProfile();
 
@@ -41,11 +49,21 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack }) {
 
         closeCallBack();
         const parameters = chatUtil.initNewParameters(profile, template);
-        setShowCreate(parameters);
+        setModalState({ modal: createModal, args: parameters });
     }
 
-    function handleCreateCallback() {
-        setShowCreate("");
+    function exportChats() {
+        closeCallBack();
+        setModalState({ modal: exportModal, args: {}});
+    }
+
+    function importChats() {
+        closeCallBack();
+        setModalState({ modal: importModal, args: {}});
+    }
+
+    function handleGeneralModalCallback() {
+        setModalState({ modal: noModal, args: {}});
     }
 
     const templateMru = localStoreUtil.getTemplateMRU();
@@ -55,7 +73,9 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack }) {
 
     return (
         <>
-        { showCreate ? <ChatCreateModal parameters={showCreate} closeCallback={handleCreateCallback} /> : null }
+        { modalState.modal === createModal ? <ChatCreateModal parameters={modalState.args} closeCallback={handleGeneralModalCallback} /> : null }
+        { modalState.modal === exportModal ? <ExportModal closeCallback={handleGeneralModalCallback} /> : null}
+        { modalState.modal === importModal ? <ImportModal closeCallback={handleGeneralModalCallback} /> : null }
         <Offcanvas aria-labelledby="main-menu-title" show={offcanvasState} placement="end" onHide={closeCallBack}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title id="main-menu-title">Menu</Offcanvas.Title>
@@ -84,6 +104,17 @@ export default function MainOffcanvas({ offcanvasState, closeCallBack }) {
                     </Nav.Item>
                     <Nav.Item>
                         <Link to="/template" className="chat-menu-link" aria-label="Navigate to template management"><JournalPlus /> Manage templates</Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Dropdown onToggle={(isOpen) => setToolsOpen(isOpen)}>
+                            <Dropdown.Toggle variant="link" aria-haspopup="true" aria-expanded={toolsOpen} aria-controls="tools-menu">
+                                <Tools /> Tools...
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu id="tools-menu">
+                                <Dropdown.Item as="button" onClick={() => importChats()}>Import</Dropdown.Item>
+                                <Dropdown.Item as="button" onClick={() => exportChats()}>Export</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </Nav.Item>
                     <hr className="my-3" />
                     <ChatList />

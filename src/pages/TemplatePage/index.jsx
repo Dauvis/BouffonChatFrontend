@@ -19,7 +19,7 @@ import errorUtil from "../../util/errorUtil";
 import localStoreUtil from "../../util/localStoreUtil";
 
 import "./TemplatePage.css"
-import templatePageLogic from "./TemplatePageLogic";
+import templatePageLogic from "./templatePageLogic"
 
 export default function TemplatePage() {
     const navigate = useNavigate();
