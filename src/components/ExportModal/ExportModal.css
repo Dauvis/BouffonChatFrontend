@@ -2,3 +2,12 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+
+.export-purge {
+    margin-left: 1.5rem;
+}
+
+.export-footer {
+    display: flex;
+    align-items: center;
+}

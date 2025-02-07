@@ -19,10 +19,11 @@ function isAuthenticated() {
  * @param {boolean} success 
  * @param {number} status 
  * @param {object} body 
+ * @param {string} filename
  * @returns API response information wrapped in an object
  */
-function apiResponse(success, status, body) {
-    return { success, status, body };
+function apiResponse(success, status, body, filename = null) {
+    return { success, status, body, filename };
 };
 
 /**
@@ -60,6 +61,66 @@ async function post(endpoint, body, useOverlay = true) {
         if (response.ok) {
             const data = response.status === 204 ? {} : await response.json();
             return apiResponse(true, response.status, data);
+        } else {
+            const errorData = await response.json();
+            return apiResponse(false, response.status, errorData);
+        }
+    } catch (error) {
+        console.error(`Error posting to ${endpointUri}: ${error.message}`);
+        return apiResponse(false, 500, {});
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
+    }
+};
+
+async function postGetBlob(endpoint, body, useOverlay = true) {
+    const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
+
+    try {
+        const response = await fetch(endpointUri, {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (response.ok) {
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = 'exported_data.zip';
+
+            console.log(contentDisposition);
+        
+            if (contentDisposition && contentDisposition.includes('filename=')) {
+                const match = contentDisposition.match(/filename="([^"]+)"/);
+                filename = match ? match[1] : filename;
+            }
+
+            const reader = response.body.getReader();
+            const stream = new ReadableStream({
+                start(controller) {
+                    function push() {
+                        reader.read().then(({ done, value }) => {
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            controller.enqueue(value);
+                            push();
+                        });
+                    }
+                    push();
+                }
+            });
+        
+            const blob = await new Response(stream).blob();            
+            return apiResponse(true, response.status, blob, filename);
         } else {
             const errorData = await response.json();
             return apiResponse(false, response.status, errorData);
@@ -218,6 +279,6 @@ async function patch(endpoint, body, useOverlay = true) {
     }
 };
 
-const apiUtil = { isAuthenticated, post, remove, get, put, patch };
+const apiUtil = { isAuthenticated, post, remove, get, put, patch, postGetBlob };
 
 export default apiUtil;
