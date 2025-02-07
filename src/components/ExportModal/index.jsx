@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form, Row, Col, ListGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
 
@@ -7,6 +7,8 @@ import ErrorHandler from "../ErrorHandler";
 
 import apiUtil from "../../util/apiUtil";
 import errorUtil from "../../util/errorUtil";
+
+import { ChatDataContext } from "../../contexts/ChatDataContext";
 
 import "./ExportModal.css";
 
@@ -20,6 +22,7 @@ export default function ExportModal( {closeCallback} ) {
     const [ selectAll, setSelectAll ] = useState(false);
     const [ selected, setSelected ] = useState("");
     const [ errorInfo, setErrorInfo ] = useState("");
+    const { activeChat, loadChatData } = useContext(ChatDataContext);
 
     useEffect(() => {
         async function loadAllChats() {
@@ -68,6 +71,10 @@ export default function ExportModal( {closeCallback} ) {
             a.click();
             a.remove();
             window.URL.revokeObjectURL(url);            
+
+            if (purge) {
+                loadChatData(activeChat._id);
+            }
         } else {
             const error = errorUtil.handleApiError(response);
             setErrorInfo(error);
