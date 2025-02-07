@@ -74,6 +74,36 @@ async function post(endpoint, body, useOverlay = true) {
     }
 };
 
+async function postFormData(endpoint, body, useOverlay = true) {
+    const endpointUri = getEndpointUri(endpoint);
+
+    const overlayTimeout = useOverlay ? 
+        setTimeout(() => { showOverlay(); }, 2000 )
+        : null;
+
+    try {
+        const response = await fetch(endpointUri, {
+            method: "POST",
+            credentials: 'include',
+            body
+        });
+
+        if (response.ok) {
+            const data = response.status === 204 ? {} : await response.json();
+            return apiResponse(true, response.status, data);
+        } else {
+            const errorData = await response.json();
+            return apiResponse(false, response.status, errorData);
+        }
+    } catch (error) {
+        console.error(`Error posting to ${endpointUri}: ${error.message}`);
+        return apiResponse(false, 500, {});
+    } finally {
+        if (overlayTimeout) clearTimeout(overlayTimeout);
+        hideOverlay();
+    }
+};
+
 async function postGetBlob(endpoint, body, useOverlay = true) {
     const endpointUri = getEndpointUri(endpoint);
 
@@ -279,6 +309,6 @@ async function patch(endpoint, body, useOverlay = true) {
     }
 };
 
-const apiUtil = { isAuthenticated, post, remove, get, put, patch, postGetBlob };
+const apiUtil = { isAuthenticated, post, remove, get, put, patch, postGetBlob, postFormData };
 
 export default apiUtil;

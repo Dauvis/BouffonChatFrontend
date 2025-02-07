@@ -3,8 +3,10 @@ import { Modal, Button, Form, Row, Col, ListGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import LoadingWait from "../LoadingWait";
+import ErrorHandler from "../ErrorHandler";
 
 import apiUtil from "../../util/apiUtil";
+import errorUtil from "../../util/errorUtil";
 
 import "./ExportModal.css";
 
@@ -17,6 +19,7 @@ export default function ExportModal( {closeCallback} ) {
     const [ showAll, setShowAll ] = useState(false);
     const [ selectAll, setSelectAll ] = useState(false);
     const [ selected, setSelected ] = useState("");
+    const [ errorInfo, setErrorInfo ] = useState("");
 
     useEffect(() => {
         async function loadAllChats() {
@@ -66,7 +69,8 @@ export default function ExportModal( {closeCallback} ) {
             a.remove();
             window.URL.revokeObjectURL(url);            
         } else {
-            alert("Error with export");
+            const error = errorUtil.handleApiError(response);
+            setErrorInfo(error);
         }
 
         closeCallback();
@@ -87,6 +91,10 @@ export default function ExportModal( {closeCallback} ) {
             <Modal.Header closeButton>
                 <Modal.Title id="dlg-title">Export</Modal.Title>
             </Modal.Header>
+            { errorInfo 
+                ? <Modal.Body><ErrorHandler errorInfo={errorInfo} redirect={false}/></Modal.Body>
+                : null 
+            }
             <Modal.Body>
                 <Form action={performExport}>
                     <Row>
