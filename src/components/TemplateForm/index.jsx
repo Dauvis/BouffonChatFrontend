@@ -124,7 +124,7 @@ export default function TemplateForm({defaultData, categories, closeCallback}) {
                     </Col>
                     <Col>
                     <Form.Group>
-                        <Form.Label>Tone</Form.Label>
+                        <Form.Label>Persona</Form.Label>
                         <Form.Select name="tone" id="tone" defaultValue={defaultData.tone}>
                             <option value=""></option>
                             {toneOptions}

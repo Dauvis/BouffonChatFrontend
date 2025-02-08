@@ -40,7 +40,7 @@ export default function TemplateView({current}) {
                 </Col>
                 <Col>
                     <FormGroup controlId="toneText">
-                        <FormLabel>Tone</FormLabel>
+                        <FormLabel>Persona</FormLabel>
                         <FormControl type="text" readOnly  value={current.tone} />
                     </FormGroup>
                 </Col>

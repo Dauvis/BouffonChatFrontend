@@ -104,7 +104,7 @@ export default function ChatCreateForm({ parameters, closeCallback }) {
             <Row>
                 <Col>
                     <Form.Group controlId="tone">
-                        <Form.Label>Tone</Form.Label>
+                        <Form.Label>Persona</Form.Label>
                         <Form.Select ref={toneSelect} name="tone" required defaultValue={parameters.tone} disabled={sysDisabled}>
                             <option value=""></option>
                             {toneOptions}

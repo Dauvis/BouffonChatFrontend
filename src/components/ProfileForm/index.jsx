@@ -104,7 +104,7 @@ export default function ProfileForm({ saveCallback, cancelCallback }) {
                 <Row>
                     <Col sm={6}>
                         <Form.Group className="mb-3" controlId="defaultTone">
-                            <Form.Label>Tone</Form.Label>
+                            <Form.Label>Persona</Form.Label>
                             <Form.Select defaultValue={profile.defaultTone} onBlur={fieldChanged}>
                                 <option value="">Select tone...</option>
                                 {toneOptions}
