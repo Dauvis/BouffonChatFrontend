@@ -75,12 +75,12 @@ export default function ExportModal( {closeCallback} ) {
             if (purge) {
                 loadChatData(activeChat._id);
             }
+
+            closeCallback();
         } else {
             const error = errorUtil.handleApiError(response);
             setErrorInfo(error);
         }
-
-        closeCallback();
     }
 
     const listContents = allChats
