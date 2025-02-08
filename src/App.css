@@ -22,3 +22,30 @@ select:invalid {
 .chat-list-scroll .list-group-item {
   padding: 0.25rem;
 }
+
+@media print {
+  .chat-content-scroll-up,
+  .chat-content-scroll-down,
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
+  
+  .container {
+    width: 100% !important;
+    max-width: 960px !important;
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+  }
+
+  .chat-content-message-common {
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+  }
+}
