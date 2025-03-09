@@ -11,9 +11,9 @@ export default function ErrorPage({ args }) {
         args: PropTypes.any,
     }
 
-    const errorStatus = args?.status || location.state?.errorInfo?.status || "Unknown";
-    const errorText = args?.message || location.state?.errorInfo?.message || "There was an error but we cannot identify what kind of error it was.";
-    const errorCode = args?.code || location.state?.errorInfo?.code || "";
+    const errorStatus = args?.status || location.state?.args.status || "Unknown";
+    const errorText = args?.message || location.state?.args.message || "There was an error but we cannot identify what kind of error it was.";
+    const errorCode = args?.code || location.state?.args.code || "";
 
     return (
         <>
